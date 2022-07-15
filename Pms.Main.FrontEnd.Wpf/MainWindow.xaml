@@ -1,0 +1,95 @@
+﻿<Window x:Class="Pms.Main.FrontEnd.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Pms.Main.FrontEnd.Wpf"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="650" Width="900"
+        Loaded="Window_Loaded"
+        >
+    <Window.Resources>
+        <CollectionViewSource x:Key="CutoffViewSource"/>
+        <CollectionViewSource x:Key="PayrollCodeViewSource"/>
+    </Window.Resources>
+    <Border>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions >
+                <RowDefinition Height="75" />
+                <RowDefinition Height="35" />
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="8,0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock  VerticalAlignment="Center" Margin="6">Cutoff Date:</TextBlock>
+                    <ComboBox Name="cbPayrollDate" SelectionChanged="CbPayrollDate_SelectionChanged" 
+                              ItemsSource="{Binding Source={StaticResource CutoffViewSource}}" 
+                              Width="125" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock  VerticalAlignment="Center" Margin="6">PayrollCode:</TextBlock>
+                    <ComboBox Name="cbPayrollCode" SelectionChanged="cbPayrollCode_SelectionChanged" 
+                              ItemsSource="{Binding Source={StaticResource PayrollCodeViewSource}}" 
+                              Width="125" VerticalAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+
+            <DockPanel Grid.Row="1" Width="200" Height="45"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Right">
+                <Menu DockPanel.Dock="Top" Height="45" HorizontalAlignment="Right">
+                    <MenuItem Style="{StaticResource ProfileMenuItemTheme}">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="tbProfile" HorizontalAlignment="Right" Text="Fernandez, Sean Ivan M."  VerticalAlignment="Center"/>
+                                <Image Source="Assets/dropdown_outlined.png" Margin="8,14,0,14"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+ 
+                    </MenuItem>
+                </Menu>
+                <TextBox AcceptsReturn="True" />
+            </DockPanel>
+
+            <StackPanel x:Name="testung" Grid.Column="1" Grid.RowSpan="8" Grid.ColumnSpan="1" Orientation="Horizontal" VerticalAlignment="Top">
+                <Button x:Name="btnTitle"
+                        Cursor="Hand"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
+                        FontSize="22"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Margin="20">Payroll Management</Button>
+
+                <Button x:Name="BtnTimesheet" 
+                             Content="Timesheet"
+                             Style="{StaticResource MenuButton}" 
+                             Click="BtnTimesheet_Checked"/>
+
+                <Button x:Name="BtnAdjustment" 
+                             Content="Adjustment"
+                             Style="{StaticResource MenuButton}" 
+                             Click="BtnAdjustment_Click"/>
+                
+                <Button x:Name="BtnPayroll" 
+                             Content="Payroll"
+                             Style="{StaticResource MenuButton}" 
+                             Click="BtnPayroll_Click"/>
+                <Button x:Name="BtnEmployee" 
+                             Content="Employee"
+                             Style="{StaticResource MenuButton}" 
+                             Click="BtnEmployee_Checked"/>
+            </StackPanel>
+
+
+            <Frame x:Name="frmMain" Grid.Row="2" Grid.Column="2" 
+                    BorderBrush="#FF786F6F" BorderThickness="0.3" Margin="5,0,5,5" 
+                    NavigationUIVisibility="Hidden"/>
+
+        </Grid>
+    </Border>
+</Window>

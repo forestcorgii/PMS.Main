@@ -1,0 +1,157 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <UserSecretsId>113b92cd-662c-4cc3-8450-8b2ecdfd3bef</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\add.png" />
+    <None Remove="Assets\back.png" />
+    <None Remove="Assets\building.png" />
+    <None Remove="Assets\cancel.png" />
+    <None Remove="Assets\DDC.PNG" />
+    <None Remove="Assets\dropdown.png" />
+    <None Remove="Assets\dropdown_outlined.png" />
+    <None Remove="Assets\edit.png" />
+    <None Remove="Assets\import.png" />
+    <None Remove="Assets\male.png" />
+    <None Remove="Assets\print-white.png" />
+    <None Remove="Assets\print.png" />
+    <None Remove="Assets\save.png" />
+    <None Remove="Assets\template.png" />
+    <None Remove="Assets\timer.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignColors" Version="2.0.6" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.5.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
+    <PackageReference Include="Payroll.Employees" Version="1.0.0-preview001" />
+    <PackageReference Include="Payroll.Timesheets" Version="1.0.0-preview002" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Payroll.Timesheets.BizLogic">
+      <HintPath>..\..\Payroll.Timesheets\Payroll.Timesheets.BizLogic\bin\Debug\net5.0\ref\Payroll.Timesheets.BizLogic.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\System.Windows.Forms.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Pages\Adjustment\AddAdjustmentBilling.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Adjustment\AddAdjustmentRecord.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Adjustment\AdjustmentBilling.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Adjustment\AdjustmentRecord.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Employee\EmployeeUi.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Payroll\PayRegister.xaml.cs">
+      <DependentUpon>PayRegister.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Pages\Adjustment\AddAdjustmentBilling.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Adjustment\AddAdjustmentRecord.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Adjustment\AdjustmentBilling.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Adjustment\AdjustmentRecord.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Adjustment\AdjustmentWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Employee\EmployeeUi.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Employee\EmployeeWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Payroll\PayrollWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Timesheet\TimesheetWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Payroll\PayRegister.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Theme\MenuButton.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Theme\MenuButtonStyle.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Theme\PrimaryButton.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Theme\ProfileButtonStyle.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Theme\SecondaryButton.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Timesheet\TimesheetDownloader.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Timesheet\TimesheetPage.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\add.png" />
+    <Resource Include="Assets\back.png" />
+    <Resource Include="Assets\building.png" />
+    <Resource Include="Assets\cancel.png" />
+    <Resource Include="Assets\DDC.PNG" />
+    <Resource Include="Assets\dropdown.png" />
+    <Resource Include="Assets\dropdown_outlined.png" />
+    <Resource Include="Assets\edit.png" />
+    <Resource Include="Assets\import.png" />
+    <Resource Include="Assets\male.png" />
+    <Resource Include="Assets\print-white.png" />
+    <Resource Include="Assets\print.png" />
+    <Resource Include="Assets\save.png" />
+    <Resource Include="Assets\template.png" />
+    <Resource Include="Assets\timer.png" />
+  </ItemGroup>
+
+</Project>
