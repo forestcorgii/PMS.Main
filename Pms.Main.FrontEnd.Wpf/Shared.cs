@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Payroll.Timesheets.Domain.SupportTypes;
+using Pms.Timesheets.Domain.SupportTypes;
 using System; 
 
 namespace Pms.Main.FrontEnd.Wpf
