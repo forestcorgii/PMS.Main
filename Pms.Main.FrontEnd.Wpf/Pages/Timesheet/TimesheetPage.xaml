@@ -18,6 +18,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="96"/>
             <RowDefinition />
+            <RowDefinition Height="35"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -25,19 +26,12 @@
                 <TextBlock x:Name="LbTotalEE" VerticalAlignment="Center" Margin="6,0,6,0">Total EE:</TextBlock>
                 <TextBlock x:Name="LbUnconfirmedEE" VerticalAlignment="Center" Margin="6,0,6,0">Unconfirmed EE:</TextBlock>
                 <TextBlock x:Name="LbUnconfirmedEEWithAttendance" VerticalAlignment="Center" Margin="6,0,6,0">Unconfirmed EE With Attendance:</TextBlock>
-                
-                <TextBlock VerticalAlignment="Center" Margin="12,0,6,0" Visibility="Collapsed">Bank Category:</TextBlock>
-                <ComboBox x:Name="CbBankCategory" SelectionChanged="CbBankCategory_SelectionChanged" Width="125" Visibility="Collapsed">
-                    <ComboBoxItem IsSelected="True">CCARD</ComboBoxItem>
-                    <ComboBoxItem>CHK</ComboBoxItem>
-                    <ComboBoxItem>ATM1</ComboBoxItem>
-                    <ComboBoxItem>ATM2</ComboBoxItem>
-                </ComboBox>
             </WrapPanel>
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
-                <Button x:Name="btnExportEFile" Click="btnExportEFile_Click" Content="Export E-File" VerticalAlignment="Center" Style="{StaticResource PrimaryButton}" Visibility="Collapsed"/>
-                <Button x:Name="btnExportDBF" Click="btnExportDBF_Click" Content="Export DBF" VerticalAlignment="Center" HorizontalAlignment="Right" Style="{StaticResource PrimaryButton}"/>
+                <Button x:Name="btnDownloadTS" Click="btnDownloadTS_Click" Content="Download" VerticalAlignment="Center" HorizontalAlignment="Right" Style="{StaticResource PrimaryButton}"/>
+                <Button x:Name="btnEvaluateTS" Click="btnEvaluateTS_Click" Content="Evaluate" VerticalAlignment="Center" HorizontalAlignment="Right" Style="{StaticResource PrimaryButton}"/>
+                <Button x:Name="btnExportDBF" Click="btnExportDBF_Click" Content="Export" VerticalAlignment="Center" HorizontalAlignment="Right" Style="{StaticResource PrimaryButton}"/>
             </StackPanel>
         </Grid>
 
@@ -45,11 +39,11 @@
         <DataGrid  Grid.Row="1" ItemsSource="{Binding Source={StaticResource TimesheetViewSource}}" AutoGenerateColumns="False" IsReadOnly="True">
             <DataGrid.Columns>
                 <!--<DataGridTextColumn Header="Timesheet Id" Binding="{Binding TimesheetId}"/>-->
-                <DataGridTextColumn Header="EE Id" Binding="{Binding EE.EEId}"/>
-                <DataGridTextColumn Header="Full Name" Binding="{Binding EE.Fullname}"/>
+                <DataGridTextColumn Header="EE Id" Binding="{Binding EEId}"/>
+                <DataGridTextColumn Header="Full Name" Binding="{Binding Fullname}"/>
                 <DataGridTextColumn Header="Payroll Code" Binding="{Binding PayrollCode}"/>
-                <DataGridTextColumn Header="Bank Category" Binding="{Binding EE.BankCategory}"/>
-                <DataGridTextColumn Header="Department" Binding="{Binding EE.Location}"/>
+                <DataGridTextColumn Header="Bank Category" Binding="{Binding BankCategory}"/>
+                <DataGridTextColumn Header="Department" Binding="{Binding Location}"/>
                 <DataGridTextColumn Header="Total Hours" Binding="{Binding TotalHours}"/>
                 <DataGridTextColumn Header="OT" Binding="{Binding TotalOT}"/>
                 <DataGridTextColumn Header="RD OT" Binding="{Binding TotalRDOT}"/>
@@ -58,9 +52,27 @@
                 <DataGridTextColumn Header="Tardy" Binding="{Binding TotalTardy}"/>
                 <DataGridTextColumn Header="Allowance" Binding="{Binding Allowance}"/>
                 <DataGridCheckBoxColumn Header="Confirmed" Binding="{Binding IsConfirmed}"/>
-                <!--<DataGridCheckBoxColumn Header="Archived" Binding="{Binding Archived}"/>
-                <DataGridTextColumn Header="Page" Binding="{Binding Page}"/>-->
             </DataGrid.Columns>
         </DataGrid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="25"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="5"/>
+            </Grid.RowDefinitions>
+            
+            <TextBlock x:Name="LbStatusMessage" Text="Status" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,0"/>
+            <TextBlock x:Name="LbPbValue" Text="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,0"/>
+            <TextBlock Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">of</TextBlock>
+            <TextBlock x:Name="LbPbMaximum" Text="0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,0"/>
+            
+            <ProgressBar x:Name="PbDownloadProgress" Grid.ColumnSpan="5" Grid.Row="1"/>
+        </Grid>
     </Grid>
 </Page>

@@ -1,4 +1,5 @@
 ﻿using Pms.Main.FrontEnd.Wpf.Controller;
+using Pms.Timesheets.Domain.SupportTypes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -45,23 +46,53 @@ namespace Pms.Main.FrontEnd.Wpf
             List<string> cutoffs = TimesheetController.GetCutoffs();
             CutoffViewSource.Source = cutoffs;
 
-            List<string> payrollCodes= EmployeeController.ListPayrollCodes();
+            List<string> payrollCodes = EmployeeController.ListPayrollCodes();
             PayrollCodeViewSource.Source = payrollCodes;
         }
 
+        private void CbPayrollDate_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                Shared.DefaultCutoff = new Cutoff(cbPayrollDate.Text);
+                frmMain.Refresh();
+            }
+        }
         private void CbPayrollDate_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0 && e.AddedItems[0] is not null)
             {
-                //Shared.DefaultCutoff = (Cutoff)e.AddedItems[0];
+                Shared.DefaultCutoff = new Cutoff((string)e.AddedItems[0]);
                 frmMain.Refresh();
             }
         }
 
+
+        private void cbPayrollCode_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                Shared.DefaultPayrollCode = cbPayrollCode.Text;
+                frmMain.Refresh();
+            }
+        }
+        private void cbPayrollCode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems is not null && e.AddedItems.Count > 0 && e.AddedItems[0] is not null)
+            {
+                Shared.DefaultPayrollCode = (string)e.AddedItems[0];
+                frmMain.Refresh();
+            }
+        }
+
+        private TimesheetPage timesheetPage;
         private void BtnTimesheet_Checked(object sender, RoutedEventArgs e)
         {
-                TimesheetWindow timeheetUI = new();
-                _ = timeheetUI.ShowDialog();
+            //TimesheetWindow timeheetUI = new();
+            //_ = timeheetUI.ShowDialog();
+            if (timesheetPage is null)
+                timesheetPage = new();
+            frmMain.Navigate(timesheetPage);
         }
 
         private void BtnEmployee_Checked(object sender, RoutedEventArgs e)
@@ -92,9 +123,5 @@ namespace Pms.Main.FrontEnd.Wpf
             //}
         }
 
-        private void cbPayrollCode_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
     }
 }

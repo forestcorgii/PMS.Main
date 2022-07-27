@@ -1,12 +1,12 @@
-﻿using Payroll.Employees.Domain;
-using Payroll.Timesheets.BizLogic.Concrete;
-using Payroll.Timesheets.Domain;
-using Payroll.Timesheets.Domain.SupportTypes;
-using Payroll.Timesheets.Persistence;
-using Payroll.Timesheets.ServiceLayer.EfCore.Concrete;
-using Payroll.Timesheets.ServiceLayer.EfCore.Queries;
-using Payroll.Timesheets.ServiceLayer.TimeSystem.Adapter;
-using Payroll.Timesheets.ServiceLayer.TimeSystem.Services;
+﻿using Pms.Employees.Domain;
+using Pms.Timesheets.BizLogic.Concrete;
+using Pms.Timesheets.Domain;
+using Pms.Timesheets.Domain.SupportTypes;
+using Pms.Timesheets.Persistence;
+using Pms.Timesheets.ServiceLayer.EfCore.Concrete;
+using Pms.Timesheets.ServiceLayer.EfCore.Queries;
+using Pms.Timesheets.ServiceLayer.TimeSystem.Adapter;
+using Pms.Timesheets.ServiceLayer.TimeSystem.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,10 +53,8 @@ namespace Pms.Main.FrontEnd.Wpf.Controller
 
         public void Cancel() => CancelPending = true;
 
-        public async Task StartDownload(DateTime cutoffDate, string payrollCode)
+        public async Task StartDownload(Cutoff cutoff, string payrollCode)
         {
-            Cutoff cutoff = new Cutoff(cutoffDate);
-
             DownloadSummaryService service = new(Adapter);
             DownloadSummary<Timesheet> summary = await service.GetTimesheetSummary(cutoff.CutoffRange, payrollCode);
             if (summary is not null && IsBusy == false)
@@ -66,7 +64,7 @@ namespace Pms.Main.FrontEnd.Wpf.Controller
 
                 foreach (int page in Enumerable.Range(0, int.Parse(summary.TotalPage) + 1).ToList())
                 {
-                    await DownloadPageContentAsync(cutoffDate, payrollCode, page);
+                    await DownloadPageContentAsync(cutoff.CutoffDate, payrollCode, page);
                     if (CancelPending)
                     {
                         CancelPending = false;
@@ -74,7 +72,7 @@ namespace Pms.Main.FrontEnd.Wpf.Controller
                         break;
                     }
                 }
-                EvaluateTimesheets(cutoffDate, payrollCode);
+                EvaluateTimesheets(cutoff.CutoffDate, payrollCode);
             }
             IsBusy = false;
             DownloadEnded?.Invoke(this, new EventArgs());
@@ -97,18 +95,42 @@ namespace Pms.Main.FrontEnd.Wpf.Controller
             }
         }
 
+        public async Task StartDownload(DateTime cutoffDate, string payrollCode, int[] pages)
+        {
+            if (IsBusy == false)
+            {
+                IsBusy = true;
+                DownloadStarted?.Invoke(this, 1);
+
+                foreach (int page in pages)
+                {
+                    await DownloadPageContentAsync(cutoffDate, payrollCode, page);
+                    if (CancelPending)
+                    {
+                        CancelPending = false;
+                        DownloadCancelled?.Invoke(this, new EventArgs());
+                        break;
+                    }
+                }
+
+                IsBusy = false;
+                DownloadEnded?.Invoke(this, new EventArgs());
+
+            }
+        }
+
         private async Task DownloadPageContentAsync(DateTime cutoffDate, string payrollCode, int page)
         {
             Cutoff cutoff = new Cutoff(cutoffDate);
             try
             {
                 DownloadTimesheetService service = new(Adapter);
-                DownloadContent<Timesheet>? timesheets = await service.DownloadTimesheets(cutoff.CutoffRange, payrollCode, page);
+                DownloadContent<Timesheet> timesheets = await service.DownloadTimesheets(cutoff.CutoffRange, payrollCode, page);
                 if (timesheets is not null && timesheets.message is not null)
                 {
                     SaveTimesheetBizLogic writeBizLogic = new(Context);
                     foreach (Timesheet timesheet in timesheets.message)
-                        writeBizLogic.SaveTimesheet(timesheet, cutoff.CutoffId, payrollCode, page);
+                        writeBizLogic.SaveTimesheet(timesheet, cutoff.CutoffId, page);
 
                     PageDownloadSucceeded?.Invoke(this, page);
                 }
@@ -130,16 +152,20 @@ namespace Pms.Main.FrontEnd.Wpf.Controller
                 TimesheetPageService PageService = new(Context);
                 ListTimesheetsService ListingService = new(Context);
                 args.NoEETimesheets = ListingService
-                    .GetTimesheetNoEETimesheet(cutoff.CutoffId, payrollCode)
-                    .Select(ts => new Employee() { EEId = ts.EEId })
+                    .GetTimesheetNoEETimesheet(cutoff.CutoffId)
+                    .Select(ts => ts.EEId)
                     .ToList();
+
                 args.MissingPages = PageService.GetMissingPages(cutoff.CutoffId, payrollCode);
-                
-                args.Timesheets = ListingService.GetTimesheetsByCutoffId(cutoff.CutoffId, payrollCode).ToList();
+                ListingService.GetTimesheets().ToList().Where(ts => ts.EE == null).ToList();
+
+                args.Timesheets = ListingService.GetTimesheetsByCutoffId(cutoff.CutoffId, payrollCode)
+                    .Where(ts => ts.IsConfirmed && ts.TotalHours > 0).ToList();
+
                 args.UnconfirmedTimesheetsWithAttendance = ListingService.GetTimesheetsByCutoffId(cutoff.CutoffId, payrollCode)
-                    .Where(ts => !ts.IsConfirmed).ToList();
-                args.UnconfirmedTimesheetsWithoutAttendance = ListingService.GetTimesheetsByCutoffId(cutoff.CutoffId, payrollCode)
                     .Where(ts => !ts.IsConfirmed && ts.TotalHours > 0).ToList();
+                args.UnconfirmedTimesheetsWithoutAttendance = ListingService.GetTimesheetsByCutoffId(cutoff.CutoffId, payrollCode)
+                    .Where(ts => !ts.IsConfirmed && ts.TotalHours == 0).ToList();
 
                 EvaluationSucceeded?.Invoke(this, args);
             }
@@ -148,11 +174,13 @@ namespace Pms.Main.FrontEnd.Wpf.Controller
                 EvaluationFailed?.Invoke(this, ex.Message);
             }
         }
+
+
     }
 
     public class EvaluationResultArgs
     {
-        public List<Employee>? NoEETimesheets { get; set; }// Find on Server
+        public List<string>? NoEETimesheets { get; set; }// Find on Server
         public List<int>? MissingPages { get; set; }// Re Download
         public List<Timesheet>? Timesheets { get; set; }// Include in Report
         public List<Timesheet>? UnconfirmedTimesheetsWithAttendance { get; set; }// Include in Report

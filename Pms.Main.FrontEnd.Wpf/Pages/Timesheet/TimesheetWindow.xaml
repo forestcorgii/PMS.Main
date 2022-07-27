@@ -8,8 +8,7 @@
         Title="MainWindow" Height="750" Width="900" Loaded="Window_Loaded">
     <Window.Resources>
         <CollectionViewSource x:Key="CutoffViewSource"/>
-        <CollectionViewSource x:Key="CutoffPayregisterViewSource" 
-                              Source="{Binding PayRegisters, Source={StaticResource CutoffViewSource}}"/>
+        <CollectionViewSource x:Key="PayrollCodeViewSource"/>
     </Window.Resources>
     <Border>
         <Grid>
@@ -25,14 +24,14 @@
             <StackPanel Grid.Row="1" Orientation="Horizontal">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock  VerticalAlignment="Center" Margin="6">Cutoff Date:</TextBlock>
-                    <ComboBox Name="cbPayrollDate" SelectionChanged="cbPayrollDate_SelectionChanged" 
+                    <ComboBox Name="cbCutoffDate" SelectionChanged="cbPayrollDate_SelectionChanged" 
                               ItemsSource="{Binding Source={StaticResource CutoffViewSource}}" 
                               Width="125" VerticalAlignment="Center" IsEditable="False"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock  VerticalAlignment="Center" Margin="6">Payroll Code:</TextBlock>
                     <ComboBox x:Name="cbPayrollCode" SelectionChanged="cbPayrollCode_SelectionChanged" 
-                              ItemsSource="{Binding Source={StaticResource CutoffPayregisterViewSource}}" 
+                              ItemsSource="{Binding Source={StaticResource PayrollCodeViewSource}}" 
                               HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" IsEditable="False" Width="100"/>
                 </StackPanel>
             </StackPanel>
@@ -41,14 +40,14 @@
                        VerticalAlignment="Center">
                     
                     <Menu DockPanel.Dock="Top" Height="45" Width="250">
-                        <MenuItem Style="{StaticResource ProfileMenuItemTheme}" Width="250">
+                        <!--<MenuItem Style="{StaticResource ProfileMenuItemTheme}" Width="250">
                             <MenuItem.Header>
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Assets/dropdown_outlined.png" Margin="8,14,0,14"/>
-                                    <TextBlock x:Name="tbProfile" HorizontalAlignment="Right" Text="Fernandez, Sean Ivan M."  VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="tbProfile" Text="Fernandez, Sean Ivan M."  VerticalAlignment="Center"/>
                                 </StackPanel>
                             </MenuItem.Header>
-                        </MenuItem>
+                        </MenuItem>-->
                         <!--<MenuItem Click="mnChangePassword_Click" Header="Change Password" />
                         <MenuItem Click="mnLogout_Click" Header="Logout" />
                         <Separator />
@@ -56,7 +55,6 @@
                     </Menu>
                     <TextBox AcceptsReturn="True" />
                 </DockPanel>
-                <Button x:Name="btnRefresh" Click="btnRefresh_Click">Refresh</Button>
             </StackPanel>
 
             <StackPanel x:Name="testung" Grid.Column="1" Grid.RowSpan="8" Grid.ColumnSpan="1" Orientation="Horizontal" VerticalAlignment="Top">

@@ -26,15 +26,15 @@
             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="8,0">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock  VerticalAlignment="Center" Margin="6">Cutoff Date:</TextBlock>
-                    <ComboBox Name="cbPayrollDate" SelectionChanged="CbPayrollDate_SelectionChanged" 
+                    <ComboBox Name="cbPayrollDate" SelectionChanged="CbPayrollDate_SelectionChanged" KeyDown="CbPayrollDate_KeyDown"
                               ItemsSource="{Binding Source={StaticResource CutoffViewSource}}" 
-                              Width="125" VerticalAlignment="Center"/>
+                              Width="125" VerticalAlignment="Center" IsEditable="True"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock  VerticalAlignment="Center" Margin="6">PayrollCode:</TextBlock>
-                    <ComboBox Name="cbPayrollCode" SelectionChanged="cbPayrollCode_SelectionChanged" 
+                    <ComboBox Name="cbPayrollCode" SelectionChanged="cbPayrollCode_SelectionChanged" KeyDown="cbPayrollCode_KeyDown"
                               ItemsSource="{Binding Source={StaticResource PayrollCodeViewSource}}" 
-                              Width="125" VerticalAlignment="Center"/>
+                              Width="125" VerticalAlignment="Center" IsEditable="True"/>
                 </StackPanel>
             </StackPanel>
 
