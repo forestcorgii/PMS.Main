@@ -1,8 +1,8 @@
-﻿using Payroll.Employees.Domain;
-using Payroll.Employees.Persistence;
-using Payroll.Employees.ServiceLayer.Concrete;
-using Payroll.Employees.ServiceLayer.HRMS.Adapter;
-using Payroll.Employees.ServiceLayer.HRMS.Service;
+﻿using Pms.Employees.Domain;
+using Pms.Employees.Persistence;
+using Pms.Employees.ServiceLayer.Concrete;
+using Pms.Employees.ServiceLayer.HRMS.Adapter;
+using Pms.Employees.ServiceLayer.HRMS.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
