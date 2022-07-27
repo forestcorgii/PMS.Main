@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Payroll.Timesheets.Domain.SupportTypes;
+using Pms.Timesheets.Domain.SupportTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;

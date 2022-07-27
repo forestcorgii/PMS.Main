@@ -8,8 +8,8 @@ using System.Windows.Data;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Pms.Main.FrontEnd.Wpf.Controller;
-using Payroll.Employees.ServiceLayer.HRMS.Adapter;
-using Payroll.Employees.Domain;
+using Pms.Employees.ServiceLayer.HRMS.Adapter;
+using Pms.Employees.Domain;
 
 namespace Pms.Main.FrontEnd.Wpf
 {

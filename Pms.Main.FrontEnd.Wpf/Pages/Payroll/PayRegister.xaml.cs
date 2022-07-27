@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using Microsoft.VisualBasic.CompilerServices;
 
 namespace Pms.Main.FrontEnd.Wpf
@@ -56,15 +55,15 @@ namespace Pms.Main.FrontEnd.Wpf
 
         private void btnUploadPayreg_Click(object sender, RoutedEventArgs e)
         {
-            using (var openFile = new OpenFileDialog())
-            {
-                openFile.Filter = "Pay Register Files(*.xls)|*.xls";
-                openFile.Multiselect = true;
-                if (openFile.ShowDialog() == DialogResult.OK)
-                {
-                    BgProcess.RunWorkerAsync(openFile.FileNames);
-                }
-            }
+            //using (var openFile = new OpenFileDialog())
+            //{
+            //    openFile.Filter = "Pay Register Files(*.xls)|*.xls";
+            //    openFile.Multiselect = true;
+            //    if (openFile.ShowDialog() == DialogResult.OK)
+            //    {
+            //        BgProcess.RunWorkerAsync(openFile.FileNames);
+            //    }
+            //}
         }
 
         private void btnExport_Click(object sender, RoutedEventArgs e)
@@ -74,15 +73,15 @@ namespace Pms.Main.FrontEnd.Wpf
 
         private async void BntSupply_Click(object sender, RoutedEventArgs e)
         {
-            using (var openFile = new OpenFileDialog())
-            {
-                openFile.Filter = "Pay Register Files(*.xls)|*.xls";
-                openFile.Multiselect = false;
-                if (openFile.ShowDialog() == DialogResult.OK)
-                {
-                    //await EmployeeService.SupplyGovernmentDetailsAsync(openFile.FileName);
-                }
-            }
+            //using (var openFile = new OpenFileDialog())
+            //{
+            //    openFile.Filter = "Pay Register Files(*.xls)|*.xls";
+            //    openFile.Multiselect = false;
+            //    if (openFile.ShowDialog() == DialogResult.OK)
+            //    {
+            //        //await EmployeeService.SupplyGovernmentDetailsAsync(openFile.FileName);
+            //    }
+            //}
         }
     }
 }
