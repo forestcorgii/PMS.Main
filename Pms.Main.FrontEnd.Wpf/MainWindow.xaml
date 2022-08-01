@@ -41,7 +41,7 @@
             <DockPanel Grid.Row="1" Width="200" Height="45"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Right">
-                <Menu DockPanel.Dock="Top" Height="45" HorizontalAlignment="Right">
+                <Menu DockPanel.Dock="Top" Height="45" HorizontalAlignment="Right" Visibility="Collapsed">
                     <MenuItem Style="{StaticResource ProfileMenuItemTheme}">
                         <MenuItem.Header>
                             <StackPanel Orientation="Horizontal">
@@ -71,11 +71,13 @@
                              Click="BtnTimesheet_Checked"/>
 
                 <Button x:Name="BtnAdjustment" 
-                             Content="Adjustment"
-                             Style="{StaticResource MenuButton}" 
-                             Click="BtnAdjustment_Click"/>
+                        IsEnabled="False"
+                        Content="Adjustment"
+                        Style="{StaticResource MenuButton}" 
+                        Click="BtnAdjustment_Click"/>
                 
                 <Button x:Name="BtnPayroll" 
+                        IsEnabled="False"
                              Content="Payroll"
                              Style="{StaticResource MenuButton}" 
                              Click="BtnPayroll_Click"/>

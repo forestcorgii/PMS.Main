@@ -1,4 +1,4 @@
-﻿using Pms.Main.FrontEnd.Wpf.Controller;
+﻿using Pms.Main.FrontEnd.Wpf.ViewModel;
 using Pms.Timesheets.Domain.SupportTypes;
 using System;
 using System.Collections.Generic;
@@ -26,16 +26,16 @@ namespace Pms.Main.FrontEnd.Wpf
         private readonly CollectionViewSource CutoffViewSource;
         private readonly CollectionViewSource PayrollCodeViewSource;
 
-        private TimesheetController TimesheetController;
-        private EmployeeController EmployeeController;
+        private readonly FilterTimesheetsViewModel TimesheetController;
+        private readonly FilterEmployeesViewModel EmployeeController;
 
 
         public MainWindow()
         {
             InitializeComponent();
 
-            TimesheetController = new();
-            EmployeeController = new();
+            TimesheetController = new(Shared.DefaultCutoff, Shared.DefaultPayrollCode);
+            EmployeeController = new(Shared.DefaultPayrollCode);
 
             CutoffViewSource = (CollectionViewSource)FindResource(nameof(CutoffViewSource));
             PayrollCodeViewSource = (CollectionViewSource)FindResource(nameof(PayrollCodeViewSource));
@@ -60,9 +60,10 @@ namespace Pms.Main.FrontEnd.Wpf
         }
         private void CbPayrollDate_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.Count > 0 && e.AddedItems[0] is not null)
+            object? currentValue = e.AddedItems[0];
+            if (currentValue is not null)
             {
-                Shared.DefaultCutoff = new Cutoff((string)e.AddedItems[0]);
+                Shared.DefaultCutoff = new Cutoff((string)currentValue);
                 frmMain.Refresh();
             }
         }
@@ -78,31 +79,30 @@ namespace Pms.Main.FrontEnd.Wpf
         }
         private void cbPayrollCode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems is not null && e.AddedItems.Count > 0 && e.AddedItems[0] is not null)
+            object? currentValue = e.AddedItems[0];
+            if (currentValue is not null)
             {
-                Shared.DefaultPayrollCode = (string)e.AddedItems[0];
+                Shared.DefaultPayrollCode = (string)currentValue;
                 frmMain.Refresh();
             }
         }
 
-        private TimesheetPage timesheetPage;
+
+        private TimesheetPage? TimesheetPage;
         private void BtnTimesheet_Checked(object sender, RoutedEventArgs e)
         {
-            //TimesheetWindow timeheetUI = new();
-            //_ = timeheetUI.ShowDialog();
-            if (timesheetPage is null)
-                timesheetPage = new();
-            frmMain.Navigate(timesheetPage);
+            if (TimesheetPage is null)
+                TimesheetPage = new();
+            frmMain.Navigate(TimesheetPage);
         }
 
         private void BtnEmployee_Checked(object sender, RoutedEventArgs e)
         {
-            //if (Shared.DefaultCutoff is not null)
-            //{
-            //    EmployeeWindow employeeUI = new(Shared.DefaultCutoff, Shared.Configuration);
-            //    _ = employeeUI.ShowDialog();
-            //}
-
+            if (Shared.DefaultCutoff is not null)
+            {
+                EmployeeUi employeeUI = new();
+                frmMain.Navigate(employeeUI);
+            }
         }
 
         private void BtnAdjustment_Click(object sender, RoutedEventArgs e)

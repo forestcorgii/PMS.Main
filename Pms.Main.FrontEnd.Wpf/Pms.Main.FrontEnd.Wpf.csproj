@@ -31,69 +31,62 @@
     <PackageReference Include="MaterialDesignThemes" Version="4.5.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Pms.Employees" Version="1.0.0-preview001" />
     <PackageReference Include="Pms.Timesheets" Version="1.0.0-preview002" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Pages\Adjustment\AddAdjustmentBilling.xaml.cs">
+    <Compile Update="View\Adjustment\AddAdjustmentBilling.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\Adjustment\AddAdjustmentRecord.xaml.cs">
+    <Compile Update="View\Adjustment\AddAdjustmentRecord.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\Adjustment\AdjustmentBilling.xaml.cs">
+    <Compile Update="View\Adjustment\AdjustmentBilling.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\Adjustment\AdjustmentRecord.xaml.cs">
+    <Compile Update="View\Adjustment\AdjustmentRecord.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\Employee\EmployeeUi.xaml.cs">
+    <Compile Update="View\Employee\EmployeeUi.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\Payroll\PayRegister.xaml.cs">
+    <Compile Update="View\Payroll\PayRegister.xaml.cs">
       <DependentUpon>PayRegister.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="Pages\Adjustment\AddAdjustmentBilling.xaml">
+    <Page Update="View\Adjustment\AddAdjustmentBilling.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\Adjustment\AddAdjustmentRecord.xaml">
+    <Page Update="View\Adjustment\AddAdjustmentRecord.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\Adjustment\AdjustmentBilling.xaml">
+    <Page Update="View\Adjustment\AdjustmentBilling.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\Adjustment\AdjustmentRecord.xaml">
+    <Page Update="View\Adjustment\AdjustmentRecord.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\Adjustment\AdjustmentWindow.xaml">
+    <Page Update="View\Adjustment\AdjustmentWindow.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\Employee\EmployeeUi.xaml">
+    <Page Update="View\Employee\EmployeeUi.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\Employee\EmployeeWindow.xaml">
+    <Page Update="View\Payroll\PayrollWindow.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\Payroll\PayrollWindow.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Pages\Timesheet\TimesheetWindow.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Pages\Payroll\PayRegister.xaml">
+    <Page Update="View\Payroll\PayRegister.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
@@ -117,11 +110,7 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\Timesheet\TimesheetDownloader.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Pages\Timesheet\TimesheetPage.xaml">
+    <Page Update="View\Timesheet\TimesheetPage.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
@@ -143,6 +132,12 @@
     <Resource Include="Assets\save.png" />
     <Resource Include="Assets\template.png" />
     <Resource Include="Assets\timer.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

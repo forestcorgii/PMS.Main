@@ -8,7 +8,7 @@ namespace Pms.Main.FrontEnd.Wpf
     {
         public static IConfigurationRoot? Configuration { get; set; }
 
-        public static Cutoff DefaultCutoff { get; set; }
-        public static string DefaultPayrollCode { get; set; }
+        public static Cutoff? DefaultCutoff { get; set; }
+        public static string? DefaultPayrollCode { get; set; }
     }
 }
