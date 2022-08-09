@@ -27,15 +27,16 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModel
 
         public bool IsBusy { get; private set; }
 
-        private readonly TimesheetDbContext Context;
+        private readonly TimesheetDbContextFactory Factory;
 
         public Cutoff Cutoff { get; private set; }
-
         public string PayrollCode { get; private set; }
 
-        public EvaluateTimesheetsViewModel(Cutoff cutoff, string payrollCode)
+
+
+        public EvaluateTimesheetsViewModel(TimesheetDbContextFactory _factory, Cutoff cutoff, string payrollCode)
         {
-            Context = new TimesheetDbContext();
+            Factory = _factory;
 
             Cutoff = cutoff;
             PayrollCode = payrollCode;
@@ -49,28 +50,28 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModel
             EvaluationResultArgs args = new();
             try
             {
-                TimesheetPageService PageService = new(Context);
-                ListTimesheetsService ListingService = new(Context);
-                args.MissingPages = PageService.GetMissingPages(Cutoff.CutoffId, PayrollCode);
-                if (args.MissingPages is not null && args.MissingPages.Count == 0)
-                {
-                    args.NoEETimesheets = ListingService
-                        .GetTimesheetNoEETimesheet(Cutoff.CutoffId)
-                        .Select(ts => ts.EEId)
-                        .ToList();
+                //TimesheetPageListingService PageService = new(Factory);
+                //TimesheetListingService ListingService = new(Factory);
+                //args.MissingPages = PageService.GetMissingPages(Cutoff.CutoffId, PayrollCode);
+                //if (args.MissingPages is not null && args.MissingPages.Count == 0)
+                //{
+                //    args.NoEETimesheets = ListingService
+                //        .GetTimesheetNoEETimesheet(Cutoff.CutoffId)
+                //        .Select(ts => ts.EEId)
+                //        .ToList();
 
-                    args.Timesheets = ListingService.GetTimesheetsByCutoffId(Cutoff.CutoffId, PayrollCode)
-                        .ByExportable().ToList();
+                //    args.Timesheets = ListingService.GetTimesheetsByCutoffId(Cutoff.CutoffId, PayrollCode)
+                //        .ByExportable().ToList();
 
-                    args.UnconfirmedTimesheetsWithAttendance = ListingService.GetTimesheetsByCutoffId(Cutoff.CutoffId, PayrollCode)
-                        .ByUnconfirmedWithAttendance()
-                        .ToList();
+                //    args.UnconfirmedTimesheetsWithAttendance = ListingService.GetTimesheetsByCutoffId(Cutoff.CutoffId, PayrollCode)
+                //        .ByUnconfirmedWithAttendance()
+                //        .ToList();
 
-                    args.UnconfirmedTimesheetsWithoutAttendance = ListingService.GetTimesheetsByCutoffId(Cutoff.CutoffId, PayrollCode)
-                        .ByUnconfirmedWithoutAttendance()
-                        .ToList();
-                }
-                EvaluationSucceeded?.Invoke(this, args);
+                //    args.UnconfirmedTimesheetsWithoutAttendance = ListingService.GetTimesheetsByCutoffId(Cutoff.CutoffId, PayrollCode)
+                //        .ByUnconfirmedWithoutAttendance()
+                //        .ToList();
+                //}
+                //EvaluationSucceeded?.Invoke(this, args);
             }
             catch (Exception ex)
             {

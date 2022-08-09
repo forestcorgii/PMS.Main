@@ -27,7 +27,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModel
 
         public ExportTimesheetsViewModel(Cutoff cutoff, string payrollCode)
         {
-            Context = new TimesheetDbContext();
+            //Context = new TimesheetDbContext();
 
             Cutoff = cutoff;
             PayrollCode = payrollCode;
@@ -37,22 +37,22 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModel
 
         public void Export()
         {
-            ListTimesheetsService service = new(Context);
-            List<string> bankCategories = service.ListTimesheetBankCategory(PayrollCode);
+            //ListTimesheetsService service = new(Context);
+            //List<string> bankCategories = service.ListTimesheetBankCategory(PayrollCode);
 
-            foreach (string bankCategory in bankCategories)
-            {
-                var timesheets = service.GetTimesheetsByCutoffId(Cutoff.CutoffId, PayrollCode, bankCategory);
-                if (timesheets.Any())
-                {
-                    List<Timesheet> exportable = timesheets.ByExportable().ToList();
-                    List<Timesheet> unconfirmedTimesheetsWithAttendance = timesheets.ByUnconfirmedWithAttendance().ToList();
-                    List<Timesheet> unconfirmedTimesheetsWithoutAttendance = timesheets.ByUnconfirmedWithoutAttendance().ToList();
+            //foreach (string bankCategory in bankCategories)
+            //{
+            //    var timesheets = service.GetTimesheetsByCutoffId(Cutoff.CutoffId, PayrollCode, bankCategory);
+            //    if (timesheets.Any())
+            //    {
+            //        List<Timesheet> exportable = timesheets.ByExportable().ToList();
+            //        List<Timesheet> unconfirmedTimesheetsWithAttendance = timesheets.ByUnconfirmedWithAttendance().ToList();
+            //        List<Timesheet> unconfirmedTimesheetsWithoutAttendance = timesheets.ByUnconfirmedWithoutAttendance().ToList();
 
-                    ExportEfile(bankCategory, exportable, unconfirmedTimesheetsWithAttendance, unconfirmedTimesheetsWithoutAttendance);
-                    ExportDBF(bankCategory, exportable);
-                }
-            }
+            //        ExportEfile(bankCategory, exportable, unconfirmedTimesheetsWithAttendance, unconfirmedTimesheetsWithoutAttendance);
+            //        ExportDBF(bankCategory, exportable);
+            //    }
+            //}
         }
 
         public void ExportEfile(string bankCategory, List<Timesheet> exportable, List<Timesheet> unconfirmedTimesheetsWithAttendance, List<Timesheet> unconfirmedTimesheetsWithoutAttendance)

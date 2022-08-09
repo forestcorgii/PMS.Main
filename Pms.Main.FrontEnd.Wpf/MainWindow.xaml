@@ -4,13 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pms.Main.FrontEnd.Wpf"
+        xmlns:vms="clr-namespace:Pms.Main.FrontEnd.Wpf.ViewModels"
+        xmlns:views="clr-namespace:Pms.Main.FrontEnd.Wpf.Views"
+        xmlns:converters="clr-namespace:Pms.Main.FrontEnd.Wpf.Converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="650" Width="900"
-        Loaded="Window_Loaded"
         >
     <Window.Resources>
-        <CollectionViewSource x:Key="CutoffViewSource"/>
-        <CollectionViewSource x:Key="PayrollCodeViewSource"/>
+        <DataTemplate DataType="{x:Type vms:TimesheetViewModel}">
+            <views:TimesheetPage/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vms:EmployeeViewModel}">
+            <views:EmployeeUi/>
+        </DataTemplate>
+        <converters:CutoffToStringConverter x:Key="cutoffToStringConverter"/>
     </Window.Resources>
     <Border>
         <Grid>
@@ -26,14 +33,15 @@
             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="8,0">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock  VerticalAlignment="Center" Margin="6">Cutoff Date:</TextBlock>
-                    <ComboBox Name="cbPayrollDate" SelectionChanged="CbPayrollDate_SelectionChanged" KeyDown="CbPayrollDate_KeyDown"
-                              ItemsSource="{Binding Source={StaticResource CutoffViewSource}}" 
+                    <ComboBox Name="cbPayrollDate" Text="{Binding CutoffId, UpdateSourceTrigger=PropertyChanged}" 
+                              ItemsSource="{Binding CutoffIds}" 
                               Width="125" VerticalAlignment="Center" IsEditable="True"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock  VerticalAlignment="Center" Margin="6">PayrollCode:</TextBlock>
-                    <ComboBox Name="cbPayrollCode" SelectionChanged="cbPayrollCode_SelectionChanged" KeyDown="cbPayrollCode_KeyDown"
-                              ItemsSource="{Binding Source={StaticResource PayrollCodeViewSource}}" 
+                    <!--<TextBox Text="{Binding PayrollCode, UpdateSourceTrigger=PropertyChanged}" Width="150"/>-->
+                    <ComboBox Name="cbPayrollCode" Text="{Binding PayrollCode, UpdateSourceTrigger=PropertyChanged}" 
+                              ItemsSource="{Binding PayrollCodes}" 
                               Width="125" VerticalAlignment="Center" IsEditable="True"/>
                 </StackPanel>
             </StackPanel>
@@ -66,9 +74,10 @@
                         Margin="20">Payroll Management</Button>
 
                 <Button x:Name="BtnTimesheet" 
-                             Content="Timesheet"
-                             Style="{StaticResource MenuButton}" 
-                             Click="BtnTimesheet_Checked"/>
+                        Content="Timesheet"
+                        Command="{Binding TimesheetCommand}"
+                        Style="{StaticResource MenuButton}" 
+                        Click="BtnTimesheet_Checked"/>
 
                 <Button x:Name="BtnAdjustment" 
                         IsEnabled="False"
@@ -78,19 +87,27 @@
                 
                 <Button x:Name="BtnPayroll" 
                         IsEnabled="False"
-                             Content="Payroll"
-                             Style="{StaticResource MenuButton}" 
-                             Click="BtnPayroll_Click"/>
+                        Content="Payroll"
+                        Command="{Binding EmployeeCommand}"
+                        Style="{StaticResource MenuButton}" 
+                        Click="BtnPayroll_Click"/>
+
                 <Button x:Name="BtnEmployee" 
-                             Content="Employee"
-                             Style="{StaticResource MenuButton}" 
-                             Click="BtnEmployee_Checked"/>
+                        Content="Employee"
+                        Command="{Binding EmployeeCommand}"
+                        Style="{StaticResource MenuButton}" 
+                        Click="BtnEmployee_Checked"/>
             </StackPanel>
 
 
-            <Frame x:Name="frmMain" Grid.Row="2" Grid.Column="2" 
+            <!--<Frame x:Name="frmMain" Grid.Row="2" Grid.Column="2" 
                     BorderBrush="#FF786F6F" BorderThickness="0.3" Margin="5,0,5,5" 
-                    NavigationUIVisibility="Hidden"/>
+                    NavigationUIVisibility="Hidden"/>-->
+            
+            <ContentControl Content="{Binding CurrentViewModel}" 
+                            Grid.Row="2" Grid.Column="2"
+                            BorderBrush="#FF786F6F" BorderThickness="0.3" Margin="5,0,5,5" 
+            />
 
         </Grid>
     </Border>

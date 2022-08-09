@@ -44,7 +44,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModel
 
         public DownloadTimesheetsViewModel(Cutoff cutoff, string payrollCode)
         {
-            Context = new TimesheetDbContext();
+            //Context = new TimesheetDbContext();
             Adapter = TimeDownloaderFactory.CreateAdapter(Shared.Configuration);
 
             Cutoff = cutoff;
@@ -58,22 +58,22 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModel
             {
                 IsBusy = true;
 
-                TimesheetPageService pageService = new(Context);
+                //TimesheetPageService pageService = new(Context);
 
-                List<int> pages;
-                if (options == DownloadOptions.UnconfirmedOnly)
-                    pages = pageService.GetPageWithUnconfirmedTS(Cutoff.CutoffId, PayrollCode);
-                else
-                {
-                    DownloadSummaryService service = new(Adapter);
-                    DownloadSummary<Timesheet> summary = await service.GetTimesheetSummary(Cutoff.CutoffRange, PayrollCode);
-                    pages = Enumerable.Range(0, int.Parse(summary.TotalPage) + 1).ToList();
-                }
+                //List<int> pages;
+                //if (options == DownloadOptions.UnconfirmedOnly)
+                //    pages = pageService.GetPageWithUnconfirmedTS(Cutoff.CutoffId, PayrollCode);
+                //else
+                //{
+                //    DownloadSummaryService service = new(Adapter);
+                //    DownloadSummary<Timesheet> summary = await service.GetTimesheetSummary(Cutoff.CutoffRange, PayrollCode);
+                //    pages = Enumerable.Range(0, int.Parse(summary.TotalPage) + 1).ToList();
+                //}
 
-                DownloadStarted?.Invoke(this, pages.Count);
+                //DownloadStarted?.Invoke(this, pages.Count);
 
-                foreach (int page in pages)
-                    await DownloadPageContentAsync(page);
+                //foreach (int page in pages)
+                //    await DownloadPageContentAsync(page);
 
             }
             IsBusy = false;
@@ -122,16 +122,16 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModel
                 string site = "MANILA";
                 if (PayrollCode[0] == 'L') site = "LEYTE";
 
-                DownloadTimesheetService service = new(Adapter);
-                DownloadContent<Timesheet> timesheets = await service.DownloadTimesheets(Cutoff.CutoffRange, PayrollCode, page, site);
-                if (timesheets is not null && timesheets.message is not null)
-                {
-                    SaveTimesheetBizLogic writeBizLogic = new(Context);
-                    foreach (Timesheet timesheet in timesheets.message)
-                        writeBizLogic.SaveTimesheet(timesheet, Cutoff.CutoffId, page);
+                //DownloadTimesheetService service = new(Adapter);
+                //DownloadContent<Timesheet> timesheets = await service.DownloadTimesheets(Cutoff.CutoffRange, PayrollCode, page, site);
+                //if (timesheets is not null && timesheets.message is not null)
+                //{
+                //    SaveTimesheetBizLogic writeBizLogic = new(Context);
+                //    foreach (Timesheet timesheet in timesheets.message)
+                //        writeBizLogic.SaveTimesheet(timesheet, Cutoff.CutoffId, page);
 
-                    PageDownloadSucceeded?.Invoke(this, page);
-                }
+                //    PageDownloadSucceeded?.Invoke(this, page);
+                //}
             }
             catch (Exception ex)
             {

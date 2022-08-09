@@ -1,4 +1,5 @@
-﻿using Pms.Main.FrontEnd.Wpf.ViewModel;
+﻿using Pms.Main.FrontEnd.Wpf.Stores;
+using Pms.Main.FrontEnd.Wpf.ViewModel;
 using Pms.Timesheets.Domain.SupportTypes;
 using System;
 using System.Collections.Generic;
@@ -22,87 +23,79 @@ namespace Pms.Main.FrontEnd.Wpf
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
-        private readonly CollectionViewSource CutoffViewSource;
-        private readonly CollectionViewSource PayrollCodeViewSource;
-
-        private readonly FilterTimesheetsViewModel TimesheetController;
-        private readonly FilterEmployeesViewModel EmployeeController;
-
+    { 
 
         public MainWindow()
         {
             InitializeComponent();
 
-            TimesheetController = new(Shared.DefaultCutoff, Shared.DefaultPayrollCode);
-            EmployeeController = new(Shared.DefaultPayrollCode);
+            // _cutoffStore = cutoffStore;
+    }
 
-            CutoffViewSource = (CollectionViewSource)FindResource(nameof(CutoffViewSource));
-            PayrollCodeViewSource = (CollectionViewSource)FindResource(nameof(PayrollCodeViewSource));
-        }
+        //private void Window_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    CutoffViewSource.Source = _cutoffStore.Timesheets;
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            List<string> cutoffs = TimesheetController.GetCutoffs();
-            CutoffViewSource.Source = cutoffs;
+        //    //List<string> payrollCodes = EmployeeController.ListPayrollCodes();
+        //    //PayrollCodeViewSource.Source = payrollCodes;
+        //}
 
-            List<string> payrollCodes = EmployeeController.ListPayrollCodes();
-            PayrollCodeViewSource.Source = payrollCodes;
-        }
-
-        private void CbPayrollDate_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                Shared.DefaultCutoff = new Cutoff(cbPayrollDate.Text);
-                frmMain.Refresh();
-            }
-        }
-        private void CbPayrollDate_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            object? currentValue = e.AddedItems[0];
-            if (currentValue is not null)
-            {
-                Shared.DefaultCutoff = new Cutoff((string)currentValue);
-                frmMain.Refresh();
-            }
-        }
+        //private void CbPayrollDate_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    if (e.Key == Key.Enter)
+        //    {
+        //        //Shared.DefaultCutoff = new Cutoff(cbPayrollDate.Text);
+        //        frmMain.Refresh();
+        //    }
+        //}
+        //private void CbPayrollDate_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    object? currentValue = e.AddedItems[0];
+        //    if (currentValue is not null)
+        //    {
+        //        Shared.DefaultCutoff = new Cutoff((string)currentValue);
+        //        frmMain.Refresh();
+        //    }
+        //}
 
 
-        private void cbPayrollCode_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                Shared.DefaultPayrollCode = cbPayrollCode.Text;
-                frmMain.Refresh();
-            }
-        }
-        private void cbPayrollCode_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            object? currentValue = e.AddedItems[0];
-            if (currentValue is not null)
-            {
-                Shared.DefaultPayrollCode = (string)currentValue;
-                frmMain.Refresh();
-            }
-        }
+        //private void cbPayrollCode_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    if (e.Key == Key.Enter)
+        //    {
+        //        //Shared.DefaultPayrollCode = cbPayrollCode.Text;
+        //        frmMain.Refresh();
+        //    }
+        //}
+        //private void cbPayrollCode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    object? currentValue = e.AddedItems[0];
+        //    if (currentValue is not null)
+        //    {
+        //        Shared.DefaultPayrollCode = (string)currentValue;
+        //        frmMain.Refresh();
+        //    }
+        //}
 
 
-        private TimesheetPage? TimesheetPage;
+        //private TimesheetPage? TimesheetPage;
         private void BtnTimesheet_Checked(object sender, RoutedEventArgs e)
         {
-            if (TimesheetPage is null)
-                TimesheetPage = new();
-            frmMain.Navigate(TimesheetPage);
+            //if (TimesheetPage is null)
+            //{
+            //    TimesheetPage = new();
+            //    TimesheetPage.DataContext = App.Current.Services.GetService(typeof(NewTimesheetDownloadingViewModel));
+            //}
+            //frmMain.Navigate(TimesheetPage);
         }
 
         private void BtnEmployee_Checked(object sender, RoutedEventArgs e)
         {
-            if (Shared.DefaultCutoff is not null)
-            {
-                EmployeeUi employeeUI = new();
-                frmMain.Navigate(employeeUI);
-            }
+            //if (Shared.DefaultCutoff is not null)
+            //{
+            //    EmployeeUi employeeUI = new();
+            //    frmMain.Navigate(employeeUI);
+            //}
         }
 
         private void BtnAdjustment_Click(object sender, RoutedEventArgs e)

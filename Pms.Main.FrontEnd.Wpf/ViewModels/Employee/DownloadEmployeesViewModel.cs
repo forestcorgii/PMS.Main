@@ -35,7 +35,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModel
 
         public DownloadEmployeesViewModel(string payrollCode)
         {
-            Context = new EmployeeDbContext();
+            //Context = new EmployeeDbContext();
             Adapter = HRMSAdapterFactory.CreateAdapter(Shared.Configuration);
 
             PayrollCode = payrollCode;
@@ -56,26 +56,26 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModel
 
         public async Task FindEmployeeAsync(string[] eeIds)
         {
-            EmployeeDownloadStarted?.Invoke(this, eeIds.Length);
-            foreach (string eeId in eeIds)
-            {
-                try
-                {
-                    FindEmployeeService service = new(Adapter);
-                    Employee? employeeFound = await service.GetEmployeeAsync(eeId, Site);
-                    if (employeeFound is null)
-                        employeeFound = new Employee() { EEId = eeId, Active = false };
+            //EmployeeDownloadStarted?.Invoke(this, eeIds.Length);
+            //foreach (string eeId in eeIds)
+            //{
+            //    try
+            //    {
+            //        FindEmployeeService service = new(Adapter);
+            //        Employee? employeeFound = await service.GetEmployeeAsync(eeId, Site);
+            //        if (employeeFound is null)
+            //            employeeFound = new Employee() { EEId = eeId, Active = false };
 
-                    SaveEmployeeService saveService = new(Context);
-                    saveService.CreateOrEditAndSave(employeeFound);
+            //        SaveEmployeeService saveService = new(Context);
+            //        saveService.CreateOrEditAndSave(employeeFound);
 
-                    EmployeeDownloadSucceed?.Invoke(this, eeId);
-                }
-                catch (Exception ex)
-                {
-                    EmployeeDownloadError?.Invoke(this, eeId, ex.Message);
-                }
-            }
+            //        EmployeeDownloadSucceed?.Invoke(this, eeId);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        EmployeeDownloadError?.Invoke(this, eeId, ex.Message);
+            //    }
+            //}
         }
 
 

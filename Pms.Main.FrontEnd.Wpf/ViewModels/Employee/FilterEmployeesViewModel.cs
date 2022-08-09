@@ -21,39 +21,44 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModel
 
         public FilterEmployeesViewModel(string payrollCode)
         {
-            Context = new EmployeeDbContext();
+            //Context = new EmployeeDbContext();
 
             PayrollCode = payrollCode;
         }
 
         public List<Employee> ListEmployeesByPayrollCode(string searchString)
         {
-            ListEmployeesService service = new(Context);
-            return service.FilterEmployees(searchString, PayrollCode).ToList();
+            //ListEmployeesService service = new(Context);
+            //return service.FilterEmployees(searchString, PayrollCode).ToList();
+            return new List<Employee>();
         }
 
         public List<Employee> ListEmployeesByPayrollCode()
         {
-            ListEmployeesService service = new(Context);
-            return service.FilterEmployees("", PayrollCode).ToList();
+            //ListEmployeesService service = new(Context);
+            //return service.FilterEmployees("", PayrollCode).ToList();
+            return new List<Employee>();
         }
 
         public List<Employee> ListAllEmployees()
         {
-            ListEmployeesService service = new(Context);
-            return service.GetEmployees().ToList();
+            //ListEmployeesService service = new(Context);
+            //return service.GetEmployees().ToList();
+            return new List<Employee>();
         }
 
         public List<string> ListPayrollCodes()
         {
-            ListEmployeesService service = new(Context);
-            return service.ListEmployeePayrollCodes().ToList();
+            //ListEmployeesService service = new(Context);
+            //return service.ListEmployeePayrollCodes().ToList();
+            return new List<string>();
         }
 
         public List<string> ListBankCategories(string payrollCodes)
         {
-            ListEmployeesService service = new(Context);
-            return service.ListEmployeeBankCategory(payrollCodes).ToList();
+            //ListEmployeesService service = new(Context);
+            //return service.ListEmployeeBankCategory(payrollCodes).ToList();
+            return new List<string>();
         }
     }
 }
