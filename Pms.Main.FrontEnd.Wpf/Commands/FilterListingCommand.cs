@@ -13,9 +13,9 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
     {
         public event EventHandler? CanExecuteChanged;
 
-        private CutoffStore _cutoffStore;
+        private MainStore _cutoffStore;
 
-        public FilterListingCommand(CutoffStore cutoffStore)
+        public FilterListingCommand(MainStore cutoffStore)
         {
             _cutoffStore = cutoffStore;
         }

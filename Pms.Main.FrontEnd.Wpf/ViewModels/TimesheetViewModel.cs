@@ -57,7 +57,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         public ICommand LoadTimesheetCommand { get; }
 
 
-        public TimesheetViewModel(CutoffTimesheet cutoffTimesheet, EmployeeModel employeeModel, CutoffStore cutoffStore, TimesheetStore timesheetStore,EmployeeStore employeeStore)
+        public TimesheetViewModel(CutoffTimesheet cutoffTimesheet, EmployeeModel employeeModel, MainStore cutoffStore, TimesheetStore timesheetStore,EmployeeStore employeeStore)
         {
             _timesheetStore = timesheetStore;
             _timesheetStore.TimesheetsReloaded += _cutoffStore_TimesheetsReloaded;

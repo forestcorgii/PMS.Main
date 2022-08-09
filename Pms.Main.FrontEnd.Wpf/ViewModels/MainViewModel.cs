@@ -18,7 +18,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 {
     public class MainViewModel : ObservableValidator
     {
-        private readonly CutoffStore _cutoffStore;
+        private readonly MainStore _cutoffStore;
         private readonly NavigationStore _navigationStore;
         public ObservableObject CurrentViewModel => _navigationStore.CurrentViewModel;
 
@@ -82,7 +82,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         public ICommand EmployeeCommand { get; }
         public ICommand LoadFilterCommand { get; }
 
-        public MainViewModel(CutoffStore cutoffStore, NavigationStore navigationStore, NavigationService<TimesheetViewModel> timesheetNavigation, NavigationService<EmployeeViewModel> employeeNavigation)
+        public MainViewModel(MainStore cutoffStore, NavigationStore navigationStore, NavigationService<TimesheetViewModel> timesheetNavigation, NavigationService<EmployeeViewModel> employeeNavigation)
         {
             _navigationStore = navigationStore;
             _cutoffStore = cutoffStore;

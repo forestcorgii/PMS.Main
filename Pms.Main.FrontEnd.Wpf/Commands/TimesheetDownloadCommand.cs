@@ -15,10 +15,10 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
     public class TimesheetDownloadCommand : IRelayCommand
     {
         private TimesheetViewModel _viewModel;
-        private CutoffStore _cutoffStore;
+        private MainStore _cutoffStore;
         private CutoffTimesheet _cutoffTimesheet;
 
-        public TimesheetDownloadCommand(TimesheetViewModel viewModel, CutoffStore cutoffStore, CutoffTimesheet cutoffTimesheet)
+        public TimesheetDownloadCommand(TimesheetViewModel viewModel, MainStore cutoffStore, CutoffTimesheet cutoffTimesheet)
         {
             _viewModel = viewModel;
             _cutoffStore = cutoffStore;

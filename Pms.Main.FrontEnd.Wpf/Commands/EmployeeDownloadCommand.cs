@@ -17,7 +17,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
         private ViewModelBase _viewModel;
         private EmployeeModel _employeeModel;
         private EmployeeStore _employeeStore;
-        private CutoffStore _cutoffStore;
+        private MainStore _cutoffStore;
 
         public Task? ExecutionTask => throw new NotImplementedException();
 
@@ -30,7 +30,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
         public event EventHandler? CanExecuteChanged;
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public EmployeeDownloadCommand(ViewModelBase viewModel, CutoffStore cutoffStore, EmployeeStore employeeStore, EmployeeModel employeeModel)
+        public EmployeeDownloadCommand(ViewModelBase viewModel, MainStore cutoffStore, EmployeeStore employeeStore, EmployeeModel employeeModel)
         {
             _viewModel = viewModel;
             _cutoffStore = cutoffStore;

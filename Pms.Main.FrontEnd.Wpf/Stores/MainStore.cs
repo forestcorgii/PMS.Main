@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Pms.Main.FrontEnd.Wpf.Stores
 {
-    public class CutoffStore
+    public class MainStore
     {
         #region MAIN
         public Cutoff Cutoff { get; private set; }
@@ -53,7 +53,7 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         private readonly EmployeeStore _employeeStore;
 
 
-        public CutoffStore(CutoffTimesheet cutoffTimesheet,TimesheetStore timesheetStore, EmployeeStore employeeStore)
+        public MainStore(CutoffTimesheet cutoffTimesheet,TimesheetStore timesheetStore, EmployeeStore employeeStore)
         {
             _timesheetStore = timesheetStore;
             _employeeStore = employeeStore;

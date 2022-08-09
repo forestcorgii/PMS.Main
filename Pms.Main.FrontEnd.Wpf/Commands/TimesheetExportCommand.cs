@@ -17,12 +17,12 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
     public class TimesheetExportCommand : IRelayCommand
     {
         private readonly TimesheetViewModel _viewModel;
-        private CutoffStore _cutoffStore;
+        private MainStore _cutoffStore;
         private CutoffTimesheet _cutoffTimesheet;
 
         public event EventHandler? CanExecuteChanged;
 
-        public TimesheetExportCommand(TimesheetViewModel viewModel, CutoffTimesheet cutoffTimesheet, CutoffStore cutoffStore)
+        public TimesheetExportCommand(TimesheetViewModel viewModel, CutoffTimesheet cutoffTimesheet, MainStore cutoffStore)
         {
             _viewModel = viewModel;
             _cutoffStore = cutoffStore;

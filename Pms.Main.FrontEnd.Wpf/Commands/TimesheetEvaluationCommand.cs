@@ -14,12 +14,12 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
     public class TimesheetEvaluationCommand : IRelayCommand
     {
         private TimesheetViewModel _viewModel;
-        private CutoffStore _cutoffStore;
+        private MainStore _cutoffStore;
         private CutoffTimesheet _cutoffTimesheet;
 
         public event EventHandler? CanExecuteChanged;
 
-        public TimesheetEvaluationCommand(TimesheetViewModel viewModel, CutoffTimesheet cutoffTimesheet, CutoffStore cutoffStore)
+        public TimesheetEvaluationCommand(TimesheetViewModel viewModel, CutoffTimesheet cutoffTimesheet, MainStore cutoffStore)
         {
             _viewModel = viewModel;
             _cutoffStore = cutoffStore;

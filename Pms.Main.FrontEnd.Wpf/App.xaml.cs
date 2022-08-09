@@ -72,7 +72,7 @@ namespace Pms.Main.FrontEnd.Wpf
 
 
             services.AddSingleton<NavigationStore>();
-            services.AddSingleton<CutoffStore>();
+            services.AddSingleton<MainStore>();
             services.AddSingleton<TimesheetStore>();
             services.AddSingleton<EmployeeStore>();
 

@@ -16,7 +16,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
     public class EmployeeViewModel : ViewModelBase
     {
         private EmployeeModel _employeeModel { get; set; }
-        private CutoffStore _cutoffStore { get; set; }
+        private MainStore _cutoffStore { get; set; }
         private EmployeeStore _employeeStore { get; set; }
 
         private string _filter = "";
@@ -44,7 +44,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         public ICommand LoadEmployeesCommand { get; }
         public ICommand DownloadCommand { get; }
 
-        public EmployeeViewModel(CutoffStore cutoffStore, EmployeeStore employeeStore, EmployeeModel employeeModel)
+        public EmployeeViewModel(MainStore cutoffStore, EmployeeStore employeeStore, EmployeeModel employeeModel)
         {
             _employeeModel = employeeModel;
 
