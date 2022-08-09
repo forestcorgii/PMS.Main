@@ -57,6 +57,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
 
         private string payrollCode = "";
+        [MaxLength(6)]
         [CustomValidation(typeof(MainViewModel), nameof(ValidatePayrollCode))]
         public string PayrollCode
         {
@@ -64,16 +65,14 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             set
             {
                 SetProperty(ref payrollCode, value, true);
-                string _payrollCode = PayrollCodeParser.Parse(payrollCode);
-                if (payrollCode != "")
-                    _cutoffStore.SetPayrollCodeAsync(_payrollCode);
+                if (PayrollCodeValidator.Validate(payrollCode))
+                    _cutoffStore.SetPayrollCode(payrollCode);
             }
         }
-        public static ValidationResult ValidatePayrollCode(string name, ValidationContext context)
+        public static ValidationResult ValidatePayrollCode(string name,ValidationContext context)
         {
             MainViewModel instance = (MainViewModel)context.ObjectInstance;
-            string payrollCode = PayrollCodeParser.Parse(instance.PayrollCode);
-            if (payrollCode != "")
+            if (PayrollCodeValidator.Validate(instance.PayrollCode))
                 return ValidationResult.Success;
 
             return new("Invalid Payroll Code.");
@@ -107,14 +106,6 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             PayrollCodes = _cutoffStore.PayrollCodes;
         }
 
-        //public static MainViewModel LoadViewModel(CutoffStore cutoffStore, NavigationStore navigationStore, NavigationService<TimesheetViewModel> newTimesheetNavigation)
-        //{
-        //    MainViewModel viewModel = new MainViewModel(cutoffStore, navigationStore, newTimesheetNavigation);
-
-        //    viewModel.LoadFilterCommand.Execute(null);
-
-        //    return viewModel;
-        //}
 
         private void OnCurrentViewModelChanged()
         {

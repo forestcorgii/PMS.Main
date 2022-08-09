@@ -13,16 +13,16 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
     public class EmployeeListingCommand : IRelayCommand
     {
         private EmployeeViewModel _viewModel;
-        private CutoffStore _cutoffStore;
+        private EmployeeStore _employeeStore;
 
         public event EventHandler? CanExecuteChanged;
         private bool _canExecute;
 
 
-        public EmployeeListingCommand(EmployeeViewModel viewModel, CutoffStore cutoffStore)
+        public EmployeeListingCommand(EmployeeViewModel viewModel, EmployeeStore employeeStore)
         {
             _viewModel = viewModel;
-            _cutoffStore = cutoffStore;
+            _employeeStore = employeeStore;
 
         }
         public bool CanExecute(object? parameter) => _canExecute;
@@ -33,7 +33,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
 
             try
             {
-                await _cutoffStore.LoadEmployees();
+                await _employeeStore.Load();
             }
             catch
             {

@@ -26,48 +26,52 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
                     return "MANILA";
             }
         }
+
         public List<string> CutoffIds { get; private set; }
         public List<string> PayrollCodes { get; private set; }
         public event Action? FiltersReloaded;
         private Lazy<Task> _initializeLoadFiltersLazy;
         #endregion
 
-        #region TIMESHEET
         private CutoffTimesheet _cutoffTimesheet;
-        private readonly List<Timesheet> _timesheets;
-        public IEnumerable<Timesheet> Timesheets => _timesheets;
-        private Lazy<Task> _initializeLoadTimesheetsLazy;
-        public event Action? TimesheetsReloaded;
-        #endregion
+        //#region TIMESHEET
+        //private readonly List<Timesheet> _timesheets;
+        //public IEnumerable<Timesheet> Timesheets => _timesheets;
+        //private Lazy<Task> _initializeLoadTimesheetsLazy;
+        //public event Action? TimesheetsReloaded;
+        //#endregion
 
-        #region EMPLOYEE
-        private EmployeeModel _employeeModel;
-        private readonly List<Employee> _employees;
-        public IEnumerable<Employee> Employees => _employees;
-        private Lazy<Task> _initializeLoadEmployeesLazy;
-        public event Action? EmployeesReloaded;
-        #endregion
+        //#region EMPLOYEE
+        //private EmployeeModel _employeeModel;
+        //private readonly List<Employee> _employees;
+        //public IEnumerable<Employee> Employees => _employees;
+        //private Lazy<Task> _initializeLoadEmployeesLazy;
+        //public event Action? EmployeesReloaded;
+        //#endregion
+
+        private readonly TimesheetStore _timesheetStore;
+        private readonly EmployeeStore _employeeStore;
 
 
-
-
-        public CutoffStore(CutoffTimesheet cutoffTimesheet, EmployeeModel employeeModel)
+        public CutoffStore(CutoffTimesheet cutoffTimesheet,TimesheetStore timesheetStore, EmployeeStore employeeStore)
         {
+            _timesheetStore = timesheetStore;
+            _employeeStore = employeeStore;
+            _cutoffTimesheet = cutoffTimesheet;
             // MAIN
             Cutoff = new Cutoff();
             CutoffIds = new List<string>();
             PayrollCodes = new List<string>();
             _initializeLoadFiltersLazy = new Lazy<Task>(InitializeLoadFilters);
 
-            // TIMESHEET
-            _timesheets = new List<Timesheet>();
-            _initializeLoadTimesheetsLazy = new Lazy<Task>(InitializeLoadTimesheets);
-            _cutoffTimesheet = cutoffTimesheet;
+            //// TIMESHEET
+            //_timesheets = new List<Timesheet>();
+            //_initializeLoadTimesheetsLazy = new Lazy<Task>(InitializeLoadTimesheets);
 
-            // EMPLOYEE
-            _employees = new List<Employee>();
-            _employeeModel = employeeModel;
-            _initializeLoadEmployeesLazy = new Lazy<Task>(InitializeLoadEmployees);
+            //// EMPLOYEE
+            //_employees = new List<Employee>();
+            //_employeeModel = employeeModel;
+            //_initializeLoadEmployeesLazy = new Lazy<Task>(InitializeLoadEmployees);
         }
 
         public async Task LoadFilters()
@@ -78,7 +82,7 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             }
             catch (Exception)
             {
-                _initializeLoadFiltersLazy = new Lazy<Task>(InitializeLoadTimesheets);
+                _initializeLoadFiltersLazy = new Lazy<Task>(InitializeLoadFilters);
                 throw;
             }
         }
@@ -99,91 +103,89 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         }
 
 
-        public async Task LoadTimesheets()
-        {
-            try
-            {
-                await _initializeLoadTimesheetsLazy.Value;
-            }
-            catch (Exception)
-            {
-                _initializeLoadTimesheetsLazy = new Lazy<Task>(InitializeLoadTimesheets);
-                throw;
-            }
-        }
+        //public async Task LoadTimesheets()
+        //{
+        //    try
+        //    {
+        //        await _initializeLoadTimesheetsLazy.Value;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        _initializeLoadTimesheetsLazy = new Lazy<Task>(InitializeLoadTimesheets);
+        //        throw;
+        //    }
+        //}
 
-        public async Task ReloadTimesheets()
-        {
-            _initializeLoadTimesheetsLazy = new Lazy<Task>(InitializeLoadTimesheets);
-            await _initializeLoadTimesheetsLazy.Value;
-        }
+        //public async Task ReloadTimesheets()
+        //{
+        //    _initializeLoadTimesheetsLazy = new Lazy<Task>(InitializeLoadTimesheets);
+        //    await _initializeLoadTimesheetsLazy.Value;
+        //}
 
-        public async Task ReloadEmployees()
-        {
-            _initializeLoadEmployeesLazy = new Lazy<Task>(InitializeLoadEmployees);
-            await _initializeLoadEmployeesLazy.Value;
-        }
+        //private async Task InitializeLoadTimesheets()
+        //{
+        //    if (Cutoff is not null)
+        //    {
+        //        IEnumerable<Timesheet> timesheets = new List<Timesheet>();
+        //        await Task.Run(() =>
+        //        {
+        //            timesheets = _cutoffTimesheet.GetTimesheets(Cutoff.CutoffId, PayrollCode);
+        //        });
 
-
-        private async Task InitializeLoadTimesheets()
-        {
-            if (Cutoff is not null)
-            {
-                IEnumerable<Timesheet> timesheets = new List<Timesheet>();
-                await Task.Run(() =>
-                {
-                    timesheets = _cutoffTimesheet.GetTimesheets(Cutoff.CutoffId, PayrollCode);
-                });
-
-                _timesheets.Clear();
-                _timesheets.AddRange(timesheets);
-                TimesheetsReloaded?.Invoke();
-            }
-        }
-
-
-        public async Task LoadEmployees()
-        {
-            try
-            {
-                await _initializeLoadEmployeesLazy.Value;
-            }
-            catch (Exception)
-            {
-                _initializeLoadEmployeesLazy = new Lazy<Task>(InitializeLoadEmployees);
-                throw;
-            }
-        }
-
-        private async Task InitializeLoadEmployees()
-        {
-            IEnumerable<Employee> employees = new List<Employee>();
-            await Task.Run(() =>
-            {
-                employees = _employeeModel.FilterEmployees("", PayrollCode);
-            });
-
-            _employees.Clear();
-            _employees.AddRange(employees);
-            EmployeesReloaded?.Invoke();
-        }
+        //        _timesheets.Clear();
+        //        _timesheets.AddRange(timesheets);
+        //        TimesheetsReloaded?.Invoke();
+        //    }
+        //}
 
 
 
+        //public async Task LoadEmployees()
+        //{
+        //    try
+        //    {
+        //        await _initializeLoadEmployeesLazy.Value;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        _initializeLoadEmployeesLazy = new Lazy<Task>(InitializeLoadEmployees);
+        //        throw;
+        //    }
+        //}
+
+        //public async Task ReloadEmployees()
+        //{
+        //    _initializeLoadEmployeesLazy = new Lazy<Task>(InitializeLoadEmployees);
+        //    await _initializeLoadEmployeesLazy.Value;
+        //}
+
+        //private async Task InitializeLoadEmployees()
+        //{
+        //    IEnumerable<Employee> employees = new List<Employee>();
+        //    await Task.Run(() =>
+        //    {
+        //        employees = _employeeModel.FilterEmployees("", PayrollCode);
+        //    });
+
+        //    _employees.Clear();
+        //    _employees.AddRange(employees);
+        //    EmployeesReloaded?.Invoke();
+        //}
 
 
-        public async void SetCutoff(Cutoff cutoff)
+
+        public void SetCutoff(Cutoff cutoff)
         {
             Cutoff = cutoff;
-            await ReloadTimesheets();
+            _timesheetStore.SetCutoffId(cutoff.CutoffId);
         }
 
-        public async void SetPayrollCodeAsync(string payrollCode)
+        public void SetPayrollCode(string payrollCode)
         {
             PayrollCode = payrollCode;
             Cutoff.SetSite(Site);
-            await ReloadTimesheets();
-            await ReloadEmployees();
+            _timesheetStore.SetPayrollCode(payrollCode);
+            _employeeStore.SetPayrollCode(payrollCode);
         }
 
     }

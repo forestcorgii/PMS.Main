@@ -21,9 +21,9 @@
 
         <Grid Grid.Row="0">
             <WrapPanel Orientation="Vertical" Margin="8">
-                <TextBlock Text="{Binding TotalTimesheet}" VerticalAlignment="Center" Margin="6,0,6,0"/>
+                <!--<TextBlock Text="{Binding TotalTimesheet}" VerticalAlignment="Center" Margin="6,0,6,0"/>
                 <TextBlock Text="{Binding UnconfirmedTimesheetWithoutAttendance}" VerticalAlignment="Center" Margin="6,0,6,0"/>
-                <TextBlock Text="{Binding UnconfirmedTimesheetWithAttendance}" VerticalAlignment="Center" Margin="6,0,6,0"/>
+                <TextBlock Text="{Binding UnconfirmedTimesheetWithAttendance}" VerticalAlignment="Center" Margin="6,0,6,0"/>-->
             </WrapPanel>
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">

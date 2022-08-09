@@ -29,7 +29,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         #region Properties
         public bool IsBusy { get; private set; }
 
-        private CutoffStore _cutoffStore { get; set; }
+        private TimesheetStore _timesheetStore { get; set; }
 
         private DownloadOptions options = DownloadOptions.All;
         public DownloadOptions Options
@@ -57,28 +57,28 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         public ICommand LoadTimesheetCommand { get; }
 
 
-        public TimesheetViewModel(CutoffTimesheet cutoffTimesheet, EmployeeModel employeeModel, CutoffStore cutoffStore)
+        public TimesheetViewModel(CutoffTimesheet cutoffTimesheet, EmployeeModel employeeModel, CutoffStore cutoffStore, TimesheetStore timesheetStore,EmployeeStore employeeStore)
         {
-            _cutoffStore = cutoffStore;
-            _cutoffStore.TimesheetsReloaded += _cutoffStore_TimesheetsReloaded;
+            _timesheetStore = timesheetStore;
+            _timesheetStore.TimesheetsReloaded += _cutoffStore_TimesheetsReloaded;
 
-            LoadTimesheetCommand = new TimesheetListingCommand(this, cutoffStore);
-            LoadFilterCommand = new FilterListingCommand(_cutoffStore);
+            LoadTimesheetCommand = new TimesheetListingCommand(this, _timesheetStore);
+            LoadFilterCommand = new FilterListingCommand(cutoffStore);
 
-            EmployeeDownloadCommand = new EmployeeDownloadCommand(this, cutoffStore, employeeModel);
+            EmployeeDownloadCommand = new EmployeeDownloadCommand(this, cutoffStore,employeeStore, employeeModel);
 
             DownloadCommand = new TimesheetDownloadCommand(this, cutoffStore, cutoffTimesheet);
             EvaluateCommand = new TimesheetEvaluationCommand(this, cutoffTimesheet, cutoffStore);
             ExportCommand = new TimesheetExportCommand(this, cutoffTimesheet, cutoffStore);
 
             _timesheets = new();
-            Timesheets = new ObservableCollection<Timesheet>(_cutoffStore.Timesheets);
+            Timesheets = new ObservableCollection<Timesheet>(_timesheetStore.Timesheets);
         }
 
         #region Events
         private void _cutoffStore_TimesheetsReloaded()
         {
-            Timesheets = new ObservableCollection<Timesheet>(_cutoffStore.Timesheets); 
+            Timesheets = new ObservableCollection<Timesheet>(_timesheetStore.Timesheets);
         }
         #endregion
     }

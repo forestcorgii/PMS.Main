@@ -6,12 +6,18 @@ using System.Threading.Tasks;
 
 namespace Pms.Main.FrontEnd.Wpf.Stores
 {
-    public abstract class StoreBase
+    public class StoreBase
     {
-        protected abstract Lazy<Task> _initializeLoadLazy { get; set; }
+        protected Lazy<Task> _initializeLoadLazy { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public abstract Task Load();
+        public Task Load()
+        {
+            throw new NotImplementedException();
+        }
 
-        protected abstract Task InitializeLoad();
+        protected Task InitializeLoad()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

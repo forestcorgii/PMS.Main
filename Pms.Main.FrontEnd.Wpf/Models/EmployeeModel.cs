@@ -29,9 +29,11 @@ namespace Pms.Main.FrontEnd.Wpf.Models
         public async Task<Employee?> FindEmployeeAsync(string eeId, string site) =>
             await _employeeFinder.GetEmployeeAsync(eeId, site);
 
-
         public IEnumerable<Employee> FilterEmployees(string searchString, string payrollCode) =>
             _employeeProvider.FilterEmployees(searchString, payrollCode);
+
+        public IEnumerable<Employee> GetEmployees() =>
+            _employeeProvider.GetEmployees();
 
 
         //public async Task FindEmployeeAsync(string[] eeIds)

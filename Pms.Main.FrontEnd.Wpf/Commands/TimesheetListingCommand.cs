@@ -16,12 +16,12 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private readonly TimesheetViewModel _viewModel;
-        private CutoffStore _cutoffStore;
+        private TimesheetStore _timesheetStore;
         private bool _canExecute;
 
-        public TimesheetListingCommand(TimesheetViewModel viewModel, CutoffStore cutoffStore)
+        public TimesheetListingCommand(TimesheetViewModel viewModel, TimesheetStore timesheetStore)
         {
-            _cutoffStore = cutoffStore;
+            _timesheetStore = timesheetStore;
             _viewModel = viewModel;
         }
 
@@ -33,7 +33,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
             _canExecute = false;
             try
             {
-                await _cutoffStore.LoadTimesheets();
+                await _timesheetStore.Load();
             }
             catch
             {

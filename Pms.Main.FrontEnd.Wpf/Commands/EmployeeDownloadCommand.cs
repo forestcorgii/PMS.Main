@@ -16,6 +16,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
     {
         private ViewModelBase _viewModel;
         private EmployeeModel _employeeModel;
+        private EmployeeStore _employeeStore;
         private CutoffStore _cutoffStore;
 
         public Task? ExecutionTask => throw new NotImplementedException();
@@ -29,10 +30,11 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
         public event EventHandler? CanExecuteChanged;
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public EmployeeDownloadCommand(ViewModelBase viewModel, CutoffStore cutoffStore, EmployeeModel employeeModel)
+        public EmployeeDownloadCommand(ViewModelBase viewModel, CutoffStore cutoffStore, EmployeeStore employeeStore, EmployeeModel employeeModel)
         {
             _viewModel = viewModel;
             _cutoffStore = cutoffStore;
+            _employeeStore = employeeStore;
             _employeeModel = employeeModel;
 
         }
@@ -52,7 +54,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
             if (parameter is not null && parameter is string[])
                 eeIds = (string[])parameter;
             else
-                eeIds = _cutoffStore.Employees.Select(ee => ee.EEId).ToArray();
+                eeIds = _employeeStore.Employees.Select(ee => ee.EEId).ToArray();
 
             _viewModel.SetProgress("Syncing Unknown Employees", eeIds.Length);
 

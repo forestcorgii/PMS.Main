@@ -73,6 +73,8 @@ namespace Pms.Main.FrontEnd.Wpf
 
             services.AddSingleton<NavigationStore>();
             services.AddSingleton<CutoffStore>();
+            services.AddSingleton<TimesheetStore>();
+            services.AddSingleton<EmployeeStore>();
 
 
             services.AddTransient<TimesheetViewModel>();
