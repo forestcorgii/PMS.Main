@@ -2,8 +2,7 @@
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Timesheets.Domain;
 using Pms.Timesheets.Domain.SupportTypes;
-using Pms.Timesheets.ServiceLayer.EfCore.Queries;
-using Pms.Timesheets.ServiceLayer.EfCore.QueryObjects;
+using Pms.Timesheets.ServiceLayer.EfCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;

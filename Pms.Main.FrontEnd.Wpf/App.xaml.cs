@@ -16,7 +16,6 @@ using Pms.Timesheets.BizLogic.Concrete;
 using Pms.Timesheets.Domain.SupportTypes;
 using Pms.Timesheets.Persistence;
 using Pms.Timesheets.ServiceLayer.EfCore;
-using Pms.Timesheets.ServiceLayer.EfCore.Concrete;
 using Pms.Timesheets.ServiceLayer.TimeSystem;
 using Pms.Timesheets.ServiceLayer.TimeSystem.Adapter;
 using Pms.Timesheets.ServiceLayer.TimeSystem.Services;
@@ -63,8 +62,7 @@ namespace Pms.Main.FrontEnd.Wpf
             services.AddSingleton<IEmployeeFinder, FindEmployeeService>();
             services.AddTransient<EmployeeModel>();
 
-            services.AddSingleton<ITimesheetProvider, TimesheetProvider>();
-            services.AddSingleton<ITimesheetPageProvider, TimesheetPageProvider>();
+            services.AddSingleton<IProvideTimesheetService, ProvideTimesheetService>();
             services.AddSingleton<IDownloadContentProvider, DownloadContentProvider>();
             services.AddSingleton<ITimesheetSaving, SaveTimesheetBizLogic>();
             services.AddTransient<Cutoff>();

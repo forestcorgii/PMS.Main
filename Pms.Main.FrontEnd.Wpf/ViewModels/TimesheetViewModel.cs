@@ -8,8 +8,6 @@ using Pms.Timesheets.BizLogic.Concrete;
 using Pms.Timesheets.Domain;
 using Pms.Timesheets.Domain.SupportTypes;
 using Pms.Timesheets.Persistence;
-using Pms.Timesheets.ServiceLayer.EfCore.Concrete;
-using Pms.Timesheets.ServiceLayer.EfCore.Queries;
 using Pms.Timesheets.ServiceLayer.Outputs;
 using Pms.Timesheets.ServiceLayer.TimeSystem.Adapter;
 using Pms.Timesheets.ServiceLayer.TimeSystem.Services;

@@ -2,8 +2,6 @@
 using Pms.Timesheets.Domain;
 using Pms.Timesheets.Domain.SupportTypes;
 using Pms.Timesheets.ServiceLayer.EfCore;
-using Pms.Timesheets.ServiceLayer.EfCore.Queries;
-using Pms.Timesheets.ServiceLayer.EfCore.QueryObjects;
 using Pms.Timesheets.ServiceLayer.TimeSystem;
 using System;
 using System.Collections.Generic;
@@ -15,21 +13,19 @@ namespace Pms.Main.FrontEnd.Wpf.Models
 {
     public class CutoffTimesheet
     {
-        private ITimesheetProvider _timesheetProvider;
-        private ITimesheetPageProvider _pageProvider;
+        private IProvideTimesheetService _timesheetProvider;
         private IDownloadContentProvider _downloadProvider;
         private ITimesheetSaving _timesheetSaving;
 
-        public CutoffTimesheet(ITimesheetProvider timesheetProvider, ITimesheetPageProvider pageProvider, IDownloadContentProvider downloadProvider, ITimesheetSaving timesheetSaving)
+        public CutoffTimesheet(IProvideTimesheetService timesheetProvider,  IDownloadContentProvider downloadProvider, ITimesheetSaving timesheetSaving)
         {
             _timesheetProvider = timesheetProvider;
-            _pageProvider = pageProvider;
             _downloadProvider = downloadProvider;
             _timesheetSaving = timesheetSaving;
         } 
 
         public IEnumerable<Timesheet> GetTimesheets(string cutoffId) =>
-                    _timesheetProvider.GetTimesheetsByCutoffId(cutoffId);
+                    _timesheetProvider.GetTimesheets().FilterByCutoffId(cutoffId);
          
 
         public IEnumerable<string> ListTimesheetNoEETimesheet(string cutoffId) =>
@@ -43,10 +39,10 @@ namespace Pms.Main.FrontEnd.Wpf.Models
 
 
         public int[] GetPageWithUnconfirmedTS(Cutoff cutoff, string payrollCode) =>
-            _pageProvider.GetPageWithUnconfirmedTS(cutoff.CutoffId, payrollCode).ToArray();
+            _timesheetProvider.GetPageWithUnconfirmedTS(cutoff.CutoffId, payrollCode).ToArray();
 
         public int[] GetMissingPages(string cutoffId, string payrollCode) =>
-            _pageProvider.GetMissingPages(cutoffId, payrollCode).ToArray();
+            _timesheetProvider.GetMissingPages(cutoffId, payrollCode).ToArray();
 
          
 
