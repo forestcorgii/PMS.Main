@@ -3,6 +3,7 @@ using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Timesheets.Domain;
 using Pms.Timesheets.Domain.SupportTypes;
 using Pms.Timesheets.ServiceLayer.EfCore.Queries;
+using Pms.Timesheets.ServiceLayer.EfCore.QueryObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,23 +35,23 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         #endregion
 
         private CutoffTimesheet _cutoffTimesheet;
-        
+
         private readonly TimesheetStore _timesheetStore;
         private readonly EmployeeStore _employeeStore;
 
 
-        public MainStore(CutoffTimesheet cutoffTimesheet,TimesheetStore timesheetStore, EmployeeStore employeeStore)
+        public MainStore(CutoffTimesheet cutoffTimesheet, TimesheetStore timesheetStore, EmployeeStore employeeStore)
         {
             _timesheetStore = timesheetStore;
             _employeeStore = employeeStore;
             _cutoffTimesheet = cutoffTimesheet;
-            
+
 
             Cutoff = new Cutoff();
             CutoffIds = new List<string>();
             PayrollCodes = new List<string>();
             _initializeLoadFiltersLazy = new Lazy<Task>(InitializeLoadFilters);
-  }
+        }
 
         public async Task LoadFilters()
         {
@@ -71,15 +72,15 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             List<string> payrollCodes = new();
             await Task.Run(() =>
             {
-                cutoffIds = _cutoffTimesheet.ListTimesheetCutoffIds();
-                payrollCodes = _cutoffTimesheet.ListTimesheetPayrollCodes();
+                cutoffIds = _timesheetStore.Timesheets.ExtractCutoffIds();
+                payrollCodes = _timesheetStore.Timesheets.ExtractPayrollCodes();
             });
 
             CutoffIds = cutoffIds;
             PayrollCodes = payrollCodes;
             FiltersReloaded?.Invoke();
         }
- 
+
 
         public void SetCutoff(Cutoff cutoff)
         {

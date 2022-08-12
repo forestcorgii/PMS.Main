@@ -23,7 +23,10 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         public string Filter
         {
             get => _filter;
-            set => SetProperty(ref _filter, value);
+            set { 
+
+                SetProperty(ref _filter, value); 
+            }
         }
 
         private Employee _selectedEmployee;
@@ -63,5 +66,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         {
             Employees = new ObservableCollection<Employee>(_employeeStore.Employees);
         }
+
+
     }
 }

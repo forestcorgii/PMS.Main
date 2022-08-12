@@ -57,7 +57,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         public ICommand LoadTimesheetCommand { get; }
 
 
-        public TimesheetViewModel(CutoffTimesheet cutoffTimesheet, EmployeeModel employeeModel, MainStore cutoffStore, TimesheetStore timesheetStore,EmployeeStore employeeStore)
+        public TimesheetViewModel(CutoffTimesheet cutoffTimesheet, EmployeeModel employeeModel, MainStore cutoffStore, TimesheetStore timesheetStore, EmployeeStore employeeStore)
         {
             _timesheetStore = timesheetStore;
             _timesheetStore.TimesheetsReloaded += _cutoffStore_TimesheetsReloaded;
@@ -65,7 +65,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             LoadTimesheetCommand = new TimesheetListingCommand(this, _timesheetStore);
             LoadFilterCommand = new FilterListingCommand(cutoffStore);
 
-            EmployeeDownloadCommand = new EmployeeDownloadCommand(this, cutoffStore,employeeStore, employeeModel);
+            EmployeeDownloadCommand = new EmployeeDownloadCommand(this, cutoffStore, employeeStore, employeeModel);
 
             DownloadCommand = new TimesheetDownloadCommand(this, cutoffStore, cutoffTimesheet);
             EvaluateCommand = new TimesheetEvaluationCommand(this, cutoffTimesheet, cutoffStore);

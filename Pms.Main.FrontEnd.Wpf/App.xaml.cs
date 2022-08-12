@@ -33,7 +33,7 @@ namespace Pms.Main.FrontEnd.Wpf
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App 
     {
         public new static App Current => (App)Application.Current;
 
@@ -100,7 +100,6 @@ namespace Pms.Main.FrontEnd.Wpf
         public App()
         {
             Services = ConfigureServices();
-
             InitializeComponent();
         }
 

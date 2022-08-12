@@ -32,7 +32,7 @@
 
             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="8,0">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock  VerticalAlignment="Center" Margin="6">Cutoff Date:</TextBlock>
+                    <TextBlock  VerticalAlignment="Center" Margin="6">Cutoff Id:</TextBlock>
                     <ComboBox Name="cbPayrollDate" Text="{Binding CutoffId, UpdateSourceTrigger=PropertyChanged}" 
                               ItemsSource="{Binding CutoffIds}" 
                               Width="125" VerticalAlignment="Center" IsEditable="True"/>
@@ -76,27 +76,27 @@
                 <Button x:Name="BtnTimesheet" 
                         Content="Timesheet"
                         Command="{Binding TimesheetCommand}"
-                        Style="{StaticResource MenuButton}" 
-                        Click="BtnTimesheet_Checked"/>
+                        Style="{StaticResource MenuButton}"
+                        />
 
                 <Button x:Name="BtnAdjustment" 
                         IsEnabled="False"
                         Content="Adjustment"
                         Style="{StaticResource MenuButton}" 
-                        Click="BtnAdjustment_Click"/>
+                        />
                 
                 <Button x:Name="BtnPayroll" 
                         IsEnabled="False"
                         Content="Payroll"
                         Command="{Binding EmployeeCommand}"
                         Style="{StaticResource MenuButton}" 
-                        Click="BtnPayroll_Click"/>
+                        />
 
                 <Button x:Name="BtnEmployee" 
                         Content="Employee"
                         Command="{Binding EmployeeCommand}"
                         Style="{StaticResource MenuButton}" 
-                        Click="BtnEmployee_Checked"/>
+                        />
             </StackPanel>
 
 

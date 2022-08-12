@@ -50,7 +50,7 @@
     <Compile Update="View\Adjustment\AdjustmentRecord.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\Employee\EmployeeUi.xaml.cs">
+    <Compile Update="View\EmployeeUi.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\Payroll\PayRegister.xaml.cs">
@@ -79,7 +79,7 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\Employee\EmployeeUi.xaml">
+    <Page Update="View\EmployeeUi.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
@@ -111,7 +111,7 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\Timesheet\TimesheetPage.xaml">
+    <Page Update="View\TimesheetPage.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

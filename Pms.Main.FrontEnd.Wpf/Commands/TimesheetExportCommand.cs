@@ -5,6 +5,8 @@ using Pms.Main.FrontEnd.Wpf.ViewModels;
 using Pms.Timesheets.Domain;
 using Pms.Timesheets.Domain.SupportTypes;
 using Pms.Timesheets.ServiceLayer.EfCore.Queries;
+using Pms.Timesheets.ServiceLayer.EfCore.Queries;
+using Pms.Timesheets.ServiceLayer.EfCore.QueryObjects;
 using Pms.Timesheets.ServiceLayer.Outputs;
 using System;
 using System.Collections.Generic;
@@ -43,12 +45,14 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                 string cutoffId = cutoff.CutoffId;
                 string payrollCode = _cutoffStore.PayrollCode;
 
-                List<string> bankCategories = _cutoffTimesheet.ListTimesheetBankCategories(cutoffId, payrollCode);
+                IEnumerable<Timesheet> timesheets = _cutoffTimesheet.GetTimesheets(cutoffId).FilterByPayrollCode(payrollCode);
+                List<string> bankCategories = timesheets.ExtractBankCategories();
 
                 _viewModel.SetProgress("Exporting Timesheets", bankCategories.Count);
+
                 foreach (string bankCategory in bankCategories)
                 {
-                    var timesheets = _cutoffTimesheet.GetTimesheets(cutoffId, payrollCode, bankCategory);
+                    var timesheetsByBankCategory = timesheets.FilterByBankCategory(bankCategory);
                     if (timesheets.Any())
                     {
                         List<Timesheet> exportable = timesheets.ByExportable().ToList();
