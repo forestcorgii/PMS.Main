@@ -26,6 +26,7 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         public TimesheetStore(CutoffTimesheet cutoffTimesheet)
         {
             // TIMESHEET
+            Timesheets = new List<Timesheet>();
             _timesheets = new List<Timesheet>();
             _initializeLoadTimesheetsLazy = new Lazy<Task>(Initialize);
             _cutoffTimesheet = cutoffTimesheet;

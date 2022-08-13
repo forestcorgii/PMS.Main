@@ -11,19 +11,19 @@ namespace Pms.Main.FrontEnd.Wpf.Models
 {
     public class EmployeeModel
     {
-        IEmployeeProvider _employeeProvider;
-        IEmployeeSaving _employeeSaving;
+        IProvideEmployeeService _employeeProvider;
+        IManageEmployeeService _employeeManager;
         IEmployeeFinder _employeeFinder;
 
-        public EmployeeModel(IEmployeeProvider employeeProvider, IEmployeeSaving employeeSaving, IEmployeeFinder employeeFinder)
+        public EmployeeModel(IProvideEmployeeService employeeProvider, IManageEmployeeService employeeManager, IEmployeeFinder employeeFinder)
         {
             _employeeProvider = employeeProvider;
-            _employeeSaving = employeeSaving;
+            _employeeManager = employeeManager;
             _employeeFinder = employeeFinder;
         }
 
         public void SaveEmployee(Employee employee) =>
-           _employeeSaving.CreateOrEditAndSave(employee);
+           _employeeManager.CreateOrEditAndSave(employee);
 
 
         public async Task<Employee?> FindEmployeeAsync(string eeId, string site) =>

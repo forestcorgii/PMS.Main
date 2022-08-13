@@ -51,14 +51,14 @@ namespace Pms.Main.FrontEnd.Wpf
             IConfigurationRoot conf = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).Build();
             string connectionString = conf.GetConnectionString("Default");
 
-            services.AddSingleton(new TimesheetDbContextFactory(connectionString));
-            services.AddSingleton(new EmployeeDbContextFactory(connectionString));
+            services.AddSingleton<IDbContextFactory<TimesheetDbContext>>(new TimesheetDbContextFactory(connectionString));
+            services.AddSingleton<IDbContextFactory<EmployeeDbContext>>(new EmployeeDbContextFactory(connectionString));
 
             services.AddSingleton(TimeDownloaderFactory.CreateAdapter(conf));
             services.AddSingleton(HRMSAdapterFactory.CreateAdapter(conf));
 
-            services.AddSingleton<IEmployeeProvider, ListEmployeesService>();
-            services.AddSingleton<IEmployeeSaving, SaveEmployeeService>();
+            services.AddSingleton<IProvideEmployeeService, ProvideEmployeeService>();
+            services.AddSingleton<IManageEmployeeService, ManageEmployeeService>();
             services.AddSingleton<IEmployeeFinder, FindEmployeeService>();
             services.AddTransient<EmployeeModel>();
 
@@ -103,11 +103,11 @@ namespace Pms.Main.FrontEnd.Wpf
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            TimesheetDbContextFactory timesheetDbContextFactory = Services.GetRequiredService<TimesheetDbContextFactory>();
+            IDbContextFactory<TimesheetDbContext> timesheetDbContextFactory = Services.GetRequiredService<IDbContextFactory<TimesheetDbContext>>();
             using (TimesheetDbContext dbContext = timesheetDbContextFactory.CreateDbContext())
                 dbContext.Database.Migrate();
 
-            EmployeeDbContextFactory employeeDbContextFactory = Services.GetRequiredService<EmployeeDbContextFactory>();
+            IDbContextFactory<EmployeeDbContext> employeeDbContextFactory = Services.GetRequiredService<IDbContextFactory<EmployeeDbContext>>();
             using (EmployeeDbContext dbContext = employeeDbContextFactory.CreateDbContext())
                 dbContext.Database.Migrate();
 
