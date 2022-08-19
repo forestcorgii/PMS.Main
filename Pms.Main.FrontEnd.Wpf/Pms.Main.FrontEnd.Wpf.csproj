@@ -33,41 +33,29 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
     <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
-    <PackageReference Include="Pms.Employees" Version="1.0.0-preview001" />
+    <PackageReference Include="Pms.Adjustments" Version="1.0.0-preview001" />
+    <PackageReference Include="Pms.Employees" Version="1.0.0-preview002" />
+    <PackageReference Include="Pms.Payrolls" Version="1.0.0-preview002" />
     <PackageReference Include="Pms.Timesheets" Version="1.0.0-preview002" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="View\Adjustment\AddAdjustmentBilling.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="View\Adjustment\AddAdjustmentRecord.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="View\Adjustment\AdjustmentBilling.xaml.cs">
+    <Compile Update="View\BillingView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\Adjustment\AdjustmentRecord.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\EmployeeUi.xaml.cs">
+    <Compile Update="View\EmployeeView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\Payroll\PayRegister.xaml.cs">
-      <DependentUpon>PayRegister.xaml</DependentUpon>
+    <Compile Update="View\PayrollView.xaml.cs">
+      <DependentUpon>PayrollView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="View\Adjustment\AddAdjustmentBilling.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="View\Adjustment\AddAdjustmentRecord.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="View\Adjustment\AdjustmentBilling.xaml">
+    <Page Update="View\BillingView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
@@ -75,19 +63,11 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\Adjustment\AdjustmentWindow.xaml">
+    <Page Update="View\EmployeeView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\EmployeeUi.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="View\Payroll\PayrollWindow.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="View\Payroll\PayRegister.xaml">
+    <Page Update="View\PayrollView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
@@ -111,7 +91,7 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\TimesheetPage.xaml">
+    <Page Update="View\TimesheetView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

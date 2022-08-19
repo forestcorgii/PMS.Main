@@ -4,19 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pms.Main.FrontEnd.Wpf"
-        xmlns:vms="clr-namespace:Pms.Main.FrontEnd.Wpf.ViewModels"
-        xmlns:views="clr-namespace:Pms.Main.FrontEnd.Wpf.Views"
         xmlns:converters="clr-namespace:Pms.Main.FrontEnd.Wpf.Converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="650" Width="900"
         >
     <Window.Resources>
-        <DataTemplate DataType="{x:Type vms:TimesheetViewModel}">
-            <views:TimesheetPage/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vms:EmployeeViewModel}">
-            <views:EmployeeUi/>
-        </DataTemplate>
         <converters:CutoffToStringConverter x:Key="cutoffToStringConverter"/>
     </Window.Resources>
     <Border>
@@ -80,35 +72,30 @@
                         />
 
                 <Button x:Name="BtnAdjustment" 
-                        IsEnabled="False"
+                        IsEnabled="True"
                         Content="Adjustment"
+                        Command="{Binding BillingCommand}"
                         Style="{StaticResource MenuButton}" 
-                        />
+                />
                 
                 <Button x:Name="BtnPayroll" 
-                        IsEnabled="False"
                         Content="Payroll"
-                        Command="{Binding EmployeeCommand}"
+                        Command="{Binding PayrollCommand}"
                         Style="{StaticResource MenuButton}" 
-                        />
+                />
 
                 <Button x:Name="BtnEmployee" 
                         Content="Employee"
                         Command="{Binding EmployeeCommand}"
                         Style="{StaticResource MenuButton}" 
-                        />
+                />
             </StackPanel>
 
-
-            <!--<Frame x:Name="frmMain" Grid.Row="2" Grid.Column="2" 
-                    BorderBrush="#FF786F6F" BorderThickness="0.3" Margin="5,0,5,5" 
-                    NavigationUIVisibility="Hidden"/>-->
-            
+ 
             <ContentControl Content="{Binding CurrentViewModel}" 
                             Grid.Row="2" Grid.Column="2"
                             BorderBrush="#FF786F6F" BorderThickness="0.3" Margin="5,0,5,5" 
             />
-
         </Grid>
     </Border>
 </Window>

@@ -11,22 +11,22 @@ using System.Threading.Tasks;
 
 namespace Pms.Main.FrontEnd.Wpf.Models
 {
-    public class CutoffTimesheet
+    public class TimesheetModel
     {
         private IProvideTimesheetService _timesheetProvider;
         private IDownloadContentProvider _downloadProvider;
         private ITimesheetSaving _timesheetSaving;
 
-        public CutoffTimesheet(IProvideTimesheetService timesheetProvider,  IDownloadContentProvider downloadProvider, ITimesheetSaving timesheetSaving)
+        public TimesheetModel(IProvideTimesheetService timesheetProvider, IDownloadContentProvider downloadProvider, ITimesheetSaving timesheetSaving)
         {
             _timesheetProvider = timesheetProvider;
             _downloadProvider = downloadProvider;
             _timesheetSaving = timesheetSaving;
-        } 
+        }
 
         public IEnumerable<Timesheet> GetTimesheets(string cutoffId) =>
                     _timesheetProvider.GetTimesheets().FilterByCutoffId(cutoffId);
-         
+
 
         public IEnumerable<string> ListTimesheetNoEETimesheet(string cutoffId) =>
             _timesheetProvider.GetTimesheetNoEETimesheet(cutoffId)
@@ -44,7 +44,17 @@ namespace Pms.Main.FrontEnd.Wpf.Models
         public int[] GetMissingPages(string cutoffId, string payrollCode) =>
             _timesheetProvider.GetMissingPages(cutoffId, payrollCode).ToArray();
 
-         
+
+
+        public string[] ListPayrollCodes() =>
+                _timesheetProvider.GetTimesheets().ExtractPayrollCodes().ToArray();
+
+        public string[] ListCutoffIds() =>
+                        _timesheetProvider.GetTimesheets().ExtractCutoffIds().ToArray();
+
+
+
+
 
         public async Task<int[]> DownloadContentSummary(Cutoff cutoff, string payrollCode, string site)
         {
@@ -67,5 +77,5 @@ namespace Pms.Main.FrontEnd.Wpf.Models
 
     }
 
-     
+
 }

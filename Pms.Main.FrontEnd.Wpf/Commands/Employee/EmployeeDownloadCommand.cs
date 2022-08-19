@@ -19,7 +19,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
         private EmployeeStore _employeeStore;
         private MainStore _cutoffStore;
 
-        public Task? ExecutionTask => throw new NotImplementedException();
+        public Task? ExecutionTask { get; }
 
         public bool CanBeCanceled => false;
 
@@ -62,11 +62,11 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
             {
                 try
                 {
-                    Employee? employeeFound = await _employeeModel.FindEmployeeAsync(eeId, _cutoffStore.Site);
+                    IGeneralInformation? employeeFound = await _employeeModel.FindEmployeeAsync(eeId, _cutoffStore.Site);
                     if (employeeFound is null)
                         employeeFound = new Employee() { EEId = eeId, Active = false };
 
-                    _employeeModel.SaveEmployee(employeeFound);
+                    _employeeModel.Save(employeeFound);
                     _viewModel.ProgressValue++;
                 }
                 catch (Exception ex)

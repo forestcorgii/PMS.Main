@@ -18,11 +18,11 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
     {
         private readonly TimesheetViewModel _viewModel;
         private MainStore _cutoffStore;
-        private CutoffTimesheet _cutoffTimesheet;
+        private TimesheetModel _cutoffTimesheet;
 
         public event EventHandler? CanExecuteChanged;
 
-        public TimesheetExportCommand(TimesheetViewModel viewModel, CutoffTimesheet cutoffTimesheet, MainStore cutoffStore)
+        public TimesheetExportCommand(TimesheetViewModel viewModel, TimesheetModel cutoffTimesheet, MainStore cutoffStore)
         {
             _viewModel = viewModel;
             _cutoffStore = cutoffStore;

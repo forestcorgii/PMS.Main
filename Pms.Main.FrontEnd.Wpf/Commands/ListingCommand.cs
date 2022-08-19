@@ -3,41 +3,39 @@ using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Pms.Main.FrontEnd.Wpf.Commands
 {
-    public class TimesheetListingCommand : IRelayCommand
+    public class ListingCommand : IRelayCommand
     {
         public event EventHandler? CanExecuteChanged;
-        public event PropertyChangedEventHandler? PropertyChanged;
 
-        private readonly TimesheetViewModel _viewModel;
-        private TimesheetStore _timesheetStore;
+        private readonly IStore _store;
+
         private bool _canExecute;
 
-        public TimesheetListingCommand(TimesheetViewModel viewModel, TimesheetStore timesheetStore)
+        public ListingCommand(IStore store)
         {
-            _timesheetStore = timesheetStore;
-            _viewModel = viewModel;
+            _store = store;
         }
 
 
         public bool CanExecute(object? parameter) => _canExecute;
 
+
         public async void Execute(object? parameter)
         {
             _canExecute = false;
+
             try
             {
-                await _timesheetStore.Load();
+                await _store.Load();
             }
             catch
             {
-                _viewModel.StatusMessage = "Failed to Load Timesheets.";
             }
 
             _canExecute = true;

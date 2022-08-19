@@ -1,4 +1,5 @@
 ﻿using Pms.Employees.Domain;
+using Pms.Employees.Domain.Services;
 using Pms.Employees.ServiceLayer.EfCore;
 using Pms.Employees.ServiceLayer.HRMS;
 using System;
@@ -14,16 +15,21 @@ namespace Pms.Main.FrontEnd.Wpf.Models
         IProvideEmployeeService _employeeProvider;
         IManageEmployeeService _employeeManager;
         IEmployeeFinder _employeeFinder;
+        IImportEmployeeService _employeeImporter;
 
-        public EmployeeModel(IProvideEmployeeService employeeProvider, IManageEmployeeService employeeManager, IEmployeeFinder employeeFinder)
+        public EmployeeModel(IProvideEmployeeService employeeProvider, IManageEmployeeService employeeManager, IEmployeeFinder employeeFinder, IImportEmployeeService employeeImporter)
         {
             _employeeProvider = employeeProvider;
             _employeeManager = employeeManager;
             _employeeFinder = employeeFinder;
+            _employeeImporter = employeeImporter;
         }
 
-        public void SaveEmployee(Employee employee) =>
-           _employeeManager.CreateOrEditAndSave(employee);
+        public void Save(IGeneralInformation employee) =>
+           _employeeManager.Save(employee);
+
+        public void Save(IBankInformation employee) =>
+            _employeeManager.Save(employee);
 
 
         public async Task<Employee?> FindEmployeeAsync(string eeId, string site) =>
@@ -36,28 +42,7 @@ namespace Pms.Main.FrontEnd.Wpf.Models
             _employeeProvider.GetEmployees();
 
 
-        //public async Task FindEmployeeAsync(string[] eeIds)
-        //{
-        //    EmployeeDownloadStarted?.Invoke(this, eeIds.Length);
-        //    foreach (string eeId in eeIds)
-        //    {
-        //        try
-        //        {
-        //            FindEmployeeService service = new(Adapter);
-        //            Employee? employeeFound = await service.GetEmployeeAsync(eeId, Site);
-        //            if (employeeFound is null)
-        //                employeeFound = new Employee() { EEId = eeId, Active = false };
-
-        //            SaveEmployeeService saveService = new(Context);
-        //            saveService.CreateOrEditAndSave(employeeFound);
-
-        //            EmployeeDownloadSucceed?.Invoke(this, eeId);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            EmployeeDownloadError?.Invoke(this, eeId, ex.Message);
-        //        }
-        //    }
-        // }
+        public IEnumerable<IBankInformation> Import(string payRegisterPath) =>
+            _employeeImporter.StartImport(payRegisterPath, "LBP");
     }
 }

@@ -15,8 +15,6 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 {
     public class EmployeeViewModel : ViewModelBase
     {
-        private EmployeeModel _employeeModel { get; set; }
-        private MainStore _cutoffStore { get; set; }
         private EmployeeStore _employeeStore { get; set; }
 
         private string _filter = "";
@@ -46,20 +44,22 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
         public ICommand LoadEmployeesCommand { get; }
         public ICommand DownloadCommand { get; }
+        public ICommand ImportCommand { get; }
 
-        public EmployeeViewModel(MainStore cutoffStore, EmployeeStore employeeStore, EmployeeModel employeeModel)
+        public EmployeeViewModel(MainStore mainStore, EmployeeStore employeeStore, EmployeeModel employeeModel)
         {
-            _employeeModel = employeeModel;
-
-            _cutoffStore = cutoffStore;
-            _employeeStore = employeeStore;
-
-            _employeeStore.EmployeesReloaded += _cutoffStore_EmployeesReloaded;
-            DownloadCommand = new EmployeeDownloadCommand(this, cutoffStore, employeeStore, employeeModel);
-            LoadEmployeesCommand = new EmployeeListingCommand(this, employeeStore);
-
-            Employees = new ObservableCollection<Employee>(_employeeStore.Employees);
+            DownloadCommand = new EmployeeDownloadCommand(this, mainStore, employeeStore, employeeModel);
+            ImportCommand = new EmployeeImportCommand(this, employeeModel, mainStore);
+            LoadEmployeesCommand = new ListingCommand(employeeStore);
             LoadEmployeesCommand.Execute(null);
+
+            _selectedEmployee = new();
+            
+            _employeeStore = employeeStore;
+            _employeeStore.Reloaded += _cutoffStore_EmployeesReloaded;
+
+            _employees = new ObservableCollection<Employee>(_employeeStore.Employees);
+            Employees = new ObservableCollection<Employee>(_employeeStore.Employees);
         }
 
         private void _cutoffStore_EmployeesReloaded()

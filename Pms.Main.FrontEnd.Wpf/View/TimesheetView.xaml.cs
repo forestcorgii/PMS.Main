@@ -12,9 +12,9 @@ using static Pms.Timesheets.ServiceLayer.TimeSystem.Services.Enums;
 namespace Pms.Main.FrontEnd.Wpf.Views
 {
 
-    public partial class TimesheetPage:UserControl
+    public partial class TimesheetView : UserControl
     {
-        public TimesheetPage()
+        public TimesheetView()
         {
             InitializeComponent();
         }

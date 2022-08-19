@@ -18,18 +18,18 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 {
     public class MainViewModel : ObservableValidator
     {
-        private readonly MainStore _cutoffStore;
+        private readonly MainStore _mainStore;
         private readonly NavigationStore _navigationStore;
         public ObservableObject CurrentViewModel => _navigationStore.CurrentViewModel;
 
-        public List<string> cutoffIds;
-        public List<string> CutoffIds
+        public string[] cutoffIds;
+        public string[] CutoffIds
         {
             get => cutoffIds;
             private set => SetProperty(ref cutoffIds, value);
         }
-        public List<string> payrollCodes;
-        public List<string> PayrollCodes
+        public string[] payrollCodes;
+        public string[] PayrollCodes
         {
             get => payrollCodes;
             private set => SetProperty(ref payrollCodes, value);
@@ -49,7 +49,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
                 if (cutoffId.Length >= 6)
                 {
                     Cutoff cutoff = new Cutoff(cutoffId);
-                    _cutoffStore.SetCutoff(cutoff);
+                    _mainStore.SetCutoff(cutoff);
                     ClearErrors(nameof(CutoffId));
                 }
             }
@@ -66,10 +66,10 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             {
                 SetProperty(ref payrollCode, value, true);
                 if (PayrollCodeValidator.Validate(payrollCode))
-                    _cutoffStore.SetPayrollCode(payrollCode);
+                    _mainStore.SetPayrollCode(payrollCode);
             }
         }
-        public static ValidationResult ValidatePayrollCode(string name,ValidationContext context)
+        public static ValidationResult ValidatePayrollCode(string name, ValidationContext context)
         {
             MainViewModel instance = (MainViewModel)context.ObjectInstance;
             if (PayrollCodeValidator.Validate(instance.PayrollCode))
@@ -80,37 +80,48 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
         public ICommand TimesheetCommand { get; }
         public ICommand EmployeeCommand { get; }
+        public ICommand BillingCommand { get; }
+        public ICommand PayrollCommand { get; }
+
         public ICommand LoadFilterCommand { get; }
 
-        public MainViewModel(MainStore cutoffStore, NavigationStore navigationStore, NavigationService<TimesheetViewModel> timesheetNavigation, NavigationService<EmployeeViewModel> employeeNavigation)
+        public MainViewModel(MainStore mainStore, NavigationStore navigationStore,
+            NavigationService<TimesheetViewModel> timesheetNavigation,
+            NavigationService<EmployeeViewModel> employeeNavigation,
+            NavigationService<PayrollViewModel> payrollNavigation,
+            NavigationService<BillingViewModel> billingNavigation
+        )
         {
             _navigationStore = navigationStore;
-            _cutoffStore = cutoffStore;
-            _cutoffStore.FiltersReloaded += _cutoffStore_FiltersReloaded;
+            _mainStore = mainStore;
+            _mainStore.Reloaded += _cutoffStore_FiltersReloaded;
+
             TimesheetCommand = new NavigateCommand<TimesheetViewModel>(timesheetNavigation);
             EmployeeCommand = new NavigateCommand<EmployeeViewModel>(employeeNavigation);
+            BillingCommand = new NavigateCommand<BillingViewModel>(billingNavigation);
+            PayrollCommand = new NavigateCommand<PayrollViewModel>(payrollNavigation);
 
-            cutoffIds = new List<string>();
-            payrollCodes = new List<string>();
+            cutoffIds = new string[] { };
+            payrollCodes = new string[] { };
 
-            LoadFilterCommand = new FilterListingCommand(_cutoffStore);
+            LoadFilterCommand = new ListingCommand(_mainStore);
             LoadFilterCommand.Execute(null);
+
+            TimesheetCommand.Execute(null);
 
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
         }
 
         private void _cutoffStore_FiltersReloaded()
         {
-            CutoffId = _cutoffStore.Cutoff.CutoffId;
-            CutoffIds = _cutoffStore.CutoffIds;
-            PayrollCodes = _cutoffStore.PayrollCodes;
+            CutoffId = _mainStore.Cutoff.CutoffId;
+            CutoffIds = _mainStore.CutoffIds;
+            PayrollCodes = _mainStore.PayrollCodes;
         }
 
 
-        private void OnCurrentViewModelChanged()
-        {
+        private void OnCurrentViewModelChanged() =>
             OnPropertyChanged(nameof(CurrentViewModel));
-        }
 
     }
 }

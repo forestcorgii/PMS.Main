@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Pms.Main.FrontEnd.Wpf.Stores
 {
-    public class MainStore
+    public class MainStore : IStore
     {
         #region MAIN
         public Cutoff Cutoff { get; private set; }
@@ -27,32 +27,34 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             }
         }
 
-        public List<string> CutoffIds { get; private set; }
-        public List<string> PayrollCodes { get; private set; }
-        public event Action? FiltersReloaded;
+        public string[] CutoffIds { get; private set; }
+        public string[] PayrollCodes { get; private set; }
+        public Action? Reloaded { get; set; }
         private Lazy<Task> _initializeLoadFiltersLazy;
         #endregion
 
-        private CutoffTimesheet _cutoffTimesheet;
+        private TimesheetModel _cutoffTimesheet;
 
         private readonly TimesheetStore _timesheetStore;
         private readonly EmployeeStore _employeeStore;
+        private readonly BillingStore _billingStore;
 
 
-        public MainStore(CutoffTimesheet cutoffTimesheet, TimesheetStore timesheetStore, EmployeeStore employeeStore)
+        public MainStore(TimesheetModel cutoffTimesheet, TimesheetStore timesheetStore, EmployeeStore employeeStore, BillingStore billingStore)
         {
             _timesheetStore = timesheetStore;
             _employeeStore = employeeStore;
+            _billingStore = billingStore;
+
             _cutoffTimesheet = cutoffTimesheet;
 
-
             Cutoff = new Cutoff();
-            CutoffIds = new List<string>();
-            PayrollCodes = new List<string>();
+            CutoffIds = new string[] { };
+            PayrollCodes = new string[] { };
             _initializeLoadFiltersLazy = new Lazy<Task>(InitializeLoadFilters);
         }
 
-        public async Task LoadFilters()
+        public async Task Load()
         {
             try
             {
@@ -67,17 +69,17 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
 
         public async Task InitializeLoadFilters()
         {
-            List<string> cutoffIds = new();
-            List<string> payrollCodes = new();
+            string[] cutoffIds = new string[] { };
+            string[] payrollCodes = new string[] { };
             await Task.Run(() =>
             {
-                cutoffIds = _timesheetStore.Timesheets.ExtractCutoffIds();
-                payrollCodes = _timesheetStore.Timesheets.ExtractPayrollCodes();
+                cutoffIds = _cutoffTimesheet.ListCutoffIds();
+                payrollCodes = _cutoffTimesheet.ListPayrollCodes();
             });
 
             CutoffIds = cutoffIds;
             PayrollCodes = payrollCodes;
-            FiltersReloaded?.Invoke();
+            Reloaded?.Invoke();
         }
 
 
@@ -85,6 +87,7 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         {
             Cutoff = cutoff;
             _timesheetStore.SetCutoffId(cutoff.CutoffId);
+            _billingStore.SetCutoffId(cutoff.CutoffId);
         }
 
         public void SetPayrollCode(string payrollCode)
@@ -93,6 +96,7 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             Cutoff.SetSite(Site);
             _timesheetStore.SetPayrollCode(payrollCode);
             _employeeStore.SetPayrollCode(payrollCode);
+            _billingStore.SetPayrollCode(payrollCode);
         }
 
     }

@@ -13,11 +13,11 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
     {
         public event EventHandler? CanExecuteChanged;
 
-        private MainStore _cutoffStore;
+        private MainStore _mainStore;
 
-        public FilterListingCommand(MainStore cutoffStore)
+        public FilterListingCommand(MainStore mainStore)
         {
-            _cutoffStore = cutoffStore;
+            _mainStore = mainStore;
         }
 
         public bool CanExecute(object? parameter)
@@ -29,7 +29,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
         {
             try
             {
-                await _cutoffStore.LoadFilters();
+                await _mainStore.Load();
             }
             catch (Exception ex)
             {

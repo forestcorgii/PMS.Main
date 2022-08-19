@@ -1,6 +1,5 @@
-﻿using Pms.Main.FrontEnd.Wpf.Models;
-using Pms.Timesheets.Domain;
-using Pms.Timesheets.Domain.SupportTypes;
+﻿using Pms.Adjustments.Domain;
+using Pms.Main.FrontEnd.Wpf.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,28 +8,27 @@ using System.Threading.Tasks;
 
 namespace Pms.Main.FrontEnd.Wpf.Stores
 {
-    public class TimesheetStore :IStore
+    public class BillingStore : IStore
     {
-        private string _cutoffId { get; set; }
-
-
-        #region TIMESHEET
-        private TimesheetModel _model;
-        private readonly List<Timesheet> _timesheets;
-        public IEnumerable<Timesheet> Timesheets { get; private set; }
+        private string _cutoffId;
+        private BillingModel _model;
 
         private Lazy<Task> _initializeLazy;
-        public Action? Reloaded { get; set; }
-        #endregion
 
-        public TimesheetStore(TimesheetModel cutoffTimesheet)
+        private IEnumerable<Billing> _billings { get; set; }
+        public IEnumerable<Billing> Billings { get; set; }
+
+        public Action? Reloaded { get; set; }
+
+        public BillingStore(BillingModel model)
         {
-            // TIMESHEET
-            _cutoffId = string.Empty;
-            Timesheets = new List<Timesheet>();
-            _timesheets = new List<Timesheet>();
+            _model = model;
             _initializeLazy = new Lazy<Task>(Initialize);
-            _model = cutoffTimesheet;
+
+            Billings = new List<Billing>();
+            _billings = new List<Billing>();
+
+            _cutoffId = string.Empty;
         }
 
         public async Task Load()
@@ -39,10 +37,9 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             {
                 await _initializeLazy.Value;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 _initializeLazy = new Lazy<Task>(Initialize);
-                throw;
             }
         }
 
@@ -52,18 +49,20 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             await Load();
         }
 
+
         private async Task Initialize()
         {
-            IEnumerable<Timesheet> timesheets = new List<Timesheet>();
+            IEnumerable<Billing> billings = new List<Billing>();
             await Task.Run(() =>
             {
-                timesheets = _model.GetTimesheets(_cutoffId);
+                billings = _model.GetBillings(_cutoffId);
             });
 
-            _timesheets.Clear();
-            _timesheets.AddRange(timesheets);
+            _billings = billings;
+            Billings = billings;
             Reloaded?.Invoke();
         }
+
 
         public async void SetCutoffId(string cutoffId)
         {
@@ -73,8 +72,9 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
 
         public void SetPayrollCode(string payrollCode)
         {
-            Timesheets = _timesheets.Where(ts => ts.PayrollCode == payrollCode);
+            Billings = _billings.Where(ts => ts.PayrollCode == payrollCode);
             Reloaded?.Invoke();
         }
+        
     }
 }

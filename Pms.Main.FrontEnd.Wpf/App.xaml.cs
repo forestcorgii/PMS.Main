@@ -1,30 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Pms.Adjustments.Persistence;
 using Pms.Employees.Persistence;
-using Pms.Employees.ServiceLayer.Concrete;
-using Pms.Employees.ServiceLayer.EfCore;
-using Pms.Employees.ServiceLayer.HRMS;
-using Pms.Employees.ServiceLayer.HRMS.Adapter;
-using Pms.Employees.ServiceLayer.HRMS.Service;
-using Pms.Main.FrontEnd.Wpf.Models;
-using Pms.Main.FrontEnd.Wpf.Services;
-using Pms.Main.FrontEnd.Wpf.Stores;
-using Pms.Main.FrontEnd.Wpf.ViewModels;
-using Pms.Timesheets.BizLogic;
-using Pms.Timesheets.BizLogic.Concrete;
-using Pms.Timesheets.Domain.SupportTypes;
+using Pms.Main.FrontEnd.Wpf.Builders;
 using Pms.Timesheets.Persistence;
-using Pms.Timesheets.ServiceLayer.EfCore;
-using Pms.Timesheets.ServiceLayer.TimeSystem;
-using Pms.Timesheets.ServiceLayer.TimeSystem.Adapter;
-using Pms.Timesheets.ServiceLayer.TimeSystem.Services;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Pms.Main.FrontEnd.Wpf
@@ -32,65 +12,21 @@ namespace Pms.Main.FrontEnd.Wpf
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App 
+    public partial class App : Application
     {
         public new static App Current => (App)Application.Current;
 
-        /// <summary>
-        /// Gets the <see cref="IServiceProvider"/> instance to resolve application services.
-        /// </summary>
         public IServiceProvider Services { get; }
 
-        /// <summary>
-        /// Configures the services for the application.
-        /// </summary>
         private static IServiceProvider ConfigureServices()
         {
-            var services = new ServiceCollection();
-
-            IConfigurationRoot conf = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).Build();
-            string connectionString = conf.GetConnectionString("Default");
-
-            services.AddSingleton<IDbContextFactory<TimesheetDbContext>>(new TimesheetDbContextFactory(connectionString));
-            services.AddSingleton<IDbContextFactory<EmployeeDbContext>>(new EmployeeDbContextFactory(connectionString));
-
-            services.AddSingleton(TimeDownloaderFactory.CreateAdapter(conf));
-            services.AddSingleton(HRMSAdapterFactory.CreateAdapter(conf));
-
-            services.AddSingleton<IProvideEmployeeService, ProvideEmployeeService>();
-            services.AddSingleton<IManageEmployeeService, ManageEmployeeService>();
-            services.AddSingleton<IEmployeeFinder, FindEmployeeService>();
-            services.AddTransient<EmployeeModel>();
-
-            services.AddSingleton<IProvideTimesheetService, ProvideTimesheetService>();
-            services.AddSingleton<IDownloadContentProvider, DownloadContentProvider>();
-            services.AddSingleton<ITimesheetSaving, SaveTimesheetBizLogic>();
-            services.AddTransient<Cutoff>();
-            services.AddTransient<CutoffTimesheet>();
-
-
-            services.AddSingleton<NavigationStore>();
-            services.AddSingleton<MainStore>();
-            services.AddSingleton<TimesheetStore>();
-            services.AddSingleton<EmployeeStore>();
-
-
-            services.AddTransient<TimesheetViewModel>();
-            services.AddSingleton<Func<TimesheetViewModel>>((s) => () => s.GetRequiredService<TimesheetViewModel>());
-            services.AddSingleton<NavigationService<TimesheetViewModel>>();
-
-            services.AddTransient<EmployeeViewModel>();
-            services.AddSingleton<Func<EmployeeViewModel>>((s) => () => s.GetRequiredService<EmployeeViewModel>());
-            services.AddSingleton<NavigationService<EmployeeViewModel>>();
-
-
-
-            services.AddSingleton<MainViewModel>();
-            services.AddSingleton(s => new MainWindow()
-            {
-                DataContext = s.GetRequiredService<MainViewModel>()
-            });
-
+            ServiceCollection services = new();
+            services
+                .AddContextAndAdapter()
+                .AddServices()
+                .AddModels()
+                .AddStores()
+                .AddViewModels();
 
             return services.BuildServiceProvider();
         }
@@ -103,13 +39,6 @@ namespace Pms.Main.FrontEnd.Wpf
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            IDbContextFactory<TimesheetDbContext> timesheetDbContextFactory = Services.GetRequiredService<IDbContextFactory<TimesheetDbContext>>();
-            using (TimesheetDbContext dbContext = timesheetDbContextFactory.CreateDbContext())
-                dbContext.Database.Migrate();
-
-            IDbContextFactory<EmployeeDbContext> employeeDbContextFactory = Services.GetRequiredService<IDbContextFactory<EmployeeDbContext>>();
-            using (EmployeeDbContext dbContext = employeeDbContextFactory.CreateDbContext())
-                dbContext.Database.Migrate();
 
 
             MainWindow = Services.GetRequiredService<MainWindow>();

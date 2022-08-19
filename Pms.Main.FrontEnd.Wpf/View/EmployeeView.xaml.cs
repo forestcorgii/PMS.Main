@@ -15,8 +15,8 @@ namespace Pms.Main.FrontEnd.Wpf.Views
     /// <summary>
     /// Interaction logic for Employee.xaml
     /// </summary>
-    public partial class EmployeeUi : UserControl {
-        public EmployeeUi()
+    public partial class EmployeeView : UserControl {
+        public EmployeeView()
         {
             InitializeComponent();
         }

@@ -15,11 +15,11 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
     {
         private TimesheetViewModel _viewModel;
         private MainStore _cutoffStore;
-        private CutoffTimesheet _cutoffTimesheet;
+        private TimesheetModel _cutoffTimesheet;
 
         public event EventHandler? CanExecuteChanged;
 
-        public TimesheetEvaluationCommand(TimesheetViewModel viewModel, CutoffTimesheet cutoffTimesheet, MainStore cutoffStore)
+        public TimesheetEvaluationCommand(TimesheetViewModel viewModel, TimesheetModel cutoffTimesheet, MainStore cutoffStore)
         {
             _viewModel = viewModel;
             _cutoffStore = cutoffStore;

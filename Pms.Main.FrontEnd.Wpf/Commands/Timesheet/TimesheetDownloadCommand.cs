@@ -16,9 +16,9 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
     {
         private TimesheetViewModel _viewModel;
         private MainStore _cutoffStore;
-        private CutoffTimesheet _cutoffTimesheet;
+        private TimesheetModel _cutoffTimesheet;
 
-        public TimesheetDownloadCommand(TimesheetViewModel viewModel, MainStore cutoffStore, CutoffTimesheet cutoffTimesheet)
+        public TimesheetDownloadCommand(TimesheetViewModel viewModel, MainStore cutoffStore, TimesheetModel cutoffTimesheet)
         {
             _viewModel = viewModel;
             _cutoffStore = cutoffStore;
@@ -68,9 +68,6 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
             _viewModel.SetAsFinishProgress();
         }
 
-        public void NotifyCanExecuteChanged()
-        {
-
-        }
+        public void NotifyCanExecuteChanged() { }
     }
 }

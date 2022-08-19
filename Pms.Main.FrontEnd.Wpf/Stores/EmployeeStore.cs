@@ -9,14 +9,15 @@ using System.Threading.Tasks;
 
 namespace Pms.Main.FrontEnd.Wpf.Stores
 {
-    public class EmployeeStore
+    public class EmployeeStore : IStore
     {
         #region EMPLOYEE
         private EmployeeModel _employeeModel;
         private readonly List<Employee> _employees;
         public IEnumerable<Employee> Employees { get; private set; }
         private Lazy<Task> _initializeLazy;
-        public event Action? EmployeesReloaded;
+
+        public Action? Reloaded { get; set; }
         #endregion
 
         public EmployeeStore(EmployeeModel employeeModel)
@@ -58,7 +59,7 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
 
             _employees.Clear();
             _employees.AddRange(employees);
-            EmployeesReloaded?.Invoke();
+            Reloaded?.Invoke();
         }
 
 
@@ -66,7 +67,7 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         public void SetPayrollCode(string payrollCode)
         {
             Employees = _employees.Where(ts => ts.PayrollCode == payrollCode);
-            EmployeesReloaded?.Invoke();
+            Reloaded?.Invoke();
         }
     }
 }
