@@ -12,7 +12,7 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
     public class PayrollStore : IStore
     {
         private string _cutoffId { get; set; } = string.Empty;
-        private BankType _bankType { get; set; }
+        private BankType _bankType { get; set; } = BankType.LBP;
 
         private readonly PayrollModel _model;
 
@@ -43,7 +43,7 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             }
         }
 
-        private async Task Reload()
+        public async Task Reload()
         {
             _initializeLazy = new Lazy<Task>(Initialize);
             await _initializeLazy.Value;
@@ -69,12 +69,11 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             _cutoffId = cutoffId;
             await Reload();
         }
-        
+
         public void SetPayrollCode(string payrollCode)
         {
             Payrolls = _payrolls.Where(p => p.PayrollCode == payrollCode);
             Reloaded?.Invoke();
         }
-
     }
 }

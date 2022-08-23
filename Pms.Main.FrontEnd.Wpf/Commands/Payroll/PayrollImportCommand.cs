@@ -1,6 +1,5 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Win32;
-using Pms.Employees.Domain;
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
@@ -13,14 +12,14 @@ using System.Threading.Tasks;
 
 namespace Pms.Main.FrontEnd.Wpf.Commands
 {
-    public class EmployeeImportCommand : IRelayCommand
+    public class PayrollImportCommand : IRelayCommand
     {
-        private readonly EmployeeModel _model;
-        private readonly ViewModelBase _viewModel;
+        private readonly PayrollModel _model;
+        private readonly PayrollViewModel _viewModel;
         private readonly MainStore _mainStore;
 
 
-        public EmployeeImportCommand(ViewModelBase viewModel, EmployeeModel model, MainStore mainStore)
+        public PayrollImportCommand(PayrollViewModel viewModel, PayrollModel model, MainStore mainStore)
         {
             _model = model;
             _viewModel = viewModel;
@@ -29,24 +28,46 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
             _canExecute = true;
         }
 
-        public void Execute(object? parameter)
+        public async void Execute(object? parameter)
         {
-            _viewModel.SetProgress("Select EE Import file.", 0);
-
-            OpenFileDialog openFile = new();
-            bool? isValid = openFile.ShowDialog();
-            if (isValid is not null && isValid == true)
+            await Task.Run(() =>
             {
-                IEnumerable<IBankInformation> extractedEmployee = _model.Import(openFile.FileName);
+                _viewModel.SetProgress("Select Pay Register files.", 0);
 
-                _viewModel.SetProgress("Saving Employees bank information.", extractedEmployee.Count());
-                foreach (IBankInformation employee in extractedEmployee)
+                OpenFileDialog openFile = new()
                 {
-                    _model.Save(employee);
-                    _viewModel.ProgressValue++;
+                    Multiselect = true
+                };
+
+                bool? isValid = openFile.ShowDialog();
+                if (isValid is not null && isValid == true)
+                {
+                    foreach (string payRegister in openFile.FileNames)
+                    {
+                        try
+                        {
+                            IEnumerable<Payroll> extractedPayrolls = _model.Import(payRegister);
+
+                            _viewModel.SetProgress($"Saving extracted Payrolls from {payRegister}.", extractedPayrolls.Count());
+                            foreach (Payroll payroll in extractedPayrolls)
+                            {
+                                payroll.PayrollCode = _mainStore.PayrollCode;
+                                _model.Save(payroll, _mainStore.PayrollCode, Enums.BankType.LBP);
+                                _viewModel.ProgressValue++;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
+                    }
                 }
-                _viewModel.SetAsFinishProgress();
-            }
+            });
+
+            IEnumerable<string> noEEPayrolls = _model.ListNoEEPayrolls();
+            if (noEEPayrolls.Any())
+                await _viewModel.EmployeeDownloadCommand.ExecuteAsync(noEEPayrolls.ToArray());
+            _viewModel.SetAsFinishProgress();
         }
 
         protected bool _canExecute;
