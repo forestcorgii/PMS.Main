@@ -36,14 +36,15 @@ namespace Pms.Main.FrontEnd.Wpf.Builders
             services.AddSingleton<IDownloadContentProvider, DownloadContentProvider>();
             services.AddSingleton<ITimesheetSaving, SaveTimesheetBizLogic>();
 
-            services.AddSingleton<IManageBillingService, ManageBillingService>();
-            services.AddSingleton<IProvideBillingService, ProvideBillingService>();
-            services.AddSingleton<IGenerateBillingService, GenerateBillingService>();
+            services.AddSingleton<IManageBillingService, BillingManager>();
+            services.AddSingleton<IProvideBillingService, BillingProvider>();
+            services.AddSingleton<IGenerateBillingService, BillingGenerator>();
 
             services.AddSingleton<IManagePayrollService, PayrollManager>();
             services.AddSingleton<IProvidePayrollService, PayrollProvider>();
             services.AddSingleton<IImportPayrollService, PayRegisterImport>();
-            services.AddSingleton<IExportPayrollService, LBPExport>();
+            services.AddSingleton<LBPExport>();
+            services.AddSingleton<ThirteenthMonthExport>();
 
 
             return services;

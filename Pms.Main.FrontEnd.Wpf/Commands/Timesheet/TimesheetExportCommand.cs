@@ -51,11 +51,11 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                 foreach (string bankCategory in bankCategories)
                 {
                     var timesheetsByBankCategory = timesheets.FilterByBankCategory(bankCategory);
-                    if (timesheets.Any())
+                    if (timesheetsByBankCategory.Any())
                     {
-                        List<Timesheet> exportable = timesheets.ByExportable().ToList();
-                        List<Timesheet> unconfirmedTimesheetsWithAttendance = timesheets.ByUnconfirmedWithAttendance().ToList();
-                        List<Timesheet> unconfirmedTimesheetsWithoutAttendance = timesheets.ByUnconfirmedWithoutAttendance().ToList();
+                        List<Timesheet> exportable = timesheetsByBankCategory.ByExportable().ToList();
+                        List<Timesheet> unconfirmedTimesheetsWithAttendance = timesheetsByBankCategory.ByUnconfirmedWithAttendance().ToList();
+                        List<Timesheet> unconfirmedTimesheetsWithoutAttendance = timesheetsByBankCategory.ByUnconfirmedWithoutAttendance().ToList();
 
                         ExportEfile(cutoff, payrollCode, bankCategory, exportable, unconfirmedTimesheetsWithAttendance, unconfirmedTimesheetsWithoutAttendance);
                         ExportDBF(cutoff, payrollCode, bankCategory, exportable);

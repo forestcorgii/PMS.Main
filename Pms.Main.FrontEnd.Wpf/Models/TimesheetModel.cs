@@ -28,10 +28,21 @@ namespace Pms.Main.FrontEnd.Wpf.Models
                     _timesheetProvider.GetTimesheets().FilterByCutoffId(cutoffId);
 
 
-        public IEnumerable<string> ListTimesheetNoEETimesheet(string cutoffId) =>
-            _timesheetProvider.GetTimesheetNoEETimesheet(cutoffId)
-                .Select(ts => ts.EEId)
-                .ToList();
+        public IEnumerable<string> ListTimesheetNoEETimesheet(string cutoffId)
+        {
+            try
+            {
+                var da = _timesheetProvider.GetTimesheetNoEETimesheet(cutoffId)
+                      .Select(ts => ts.EEId)
+                      .ToList();
+                return da;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine();
+            }
+            return Enumerable.Empty<string>();
+        }
 
         public void SaveEmployeeData(Timesheet timesheet) =>
             _timesheetSaving.SaveTimesheetEmployeeData(timesheet);

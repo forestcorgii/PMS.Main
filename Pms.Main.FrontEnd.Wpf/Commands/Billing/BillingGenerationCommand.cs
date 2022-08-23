@@ -15,14 +15,14 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
     {
         public event EventHandler? CanExecuteChanged;
 
-        private ViewModelBase _viewModel;
+        private BillingViewModel _viewModel;
         private BillingModel _model;
         private EmployeeModel _employeeModel;
         private BillingStore _store;
         private MainStore _mainStore;
 
 
-        public BillingGenerationCommand(ViewModelBase viewModel, BillingModel model, BillingStore store, MainStore mainStore, EmployeeModel employeeModel)
+        public BillingGenerationCommand(BillingViewModel viewModel, BillingModel model, BillingStore store, MainStore mainStore, EmployeeModel employeeModel)
         {
             _model = model;
             _viewModel = viewModel;
@@ -59,6 +59,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                 }
 
                 _viewModel.SetAsFinishProgress();
+                _viewModel.ListBillings.Execute(true);
             });
         }
 

@@ -33,8 +33,7 @@
                   CanUserAddRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="EE ID" Binding="{Binding EEId}"/>
-                <DataGridTextColumn Header="Fullname" Binding="{Binding EE.Fullname}"/>
-                <!--<DataGridTextColumn Header="Payroll Date" Binding="{Binding PayRegister.PayrollDate,StringFormat={}{0:yyyy-MM-dd}}"/>-->
+                <DataGridTextColumn Header="Cutoff Id" Binding="{Binding CutoffId}"/>
                 <DataGridTextColumn Header="Adjustment Name" Binding="{Binding AdjustmentName}"/>
                 <DataGridTextColumn Header="Deduction Amount" Binding="{Binding Amount}"/>
                 <DataGridTextColumn Header="Adjustment Type" Binding="{Binding AdjustmentType}"/>

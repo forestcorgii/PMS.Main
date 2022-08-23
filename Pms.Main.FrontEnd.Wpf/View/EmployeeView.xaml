@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:Pms.Main.FrontEnd.Wpf"
       xmlns:emp="clr-namespace:Pms.Employees.Domain;assembly=Pms.Employees.Domain"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800">
+      d:DesignHeight="500" d:DesignWidth="800">
     <UserControl.Resources>
     </UserControl.Resources>
     <Grid>
@@ -26,7 +26,7 @@
                 <ComboBoxItem IsSelected="True">Sync Listed</ComboBoxItem>
                 <ComboBoxItem>Sync All</ComboBoxItem>
             </ComboBox>
-            
+
             <Button Style="{StaticResource SecondaryButton}" Command="{Binding DownloadCommand}" VerticalAlignment="Center">Sync</Button>
             <Button Style="{StaticResource SecondaryButton}" Command="{Binding ImportCommand}" VerticalAlignment="Center">Import</Button>
         </StackPanel>
@@ -44,40 +44,71 @@
 
         <!--DETAILS-->
         <Grid Grid.Row="1" x:Name="grbEmployeeDetail">
-            <Grid.DataContext>
+            <!--<Grid.DataContext>
                 <Binding Path="SelectedEmployee"/>
-            </Grid.DataContext>
+            </Grid.DataContext>-->
             <StackPanel>
                 <GroupBox Header="Personal" Grid.Column="1" Grid.RowSpan="3" Margin="4">
                     <StackPanel>
-                        <TextBox x:Name="tbEEId" Width="45" Margin="4" IsReadOnly="True" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"  Text="{Binding Path=EEId}" />
                         <WrapPanel>
+                        <WrapPanel.DataContext>
+                            <Binding Path="SelectedEmployee"/>
+                        </WrapPanel.DataContext>
+                        <TextBox x:Name="tbEEId" Width="45" Margin="4" IsReadOnly="True" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"  Text="{Binding Path=EEId}" />
                             <TextBox x:Name="tbLastName" Width="125" Grid.Row="2" Grid.Column="1" Margin="4" Text="{Binding Path=LastName}" />
                             <TextBox x:Name="tbFirstName" Width="125"  Grid.Row="3" Grid.Column="1" Margin="4" Text="{Binding Path=FirstName}"/>
                             <TextBox x:Name="tbMiddleName" Width="125"  Grid.Row="4" Grid.Column="1" Margin="4" Text="{Binding Path=MiddleName}" />
                         </WrapPanel>
+                        <Button
+                            Command="{Binding SaveCommand}"
+                            CommandParameter="{Binding SelectedGeneralInformation}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                        >Save</Button>
                     </StackPanel>
                 </GroupBox>
                 <GroupBox Header="Payroll" Grid.Column="1" Grid.RowSpan="3" Margin="4">
+                    <StackPanel>
                     <WrapPanel>
+                        <WrapPanel.DataContext>
+                            <Binding Path="SelectedEmployee"/>
+                        </WrapPanel.DataContext>
                         <TextBox x:Name="tbPayrollCode" Width="56"  Grid.Row="6" Grid.Column="1" Margin="4" Text="{Binding Path=PayrollCode}" />
                         <TextBox x:Name="tbBankCategory" Width="86"  Grid.Row="7" Grid.Column="1" Margin="4" Text="{Binding Path=BankCategory}" />
                         <TextBox x:Name="tbBankName"  Width="86" Grid.Row="8" Grid.Column="1" Margin="4" Text="{Binding Path=BankName}" />
                         <TextBox x:Name="tbAccountNumber" Width="126"  Grid.Row="9" Grid.Column="1" Margin="4" Text="{Binding Path=AccountNumber}" />
                         <TextBox x:Name="tbCardNumber" Width="126"  Grid.Row="10" Grid.Column="1" Margin="4" Text="{Binding Path=CardNumber}" />
                     </WrapPanel>
+                        <Button
+                            Command="{Binding SaveCommand}"
+                            CommandParameter="{Binding SelectedBankInformation}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                        >Save</Button>
+                    </StackPanel>
                 </GroupBox>
                 <GroupBox Header="Government" Grid.Column="1" Grid.RowSpan="3" Margin="4">
-                    <WrapPanel>
-                        <TextBox x:Name="tbTIN" Width="126"  Grid.Row="5" Grid.Column="1" Margin="4" Text="{Binding Path=TIN}" />
-                        <TextBox x:Name="tbPagibig" Width="126"  Grid.Row="5" Grid.Column="1" Margin="4" Text="{Binding Path=Pagibig}" />
-                        <TextBox x:Name="tbSSS" Width="126"  Grid.Row="5" Grid.Column="1" Margin="4" Text="{Binding Path=SSS}" />
-                        <TextBox x:Name="tbPhilHealth" Width="126"  Grid.Row="5" Grid.Column="1" Margin="4" Text="{Binding Path=PhilHealth}" />
-                    </WrapPanel>
+                    <StackPanel>
+                        <WrapPanel>
+                            <WrapPanel.DataContext>
+                                <Binding Path="SelectedEmployee"/>
+                            </WrapPanel.DataContext>
+                            <TextBox x:Name="tbTIN" Width="126"  Grid.Row="5" Grid.Column="1" Margin="4" Text="{Binding Path=TIN}" />
+                            <TextBox x:Name="tbPagibig" Width="126"  Grid.Row="5" Grid.Column="1" Margin="4" Text="{Binding Path=Pagibig}" />
+                            <TextBox x:Name="tbSSS" Width="126"  Grid.Row="5" Grid.Column="1" Margin="4" Text="{Binding Path=SSS}" />
+                            <TextBox x:Name="tbPhilHealth" Width="126"  Grid.Row="5" Grid.Column="1" Margin="4" Text="{Binding Path=PhilHealth}" />
+                        </WrapPanel>
+                        <Button
+                            Command="{Binding SaveCommand}"
+                            CommandParameter="{Binding SelectedGeneralInformation}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                        >Save</Button>
+                    </StackPanel>
                 </GroupBox>
-                <!--<Button x:Name="btnSave" Click="btnSave_Click" Grid.Row="11" Grid.Column="1" HorizontalAlignment="Right">Save</Button>-->
             </StackPanel>
         </Grid>
+
 
         <!--LIST VIEW-->
         <Border Grid.Row="1" Grid.Column="1">

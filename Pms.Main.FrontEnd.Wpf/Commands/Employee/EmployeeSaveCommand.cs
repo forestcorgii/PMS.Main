@@ -13,14 +13,14 @@ using System.Threading.Tasks;
 
 namespace Pms.Main.FrontEnd.Wpf.Commands
 {
-    public class EmployeeImportCommand : IRelayCommand
+    public class EmployeeSaveCommand : IRelayCommand
     {
         private readonly EmployeeModel _model;
-        private readonly ViewModelBase _viewModel;
+        private readonly EmployeeViewModel _viewModel;
         private readonly MainStore _mainStore;
 
 
-        public EmployeeImportCommand(ViewModelBase viewModel, EmployeeModel model, MainStore mainStore)
+        public EmployeeSaveCommand(EmployeeViewModel viewModel, EmployeeModel model, MainStore mainStore)
         {
             _model = model;
             _viewModel = viewModel;
@@ -31,22 +31,17 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
 
         public void Execute(object? parameter)
         {
-            _viewModel.SetProgress("Select EE Import file.", 0);
-
-            OpenFileDialog openFile = new();
-            bool? isValid = openFile.ShowDialog();
-            if (isValid is not null && isValid == true)
+            if (parameter is not null)
             {
-                IEnumerable<IBankInformation> extractedEmployee = _model.Import(openFile.FileName);
+                if (parameter is IGeneralInformation)
+                    _model.Save((IGeneralInformation)parameter);
+                else if (parameter is IBankInformation)
+                    _model.Save((IBankInformation)parameter);
 
-                _viewModel.SetProgress("Saving Employees bank information.", extractedEmployee.Count());
-                foreach (IBankInformation employee in extractedEmployee)
-                {
-                    _model.Save(employee);
-                    _viewModel.ProgressValue++;
-                }
-                _viewModel.SetAsFinishProgress();
+                _viewModel.SetProgress("Changes has been saved.", 0);
             }
+            else
+                _viewModel.SetProgress("No Changes has been saved.", 0);
         }
 
         protected bool _canExecute;

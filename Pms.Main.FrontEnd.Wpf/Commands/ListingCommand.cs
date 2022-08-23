@@ -29,13 +29,17 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
         public async void Execute(object? parameter)
         {
             _canExecute = false;
-
+            bool? doReload = (bool?)parameter;
             try
             {
-                await _store.Load();
+                if (doReload.HasValue && doReload.Value == true)
+                    await _store.Reload();
+                else
+                    await _store.Load();
             }
             catch
             {
+
             }
 
             _canExecute = true;

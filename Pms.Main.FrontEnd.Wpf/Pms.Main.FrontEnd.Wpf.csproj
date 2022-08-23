@@ -33,9 +33,9 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
     <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
-    <PackageReference Include="Pms.Adjustments" Version="1.0.0-preview001" />
+    <PackageReference Include="Pms.Adjustments" Version="1.0.0-preview003" />
     <PackageReference Include="Pms.Employees" Version="1.0.0-preview002" />
-    <PackageReference Include="Pms.Payrolls" Version="1.0.0-preview002" />
+    <PackageReference Include="Pms.Payrolls" Version="1.0.0-preview003" />
     <PackageReference Include="Pms.Timesheets" Version="1.0.0-preview002" />
   </ItemGroup>
 
@@ -117,6 +117,51 @@
 
   <ItemGroup>
     <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\template-13TH-PAY.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\template-CHINABANK.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\template-CHK.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\template-COMPARE.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\template-IMPORT-ADJUSTMENTS.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\template-IMPORT.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\TEMPLATE-LBP.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\Template-METROPALO.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\Template-METROPALO_20211001.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\Template-METROTAC.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\Template-METROTAC_20211001.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\template-SEG-CHG-SUMMARY.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\template-SEG-SUMMARY.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\template-UCPB.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\template-ZEROS.xls">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
