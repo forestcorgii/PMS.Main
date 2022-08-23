@@ -45,5 +45,8 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             ProgressValue = 0;
         }
 
+
+        public virtual void Dispose() { }
+
     }
 }

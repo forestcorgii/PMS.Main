@@ -13,7 +13,7 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         private string _cutoffId;
         private BillingModel _model;
 
-        private Lazy<Task> _initializeLazy;
+        public Lazy<Task> _initializeLazy { get; set; }
 
         private IEnumerable<Billing> _billings { get; set; }
         public IEnumerable<Billing> Billings { get; set; }
@@ -55,7 +55,7 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             IEnumerable<Billing> billings = new List<Billing>();
             await Task.Run(() =>
             {
-                billings = _model.GetBillings(_cutoffId);
+                billings = _model.GetBillings(_cutoffId.Substring(0,4));
             });
 
             _billings = billings;

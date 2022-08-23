@@ -11,5 +11,6 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         Action? Reloaded { get; set; }
 
         Task Load();
+        Task Reload();
     }
 }

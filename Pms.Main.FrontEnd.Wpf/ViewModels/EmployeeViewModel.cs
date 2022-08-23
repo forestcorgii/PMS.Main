@@ -21,9 +21,10 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         public string Filter
         {
             get => _filter;
-            set { 
+            set
+            {
 
-                SetProperty(ref _filter, value); 
+                SetProperty(ref _filter, value);
             }
         }
 
@@ -33,6 +34,8 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             get => _selectedEmployee;
             set => SetProperty(ref _selectedEmployee, value);
         }
+        public IGeneralInformation SelectedGeneralInformation { get => SelectedEmployee; }
+        public IBankInformation SelectedBankInformation { get => SelectedEmployee; }
 
         private ObservableCollection<Employee> _employees;
         public ObservableCollection<Employee> Employees
@@ -45,21 +48,30 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         public ICommand LoadEmployeesCommand { get; }
         public ICommand DownloadCommand { get; }
         public ICommand ImportCommand { get; }
+        public ICommand SaveCommand { get; }
 
         public EmployeeViewModel(MainStore mainStore, EmployeeStore employeeStore, EmployeeModel employeeModel)
         {
             DownloadCommand = new EmployeeDownloadCommand(this, mainStore, employeeStore, employeeModel);
             ImportCommand = new EmployeeImportCommand(this, employeeModel, mainStore);
+            SaveCommand = new EmployeeSaveCommand(this, employeeModel, mainStore);
+
             LoadEmployeesCommand = new ListingCommand(employeeStore);
             LoadEmployeesCommand.Execute(null);
 
             _selectedEmployee = new();
-            
+
             _employeeStore = employeeStore;
             _employeeStore.Reloaded += _cutoffStore_EmployeesReloaded;
 
-            _employees = new ObservableCollection<Employee>(_employeeStore.Employees);
+            _employees = new ObservableCollection<Employee>();
             Employees = new ObservableCollection<Employee>(_employeeStore.Employees);
+        }
+
+        public override void Dispose()
+        {
+            _employeeStore.Reloaded -= _cutoffStore_EmployeesReloaded;
+            base.Dispose();
         }
 
         private void _cutoffStore_EmployeesReloaded()

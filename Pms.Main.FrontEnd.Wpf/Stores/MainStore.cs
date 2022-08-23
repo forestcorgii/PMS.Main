@@ -30,51 +30,61 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         public string[] CutoffIds { get; private set; }
         public string[] PayrollCodes { get; private set; }
         public Action? Reloaded { get; set; }
-        private Lazy<Task> _initializeLoadFiltersLazy;
+        private Lazy<Task> _initializeLazy;
         #endregion
 
-        private TimesheetModel _cutoffTimesheet;
+        private TimesheetModel _timesheet;
+        private PayrollModel _payroll;
 
         private readonly TimesheetStore _timesheetStore;
         private readonly EmployeeStore _employeeStore;
         private readonly BillingStore _billingStore;
+        private readonly PayrollStore _payrollStore;
 
 
-        public MainStore(TimesheetModel cutoffTimesheet, TimesheetStore timesheetStore, EmployeeStore employeeStore, BillingStore billingStore)
+        public MainStore(TimesheetModel timesheet, PayrollModel payroll, TimesheetStore timesheetStore, EmployeeStore employeeStore, BillingStore billingStore, PayrollStore payrollStore)
         {
             _timesheetStore = timesheetStore;
             _employeeStore = employeeStore;
             _billingStore = billingStore;
+            _payrollStore = payrollStore;
 
-            _cutoffTimesheet = cutoffTimesheet;
+            _timesheet = timesheet;
+            _payroll = payroll;
 
             Cutoff = new Cutoff();
             CutoffIds = new string[] { };
             PayrollCodes = new string[] { };
-            _initializeLoadFiltersLazy = new Lazy<Task>(InitializeLoadFilters);
+            _initializeLazy = new Lazy<Task>(Initialize);
         }
 
         public async Task Load()
         {
             try
             {
-                await _initializeLoadFiltersLazy.Value;
+                await _initializeLazy.Value;
             }
             catch (Exception)
             {
-                _initializeLoadFiltersLazy = new Lazy<Task>(InitializeLoadFilters);
+                _initializeLazy = new Lazy<Task>(Initialize);
                 throw;
             }
         }
+        public async Task Reload()
+        {
+            _initializeLazy = new Lazy<Task>(Initialize);
+            await Load();
+        }
 
-        public async Task InitializeLoadFilters()
+
+        public async Task Initialize()
         {
             string[] cutoffIds = new string[] { };
             string[] payrollCodes = new string[] { };
             await Task.Run(() =>
             {
-                cutoffIds = _cutoffTimesheet.ListCutoffIds();
-                payrollCodes = _cutoffTimesheet.ListPayrollCodes();
+                cutoffIds = _timesheet.ListCutoffIds().Union(_payroll.ListCutoffIds()).ToArray();
+                payrollCodes = _timesheet.ListPayrollCodes();
             });
 
             CutoffIds = cutoffIds;
@@ -86,18 +96,21 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         public void SetCutoff(Cutoff cutoff)
         {
             Cutoff = cutoff;
+
             _timesheetStore.SetCutoffId(cutoff.CutoffId);
             _billingStore.SetCutoffId(cutoff.CutoffId);
+            _payrollStore.SetCutoffId(cutoff.CutoffId);
         }
 
         public void SetPayrollCode(string payrollCode)
         {
             PayrollCode = payrollCode;
             Cutoff.SetSite(Site);
+
             _timesheetStore.SetPayrollCode(payrollCode);
             _employeeStore.SetPayrollCode(payrollCode);
             _billingStore.SetPayrollCode(payrollCode);
+            _payrollStore.SetPayrollCode(payrollCode);
         }
-
     }
 }

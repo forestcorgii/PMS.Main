@@ -30,11 +30,11 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
         public BillingViewModel(BillingStore store, BillingModel model, MainStore mainStore, EmployeeModel employeeModel)
         {
-            _billings = new ObservableCollection<Billing>();
-            Billings = new ObservableCollection<Billing>();
-
             _store = store;
             _store.Reloaded += BillingsReloaded;
+            
+            _billings = new ObservableCollection<Billing>();
+            Billings = new ObservableCollection<Billing>(_store.Billings);
 
             _model = model;
 
@@ -42,6 +42,12 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             GenerateBillings = new BillingGenerationCommand(this, _model, store, mainStore, employeeModel);
             ListBillings = new ListingCommand( store);
             ListBillings.Execute(null);
+        }
+
+        public override void Dispose()
+        {
+            _store.Reloaded -= BillingsReloaded;
+            base.Dispose();
         }
 
         public void BillingsReloaded()

@@ -73,14 +73,17 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             Timesheets = new ObservableCollection<Timesheet>(_timesheetStore.Timesheets);
         }
 
-        #region Events
+        public override void Dispose()
+        {
+            _timesheetStore.Reloaded -= _cutoffStore_TimesheetsReloaded;
+            base.Dispose();
+        }
+
         private void _cutoffStore_TimesheetsReloaded()
         {
             Timesheets = new ObservableCollection<Timesheet>(_timesheetStore.Timesheets);
         }
-        #endregion
     }
-
 }
 
 
