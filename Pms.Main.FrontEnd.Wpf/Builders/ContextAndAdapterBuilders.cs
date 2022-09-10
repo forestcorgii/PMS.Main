@@ -32,7 +32,6 @@ namespace Pms.Main.FrontEnd.Wpf.Builders
             services.AddSingleton(HRMSAdapterFactory.CreateAdapter(conf));
 
 
-
             IServiceProvider serviceProvider = services.BuildServiceProvider();
             IDbContextFactory<TimesheetDbContext> timesheetDbContextFactory = serviceProvider.GetRequiredService<IDbContextFactory<TimesheetDbContext>>();
             using (TimesheetDbContext dbContext = timesheetDbContextFactory.CreateDbContext())
@@ -49,7 +48,6 @@ namespace Pms.Main.FrontEnd.Wpf.Builders
             IDbContextFactory<PayrollDbContext> payrollDbContextFactory = serviceProvider.GetRequiredService<IDbContextFactory<PayrollDbContext>>();
             using (PayrollDbContext dbContext = payrollDbContextFactory.CreateDbContext())
                 dbContext.Database.Migrate();
-
 
 
 

@@ -2,6 +2,7 @@
 using Pms.Payrolls.Domain;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,13 +13,24 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
     public class PayrollStore : IStore
     {
         private string _cutoffId { get; set; } = string.Empty;
-        private BankType _bankType { get; set; } = BankType.LBP;
+        private string _payrollCode = string.Empty;
+
+        public BankChoices Bank = BankChoices.LBP;
+        public string CompanyId = "";
+
+        public IEnumerable<string> CompanyIds { get; set; }
+        public IEnumerable<Company> Companies { get; set; }
+        public IEnumerable<Payroll> _payrolls { get; set; }
+
+        public ObservableCollection<Payroll> Payrolls;
+        public ImportProcessChoices Process = ImportProcessChoices.PD;
+
+        public IEnumerable<Payroll> PayrollsSetter { set => Payrolls = new ObservableCollection<Payroll>(value); }
+
 
         private readonly PayrollModel _model;
 
         public Lazy<Task> _initializeLazy { get; set; }
-        public IEnumerable<Payroll> _payrolls { get; set; }
-        public IEnumerable<Payroll> Payrolls { get; set; }
         public Action? Reloaded { get; set; }
 
         public PayrollStore(PayrollModel model)
@@ -26,8 +38,10 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             _initializeLazy = new Lazy<Task>(Initialize);
 
             _payrolls = new List<Payroll>();
-            Payrolls = new List<Payroll>();
+            Payrolls = new ObservableCollection<Payroll>();
             _model = model;
+
+            CompanyIds = new List<string>();
         }
 
 
@@ -53,16 +67,34 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         private async Task Initialize()
         {
             IEnumerable<Payroll> payrolls = new List<Payroll>();
+            IEnumerable<Company> companies = new List<Company>();
             await Task.Run(() =>
             {
-                payrolls = _model.Get(_cutoffId, _bankType);
+                payrolls = _model.Get(_cutoffId);
+                companies = _model.ListCompanies();
             });
 
             _payrolls = payrolls;
-            Payrolls = payrolls;
+            PayrollsSetter = payrolls
+                .SetPayrollCode(_payrollCode)
+                .SetCompanyId(CompanyId);
+
+            Companies = companies;
+            CompanyIds = companies.Select(c => c.CompanyId);
 
             Reloaded?.Invoke();
         }
+
+
+        public void ReloadFilter()
+        {
+            PayrollsSetter = _payrolls
+                .SetPayrollCode(_payrollCode)
+                .SetCompanyId(CompanyId);
+
+            Reloaded?.Invoke();
+        }
+
 
         public async void SetCutoffId(string cutoffId)
         {
@@ -72,8 +104,27 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
 
         public void SetPayrollCode(string payrollCode)
         {
-            Payrolls = _payrolls.Where(p => p.PayrollCode == payrollCode);
-            Reloaded?.Invoke();
+            _payrollCode = payrollCode;
+            ReloadFilter();
+        }
+    }
+
+    static class PayrollFilterExtension
+    {
+        //public static IEnumerable<Payroll> SetBankType(this IEnumerable<Payroll> payrolls, BankChoices bank) =>
+        //    payrolls.Where(p => p.Bank == bank);
+
+        public static IEnumerable<Payroll> SetCompanyId(this IEnumerable<Payroll> payrolls, string companyId)
+        {
+            if (companyId != string.Empty)
+                return payrolls.Where(p => p.CompanyId == companyId);
+            return payrolls;
+        }
+        public static IEnumerable<Payroll> SetPayrollCode(this IEnumerable<Payroll> payrolls, string payrollCode)
+        {
+            if (payrollCode != string.Empty)
+                return payrolls.Where(p => p.PayrollCode == payrollCode);
+            return payrolls;
         }
     }
 }

@@ -64,8 +64,9 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             {
                 await _initializeLazy.Value;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 _initializeLazy = new Lazy<Task>(Initialize);
                 throw;
             }
@@ -83,8 +84,16 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             string[] payrollCodes = new string[] { };
             await Task.Run(() =>
             {
-                cutoffIds = _timesheet.ListCutoffIds().Union(_payroll.ListCutoffIds()).ToArray();
-                payrollCodes = _timesheet.ListPayrollCodes();
+                cutoffIds = _timesheet
+                    .ListCutoffIds()
+                    .Union(_payroll.ListCutoffIds())
+                    .OrderByDescending(c => c)
+                    .ToArray();
+                payrollCodes = _timesheet
+                    .ListPayrollCodes()
+                    .Union(_payroll.ListPayrollCodes())
+                    .OrderBy(c => c)
+                    .ToArray();
             });
 
             CutoffIds = cutoffIds;

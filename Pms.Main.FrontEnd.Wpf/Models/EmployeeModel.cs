@@ -25,15 +25,25 @@ namespace Pms.Main.FrontEnd.Wpf.Models
             _employeeImporter = employeeImporter;
         }
 
-        public void Save(IGeneralInformation employee) =>
+        public bool Exists(string eeId) =>
+           _employeeProvider.EmployeeExists(eeId);
+
+
+        public void Save(IPersonalInformation employee) =>
            _employeeManager.Save(employee);
 
         public void Save(IBankInformation employee) =>
             _employeeManager.Save(employee);
 
+        public void Save(IGovernmentInformation employee) =>
+            _employeeManager.Save(employee);
 
-        public async Task<Employee?> FindEmployeeAsync(string eeId, string site) =>
+
+        public async Task<Employee> FindEmployeeAsync(string eeId, string site) =>
             await _employeeFinder.GetEmployeeAsync(eeId, site);
+
+        public Employee FindEmployee(string eeId) =>
+            _employeeProvider.FindEmployee(eeId);
 
         public IEnumerable<Employee> FilterEmployees(string searchString, string payrollCode) =>
             _employeeProvider.FilterEmployees(searchString, payrollCode);
@@ -43,6 +53,6 @@ namespace Pms.Main.FrontEnd.Wpf.Models
 
 
         public IEnumerable<IBankInformation> Import(string payRegisterPath) =>
-            _employeeImporter.StartImport(payRegisterPath, "LBP");
+            _employeeImporter.StartImport(payRegisterPath);
     }
 }

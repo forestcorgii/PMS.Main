@@ -14,13 +14,11 @@ namespace Pms.Main.FrontEnd.Wpf.Builders
     {
         public static ServiceCollection AddModels(this ServiceCollection services)
         {
-
             services.AddTransient<Cutoff>();
             services.AddTransient<EmployeeModel>();
             services.AddTransient<TimesheetModel>();
             services.AddTransient<BillingModel>();
             services.AddTransient<PayrollModel>();
-
 
             return services;
         }

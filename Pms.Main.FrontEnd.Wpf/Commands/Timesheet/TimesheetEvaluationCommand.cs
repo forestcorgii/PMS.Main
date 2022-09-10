@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Pms.Main.FrontEnd.Wpf.Commands
 {
@@ -81,7 +82,11 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                    }
                    catch (Exception ex)
                    {
-                       Console.WriteLine(ex.Message);
+                       MessageBox.Show(ex.Message,
+                            "Timesheet Evaluation Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error
+                        );
                    }
                    _viewModel.SetAsFinishProgress();
                }

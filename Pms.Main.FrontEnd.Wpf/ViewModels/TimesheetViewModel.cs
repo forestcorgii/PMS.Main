@@ -60,7 +60,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             _timesheetStore = timesheetStore;
             _timesheetStore.Reloaded += _cutoffStore_TimesheetsReloaded;
 
-            LoadTimesheetCommand = new ListingCommand( _timesheetStore);
+            LoadTimesheetCommand = new ListingCommand(_timesheetStore);
             LoadFilterCommand = new FilterListingCommand(cutoffStore);
 
             EmployeeDownloadCommand = new EmployeeDownloadCommand(this, cutoffStore, employeeStore, employeeModel);

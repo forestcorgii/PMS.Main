@@ -4,17 +4,17 @@ using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
 using Pms.Payrolls.Domain;
 using Pms.Payrolls.Domain.SupportTypes;
-using Pms.Payrolls.ServiceLayer.EfCore;
+using Pms.Payrolls.ServiceLayer.Files.Exports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Pms.Payrolls.Domain.Enums;
+using System.Windows;
 
 namespace Pms.Main.FrontEnd.Wpf.Commands
 {
-    public class PayrollExport13thMonthCommand : IRelayCommand
+    public class PayrollExportAlphalistCommand : IRelayCommand
     {
         public event EventHandler? CanExecuteChanged;
 
@@ -25,7 +25,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
 
         private bool _canExecute { get; set; } = true;
 
-        public PayrollExport13thMonthCommand(PayrollViewModel viewModel, PayrollModel model, PayrollStore store, MainStore mainStore)
+        public PayrollExportAlphalistCommand(PayrollViewModel viewModel, PayrollModel model, PayrollStore store, MainStore mainStore)
         {
             _store = store;
             _viewModel = viewModel;
@@ -44,37 +44,32 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
             {
                 await Task.Run(() =>
                 {
+                    _viewModel.SetProgress("Exporting Alphalist.", 1);
+
                     Cutoff cutoff = new(_mainStore.Cutoff.CutoffId);
-                    int yearCovered = cutoff.YearCovered;
+                    string payrollCode = _mainStore.PayrollCode;
+                    string companyId = _viewModel.CompanyId;
+                    Company company = _store.Companies.Where(c => c.CompanyId == companyId).First();
 
-                    _viewModel.SetProgress("Exporting 13th Month Report.", 1);
-                    IEnumerable<Payroll> payrolls = _model.Get(yearCovered, BankType.LBP);
-                    List<string> eeIds = payrolls.ExtractEEIds();
+                    IEnumerable<Payroll> payrolls = _model.Get(cutoff.YearCovered, companyId);
+                    var employeePayrolls = payrolls.GroupBy(py => py.EEId).Select(py => py.ToList()).ToList();
 
-                    List<ThirteenthMonth> thirteenthMonths = new();
-                    foreach (string eeId in eeIds)
-                    {
-                        IEnumerable<Payroll> eePayrolls = payrolls.Where(p => p.EEId == eeId);
+                    List<AlphalistDetail> alphalists = new();
+                    foreach (var employeePayroll in employeePayrolls)
+                        alphalists.Add(new AutomatedAlphalistDetail(employeePayroll, company.MinimumRate).CreateAlphalistDetail());
 
-                        double totalRegPay = eePayrolls.Sum(p => p.AdjustedRegPay());
-                        double computed13Month = totalRegPay / 12;
-
-                        thirteenthMonths.Add(new ThirteenthMonth()
-                        {
-                            EE = eePayrolls.First().EE,
-                            EEId = eeId,
-                            TotalRegPay = totalRegPay,
-                            Amount = computed13Month
-                        });
-                    }
-
-                    _model.Export13thMonth(thirteenthMonths, yearCovered, BankType.LBP);
+                    _model.ExportAlphalist(alphalists, cutoff.YearCovered, company);
+                    _model.ExportAlphalistVerifier(employeePayrolls, cutoff.YearCovered, company);
                     _viewModel.SetAsFinishProgress();
                 });
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                MessageBox.Show(ex.Message,
+                    "Alphalist Export Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
             _canExecute = true;
             NotifyCanExecuteChanged();

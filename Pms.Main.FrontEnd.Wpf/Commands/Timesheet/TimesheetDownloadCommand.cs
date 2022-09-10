@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Pms.Main.FrontEnd.Wpf.Commands
 {
@@ -60,9 +61,22 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
 
             foreach (int page in pages)
             {
-                var timesheets = await _cutoffTimesheet.DownloadContent(cutoff, payrollCode, site, page);
-                foreach (Timesheet timesheet in timesheets)
-                    _viewModel.Timesheets.Add(timesheet);
+                while (true)
+                {
+                    try
+                    {
+
+                        IEnumerable<Timesheet> timesheets = await _cutoffTimesheet.DownloadContent(cutoff, payrollCode, site, page);
+                        foreach (Timesheet timesheet in timesheets)
+                            _viewModel.Timesheets.Add(timesheet);
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (MessageBox.Show($"{ex.Message}... Do You want to Retry?", "Timesheet Download Error...", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+                            break;
+                    }
+                }
                 _viewModel.ProgressValue++;
             }
             _viewModel.SetAsFinishProgress();

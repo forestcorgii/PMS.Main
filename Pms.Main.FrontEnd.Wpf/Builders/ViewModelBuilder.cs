@@ -30,6 +30,9 @@ namespace Pms.Main.FrontEnd.Wpf.Builders
             services.AddSingleton<Func<PayrollViewModel>>((s) => () => s.GetRequiredService<PayrollViewModel>());
             services.AddSingleton<NavigationService<PayrollViewModel>>();
 
+            services.AddTransient<AlphalistViewModel>();
+            services.AddSingleton<Func<AlphalistViewModel>>((s) => () => s.GetRequiredService<AlphalistViewModel>());
+            services.AddSingleton<NavigationService<AlphalistViewModel>>();
 
 
             services.AddSingleton<MainViewModel>();

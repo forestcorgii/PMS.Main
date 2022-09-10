@@ -1,6 +1,7 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Win32;
 using Pms.Employees.Domain;
+using Pms.Employees.Domain.Exceptions;
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Pms.Main.FrontEnd.Wpf.Commands
 {
@@ -33,12 +35,25 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
         {
             if (parameter is not null)
             {
-                if (parameter is IGeneralInformation)
-                    _model.Save((IGeneralInformation)parameter);
-                else if (parameter is IBankInformation)
-                    _model.Save((IBankInformation)parameter);
+                try
+                {
+                    if ((string)parameter == "PERSONAL")
+                        _model.Save((IPersonalInformation)_viewModel.SelectedEmployee);
+                    else if ((string)parameter == "BANK")
+                        _model.Save((IBankInformation)_viewModel.SelectedEmployee);
+                    else if ((string)parameter == "GOVERNMENT")
+                        _model.Save((IGovernmentInformation)_viewModel.SelectedEmployee);
 
-                _viewModel.SetProgress("Changes has been saved.", 0);
+                    _viewModel.SetProgress("Changes has been saved.", 0);
+                }
+                catch (InvalidEmployeeFieldValueException ex)
+                {
+                    MessageBox.Show(ex.Message,
+                        "Employee Save Import Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
+                }
             }
             else
                 _viewModel.SetProgress("No Changes has been saved.", 0);

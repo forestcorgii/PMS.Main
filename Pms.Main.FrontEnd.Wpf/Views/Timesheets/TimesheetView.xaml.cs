@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Pms.Timesheets.Domain;
 using static Pms.Timesheets.ServiceLayer.TimeSystem.Services.Enums;
 
-namespace Pms.Main.FrontEnd.Wpf.Views
+namespace Pms.Main.FrontEnd.Wpf.Views.Timesheets
 {
 
     public partial class TimesheetView : UserControl

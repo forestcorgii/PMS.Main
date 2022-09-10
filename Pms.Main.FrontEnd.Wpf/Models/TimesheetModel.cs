@@ -1,5 +1,4 @@
-﻿using Pms.Timesheets.BizLogic;
-using Pms.Timesheets.Domain;
+﻿using Pms.Timesheets.Domain;
 using Pms.Timesheets.Domain.SupportTypes;
 using Pms.Timesheets.ServiceLayer.EfCore;
 using Pms.Timesheets.ServiceLayer.TimeSystem;
@@ -15,17 +14,20 @@ namespace Pms.Main.FrontEnd.Wpf.Models
     {
         private IProvideTimesheetService _timesheetProvider;
         private IDownloadContentProvider _downloadProvider;
-        private ITimesheetSaving _timesheetSaving;
+        private TimesheetManager _timesheetManager;
 
-        public TimesheetModel(IProvideTimesheetService timesheetProvider, IDownloadContentProvider downloadProvider, ITimesheetSaving timesheetSaving)
+        public TimesheetModel(IProvideTimesheetService timesheetProvider, IDownloadContentProvider downloadProvider, TimesheetManager timesheetManager)
         {
             _timesheetProvider = timesheetProvider;
             _downloadProvider = downloadProvider;
-            _timesheetSaving = timesheetSaving;
+            _timesheetManager= timesheetManager;
         }
 
         public IEnumerable<Timesheet> GetTimesheets(string cutoffId) =>
-                    _timesheetProvider.GetTimesheets().FilterByCutoffId(cutoffId);
+            _timesheetProvider.GetTimesheets(cutoffId);
+
+        public IEnumerable<Timesheet> GetTwoPeriodTimesheets(string cutoffId) =>
+            _timesheetProvider.GetTwoPeriodTimesheets(cutoffId);
 
 
         public IEnumerable<string> ListTimesheetNoEETimesheet(string cutoffId)
@@ -45,7 +47,10 @@ namespace Pms.Main.FrontEnd.Wpf.Models
         }
 
         public void SaveEmployeeData(Timesheet timesheet) =>
-            _timesheetSaving.SaveTimesheetEmployeeData(timesheet);
+            _timesheetManager.SaveTimesheetEmployeeData(timesheet);
+
+        public void SaveTimesheet(Timesheet timesheet) =>
+            _timesheetManager.SaveTimesheet(timesheet, timesheet.CutoffId, 0);
 
 
 
@@ -79,7 +84,7 @@ namespace Pms.Main.FrontEnd.Wpf.Models
             if (rawTimesheets is not null && rawTimesheets.message is not null)
             {
                 foreach (Timesheet timesheet in rawTimesheets.message)
-                    _timesheetSaving.SaveTimesheet(timesheet, cutoff.CutoffId, page);
+                    _timesheetManager.SaveTimesheet(timesheet, cutoff.CutoffId, page);
 
                 return rawTimesheets.message;
             }
@@ -87,6 +92,5 @@ namespace Pms.Main.FrontEnd.Wpf.Models
         }
 
     }
-
-
+ 
 }

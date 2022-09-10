@@ -1,0 +1,9 @@
+﻿<Application x:Class="Pms.Main.FrontEnd.Alphalist.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Pms.Main.FrontEnd.Alphalist"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>

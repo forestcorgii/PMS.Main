@@ -10,21 +10,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using static Pms.Employees.Domain.Enums;
 
 namespace Pms.Main.FrontEnd.Wpf.ViewModels
 {
     public class EmployeeViewModel : ViewModelBase
     {
-        private EmployeeStore _employeeStore { get; set; }
+        private EmployeeStore _store { get; set; }
 
-        private string _filter = "";
         public string Filter
         {
-            get => _filter;
+            get => _store.Filter;
             set
             {
-
-                SetProperty(ref _filter, value);
+                SetProperty(ref _store.Filter, value);
+                _store.ReloadFilter();
+            }
+        }
+        
+        public bool IncludeArchived
+        {
+            get => _store.IncludeArchived;
+            set
+            {
+                SetProperty(ref _store.IncludeArchived, value);
+                _store.ReloadFilter();
             }
         }
 
@@ -34,8 +44,6 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             get => _selectedEmployee;
             set => SetProperty(ref _selectedEmployee, value);
         }
-        public IGeneralInformation SelectedGeneralInformation { get => SelectedEmployee; }
-        public IBankInformation SelectedBankInformation { get => SelectedEmployee; }
 
         private ObservableCollection<Employee> _employees;
         public ObservableCollection<Employee> Employees
@@ -44,16 +52,17 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             set => SetProperty(ref _employees, value);
         }
 
+        public ObservableCollection<BankChoices> BankTypes => new ObservableCollection<BankChoices>(Enum.GetValues(typeof(BankChoices)).Cast<BankChoices>());
 
         public ICommand LoadEmployeesCommand { get; }
         public ICommand DownloadCommand { get; }
-        public ICommand ImportCommand { get; }
+        public ICommand BankImportCommand { get; }
         public ICommand SaveCommand { get; }
 
         public EmployeeViewModel(MainStore mainStore, EmployeeStore employeeStore, EmployeeModel employeeModel)
         {
             DownloadCommand = new EmployeeDownloadCommand(this, mainStore, employeeStore, employeeModel);
-            ImportCommand = new EmployeeImportCommand(this, employeeModel, mainStore);
+            BankImportCommand = new EmployeeBankImportCommand(this, employeeModel);
             SaveCommand = new EmployeeSaveCommand(this, employeeModel, mainStore);
 
             LoadEmployeesCommand = new ListingCommand(employeeStore);
@@ -61,22 +70,24 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
             _selectedEmployee = new();
 
-            _employeeStore = employeeStore;
-            _employeeStore.Reloaded += _cutoffStore_EmployeesReloaded;
+            _store = employeeStore;
+            _store.Reloaded += _cutoffStore_EmployeesReloaded;
 
             _employees = new ObservableCollection<Employee>();
-            Employees = new ObservableCollection<Employee>(_employeeStore.Employees);
+            Employees = new ObservableCollection<Employee>(_store.Employees);
         }
 
         public override void Dispose()
         {
-            _employeeStore.Reloaded -= _cutoffStore_EmployeesReloaded;
+            _store.Reloaded -= _cutoffStore_EmployeesReloaded;
             base.Dispose();
         }
 
         private void _cutoffStore_EmployeesReloaded()
         {
-            Employees = new ObservableCollection<Employee>(_employeeStore.Employees);
+            Employees = new ObservableCollection<Employee>(_store.Employees);
+            if (Employees.Count == 1)
+                SelectedEmployee = Employees.First();
         }
 
 

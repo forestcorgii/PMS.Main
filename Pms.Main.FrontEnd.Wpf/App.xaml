@@ -4,6 +4,7 @@
             xmlns:local="clr-namespace:Pms.Main.FrontEnd.Wpf"
             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
             xmlns:views="clr-namespace:Pms.Main.FrontEnd.Wpf.Views"
+            xmlns:timesheetViews="clr-namespace:Pms.Main.FrontEnd.Wpf.Views.Timesheets"
             xmlns:vms="clr-namespace:Pms.Main.FrontEnd.Wpf.ViewModels"
 >
     <Application.Resources>
@@ -16,13 +17,13 @@
                 <ResourceDictionary Source="Theme/SecondaryButton.xaml"/>
 
 
-                <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime" />
+                <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="Indigo" SecondaryColor="Lime" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type vms:TimesheetViewModel}">
-                <views:TimesheetView/>
+                <timesheetViews:TimesheetView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type vms:EmployeeViewModel}">
                 <views:EmployeeView/>
@@ -32,6 +33,9 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type vms:PayrollViewModel}">
                 <views:PayrollView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vms:AlphalistViewModel}">
+                <views:AlphalistView/>
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>

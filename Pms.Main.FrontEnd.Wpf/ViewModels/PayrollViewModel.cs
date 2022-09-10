@@ -16,38 +16,91 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 {
     public class PayrollViewModel : ViewModelBase
     {
-        private ObservableCollection<Payroll> _payrolls;
-        public ObservableCollection<Payroll> Payrolls { get => _payrolls; set => SetProperty(ref _payrolls, value); }
+        public ObservableCollection<Payroll> Payrolls { get => _store.Payrolls; set => SetProperty(ref _store.Payrolls, value); }
 
-        private BankType _bankType = BankType.LBP;
-        public BankType BankType { get => _bankType; set => SetProperty(ref _bankType, value); }
-        public ObservableCollection<BankType> BankTypes => new ObservableCollection<BankType>(Enum.GetValues(typeof(BankType)).Cast<BankType>());
+        private int chkCount;
+        public int ChkCount { get => chkCount; set => SetProperty(ref chkCount, value); }
+
+        private int lbpCount;
+        public int LbpCount { get => lbpCount; set => SetProperty(ref lbpCount, value); }
+
+        private int cbcCount;
+        public int CbcCount { get => cbcCount; set => SetProperty(ref cbcCount, value); }
+
+        private int mtacCount;
+        public int MtacCount { get => mtacCount; set => SetProperty(ref mtacCount, value); }
+
+        private int mpaloCount;
+        public int MpaloCount { get => mpaloCount; set => SetProperty(ref mpaloCount, value); }
+
+        private int unknownEECount;
+        public int UnknownEECount { get => unknownEECount; set => SetProperty(ref unknownEECount, value); }
+
+
+
+
+        #region Filter Fields
+        public ImportProcessChoices Process
+        {
+            get => _store.Process;
+            set
+            {
+                SetProperty(ref _store.Process, value);
+                _store.ReloadFilter();
+            }
+        }
+        public BankChoices Bank
+        {
+            get => _store.Bank;
+            set
+            {
+                SetProperty(ref _store.Bank, value);
+                _store.ReloadFilter();
+            }
+        }
+        public string CompanyId
+        {
+            get => _store.CompanyId;
+            set
+            {
+                SetProperty(ref _store.CompanyId, value);
+                _store.ReloadFilter();
+            }
+        }
+        #endregion
+
+        #region Field Options
+        public ObservableCollection<string> CompanyIds { get; set; }
+        public ObservableCollection<ImportProcessChoices> ProcessTypes => new ObservableCollection<ImportProcessChoices>(Enum.GetValues(typeof(ImportProcessChoices)).Cast<ImportProcessChoices>());
+        public ObservableCollection<BankChoices> BankTypes => new ObservableCollection<BankChoices>(Enum.GetValues(typeof(BankChoices)).Cast<BankChoices>());
+        #endregion
+
+        #region Commands
+        public ICommand PayrollListing { get; }
+        public ICommand PayrollImport { get; }
+        public ICommand PayrollBankReportExport { get; }
+        public ICommand PayrollAlphalistExport { get; }
+        public IAsyncRelayCommand EmployeeDownloadCommand { get; }
+        #endregion
 
         private PayrollStore _store;
 
-        public ICommand PayrollListing { get; }
-        public ICommand PayrollImport { get; }
-        public ICommand PayrollLBPExport { get; }
-        public ICommand Payroll13thMonthExport { get; }
-        public IAsyncRelayCommand EmployeeDownloadCommand { get; }
-
-
-        public PayrollViewModel(PayrollStore store, MainStore mainStore, PayrollModel model,EmployeeStore employeeStore,EmployeeModel employeeModel)
+        public PayrollViewModel(PayrollStore store, MainStore mainStore, PayrollModel model, EmployeeStore employeeStore, EmployeeModel employeeModel)
         {
             _store = store;
             _store.Reloaded += PayrollsReloaded;
 
-            _payrolls = new ObservableCollection<Payroll>();
-            Payrolls = new ObservableCollection<Payroll>(_store.Payrolls);
-
             PayrollListing = new ListingCommand(store);
+            PayrollListing.Execute(null);
+
             PayrollImport = new PayrollImportCommand(this, model, mainStore);
-            PayrollLBPExport = new PayrollExportLBPCommand(this, model, store, mainStore);
-            Payroll13thMonthExport = new PayrollExport13thMonthCommand(this, model, store, mainStore);
-           
+            PayrollBankReportExport = new PayrollExportBankReportCommand(this, model, store, mainStore);
+            PayrollAlphalistExport = new PayrollExportAlphalistCommand(this, model, store, mainStore);
+
             EmployeeDownloadCommand = new EmployeeDownloadCommand(this, mainStore, employeeStore, employeeModel);
 
-            PayrollListing.Execute(null);
+            Payrolls = new ObservableCollection<Payroll>(_store.Payrolls);
+            CompanyIds = new ObservableCollection<string>(_store.CompanyIds);
         }
 
         public override void Dispose()
@@ -58,7 +111,15 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
         private void PayrollsReloaded()
         {
+            CompanyIds = new ObservableCollection<string>(_store.CompanyIds);
+
             Payrolls = new ObservableCollection<Payroll>(_store.Payrolls);
+            ChkCount = Payrolls.Count(p => p.EE.Bank == BankChoices.CHK);
+            LbpCount = Payrolls.Count(p => p.EE.Bank == BankChoices.LBP);
+            CbcCount = Payrolls.Count(p => p.EE.Bank == BankChoices.CBC);
+            MtacCount = Payrolls.Count(p => p.EE.Bank == BankChoices.MTAC);
+            MpaloCount = Payrolls.Count(p => p.EE.Bank == BankChoices.MPALO);
+            UnknownEECount = Payrolls.Count(p => p.EE is null || p.EE.FirstName == string.Empty);
         }
     }
 }

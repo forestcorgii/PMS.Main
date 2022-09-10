@@ -11,22 +11,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Pms.Payrolls.Domain.TimesheetEnums;
 
 namespace Pms.Main.FrontEnd.Wpf.Commands
 {
     public class TimesheetExportCommand : IRelayCommand
     {
         private readonly TimesheetViewModel _viewModel;
-        private MainStore _cutoffStore;
-        private TimesheetModel _cutoffTimesheet;
+        private MainStore _store;
+        private TimesheetModel _model;
 
         public event EventHandler? CanExecuteChanged;
 
-        public TimesheetExportCommand(TimesheetViewModel viewModel, TimesheetModel cutoffTimesheet, MainStore cutoffStore)
+        public TimesheetExportCommand(TimesheetViewModel viewModel, TimesheetModel model, MainStore store)
         {
             _viewModel = viewModel;
-            _cutoffStore = cutoffStore;
-            _cutoffTimesheet = cutoffTimesheet;
+            _store = store;
+            _model = model;
         }
 
 
@@ -39,26 +40,32 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
         {
             await Task.Run(() =>
             {
-                Cutoff cutoff = _cutoffStore.Cutoff;
+                Cutoff cutoff = _store.Cutoff;
                 string cutoffId = cutoff.CutoffId;
-                string payrollCode = _cutoffStore.PayrollCode;
+                string payrollCode = _store.PayrollCode;
 
-                IEnumerable<Timesheet> timesheets = _cutoffTimesheet.GetTimesheets(cutoffId).FilterByPayrollCode(payrollCode);
-                List<string> bankCategories = timesheets.ExtractBankCategories();
+                IEnumerable<Timesheet> timesheets = _model.GetTimesheets(cutoffId).FilterByPayrollCode(payrollCode);
+                IEnumerable<Timesheet> twoPeriodTimesheets = _model.GetTwoPeriodTimesheets(cutoffId).FilterByPayrollCode(payrollCode);
+                
+                List<TimesheetBankChoices> bankCategories = timesheets.ExtractBanks();
 
                 _viewModel.SetProgress("Exporting Timesheets", bankCategories.Count);
-
-                foreach (string bankCategory in bankCategories)
+                foreach (TimesheetBankChoices bankCategory in bankCategories)
                 {
-                    var timesheetsByBankCategory = timesheets.FilterByBankCategory(bankCategory);
+                    var timesheetsByBankCategory = timesheets.FilterByBank(bankCategory);
+                    var twoPeriodTimesheetsByBankCategory = twoPeriodTimesheets.FilterByBank(bankCategory);
                     if (timesheetsByBankCategory.Any())
                     {
                         List<Timesheet> exportable = timesheetsByBankCategory.ByExportable().ToList();
+                        ExportDBF(cutoff, payrollCode, bankCategory, exportable);
+                        
                         List<Timesheet> unconfirmedTimesheetsWithAttendance = timesheetsByBankCategory.ByUnconfirmedWithAttendance().ToList();
                         List<Timesheet> unconfirmedTimesheetsWithoutAttendance = timesheetsByBankCategory.ByUnconfirmedWithoutAttendance().ToList();
+                        ExportFeedback(cutoff, payrollCode, bankCategory, exportable, unconfirmedTimesheetsWithAttendance, unconfirmedTimesheetsWithoutAttendance);
 
-                        ExportEfile(cutoff, payrollCode, bankCategory, exportable, unconfirmedTimesheetsWithAttendance, unconfirmedTimesheetsWithoutAttendance);
-                        ExportDBF(cutoff, payrollCode, bankCategory, exportable);
+
+                        IEnumerable<Timesheet> monthlyExportable = twoPeriodTimesheetsByBankCategory.ByExportable();
+                        ExportEFile(cutoff, payrollCode, bankCategory, monthlyExportable.GroupTimesheetsByEEId().ToList());
                     }
                     _viewModel.ProgressValue++;
                 }
@@ -66,11 +73,28 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
             });
         }
 
-        public void ExportEfile(Cutoff cutoff, string payrollCode, string bankCategory, List<Timesheet> exportable, List<Timesheet> unconfirmedTimesheetsWithAttendance, List<Timesheet> unconfirmedTimesheetsWithoutAttendance)
+        public void ExportFeedback(Cutoff cutoff, string payrollCode, TimesheetBankChoices bankCategory, List<Timesheet> exportable, List<Timesheet> unconfirmedTimesheetsWithAttendance, List<Timesheet> unconfirmedTimesheetsWithoutAttendance)
         {
             try
             {
-                ExportTimesheetsEfileService service = new(cutoff, payrollCode, bankCategory, exportable, unconfirmedTimesheetsWithAttendance, unconfirmedTimesheetsWithoutAttendance);
+                TimesheetFeedbackExporter service = new(cutoff, payrollCode, bankCategory, exportable, unconfirmedTimesheetsWithAttendance, unconfirmedTimesheetsWithoutAttendance);
+
+                string efiledir = $@"{AppDomain.CurrentDomain.BaseDirectory}\EXPORT\{cutoff.CutoffId}\{payrollCode}";
+                string efilepath = $@"{efiledir}\{payrollCode}_{bankCategory}_{cutoff.CutoffId}-FEEDBACK.XLS";
+                System.IO.Directory.CreateDirectory(efiledir);
+                service.StartExport(efilepath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public void ExportEFile(Cutoff cutoff, string payrollCode, TimesheetBankChoices bankCategory, List<Timesheet[]> exportable)
+        {
+            try
+            {
+                TimesheetEfileExporter service = new(cutoff, payrollCode, bankCategory, exportable);
 
                 string efiledir = $@"{AppDomain.CurrentDomain.BaseDirectory}\EXPORT\{cutoff.CutoffId}\{payrollCode}";
                 string efilepath = $@"{efiledir}\{payrollCode}_{bankCategory}_{cutoff.CutoffId}.XLS";
@@ -83,7 +107,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
             }
         }
 
-        public void ExportDBF(Cutoff cutoff, string payrollCode, string bankCategory, List<Timesheet> exportable)
+        public void ExportDBF(Cutoff cutoff, string payrollCode, TimesheetBankChoices bankCategory, List<Timesheet> exportable)
         {
             try
             {

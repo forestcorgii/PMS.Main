@@ -8,6 +8,10 @@
     <UserSecretsId>113b92cd-662c-4cc3-8450-8b2ecdfd3bef</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Assets\add.png" />
     <None Remove="Assets\back.png" />
@@ -24,6 +28,7 @@
     <None Remove="Assets\save.png" />
     <None Remove="Assets\template.png" />
     <None Remove="Assets\timer.png" />
+    <None Remove="Loading.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,38 +41,44 @@
     <PackageReference Include="Pms.Adjustments" Version="1.0.0-preview003" />
     <PackageReference Include="Pms.Employees" Version="1.0.0-preview002" />
     <PackageReference Include="Pms.Payrolls" Version="1.0.0-preview003" />
-    <PackageReference Include="Pms.Timesheets" Version="1.0.0-preview002" />
+    <PackageReference Include="Pms.Timesheets" Version="1.0.0-preview003" />
+    <PackageReference Include="System.Data.OleDb" Version="6.0.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="View\BillingView.xaml.cs">
+    <ProjectReference Include="..\Pms.Employees.FrontEnd\Pms.Employees.FrontEnd.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\BillingView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\Adjustment\AdjustmentRecord.xaml.cs">
+    <Compile Update="Views\Adjustment\AdjustmentRecord.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\EmployeeView.xaml.cs">
+    <Compile Update="Views\EmployeeView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\PayrollView.xaml.cs">
+    <Compile Update="Views\PayrollView.xaml.cs">
       <DependentUpon>PayrollView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="View\BillingView.xaml">
+    <Page Update="Views\BillingView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\Adjustment\AdjustmentRecord.xaml">
+    <Page Update="Views\Adjustment\AdjustmentRecord.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\EmployeeView.xaml">
+    <Page Update="Views\EmployeeView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\PayrollView.xaml">
+    <Page Update="Views\PayrollView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
@@ -91,7 +102,7 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\TimesheetView.xaml">
+    <Page Update="Views\Timesheets\TimesheetView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
@@ -116,16 +127,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <SplashScreen Include="Loading.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="TEMPLATES\template-13TH-PAY.xls">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TEMPLATES\template-CHINABANK.xls">
+    <None Update="TEMPLATES\CBC.xls">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TEMPLATES\template-CHK.xls">
+    <None Update="TEMPLATES\CHK.xls">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TEMPLATES\template-COMPARE.xls">
@@ -137,10 +152,10 @@
     <None Update="TEMPLATES\template-IMPORT.xls">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TEMPLATES\TEMPLATE-LBP.xls">
+    <None Update="TEMPLATES\LBP.xls">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TEMPLATES\Template-METROPALO.xls">
+    <None Update="TEMPLATES\MB.xls">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TEMPLATES\Template-METROPALO_20211001.xls">

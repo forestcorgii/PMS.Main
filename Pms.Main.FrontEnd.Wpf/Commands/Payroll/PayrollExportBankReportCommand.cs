@@ -2,16 +2,17 @@
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
+using Pms.Payrolls.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Pms.Payrolls.Domain.Enums;
+using System.Windows;
 
 namespace Pms.Main.FrontEnd.Wpf.Commands
 {
-    public class PayrollExportLBPCommand : IRelayCommand
+    public class PayrollExportBankReportCommand : IRelayCommand
     {
         public event EventHandler? CanExecuteChanged;
 
@@ -22,7 +23,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
 
         private bool _canExecute { get; set; } = true;
 
-        public PayrollExportLBPCommand(PayrollViewModel viewModel, PayrollModel model, PayrollStore store, MainStore mainStore)
+        public PayrollExportBankReportCommand(PayrollViewModel viewModel, PayrollModel model, PayrollStore store, MainStore mainStore)
         {
             _store = store;
             _viewModel = viewModel;
@@ -30,9 +31,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
             _mainStore = mainStore;
         }
 
-
         public bool CanExecute(object? parameter) => _canExecute;
-
 
         public async void Execute(object? parameter)
         {
@@ -41,16 +40,24 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
             {
                 await Task.Run(() =>
                 {
-                    _viewModel.SetProgress("Exporting Payrolls for Land Bank.",1);
+                    _viewModel.SetProgress("Exporting Payrolls.", 1);
+
                     string cutoffId = _mainStore.Cutoff.CutoffId;
-                    IEnumerable<Payrolls.Domain.Payroll> payrolls = _model.Get(cutoffId, BankType.LBP);
-                    _model.ExportLBP(payrolls, cutoffId, "LBP");
+                    string payrollCode = _mainStore.PayrollCode;
+
+                    IEnumerable<Payroll> payrolls = _model.Get(cutoffId).Where(p => p.PayrollCode == payrollCode);
+
+                    _model.ExportBankReport(payrolls, cutoffId, payrollCode);
                     _viewModel.SetAsFinishProgress();
                 });
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                MessageBox.Show(ex.Source,
+                    "Bank Report Export Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
             _canExecute = true;
             NotifyCanExecuteChanged();

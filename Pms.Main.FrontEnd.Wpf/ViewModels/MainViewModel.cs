@@ -82,6 +82,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         public ICommand EmployeeCommand { get; }
         public ICommand BillingCommand { get; }
         public ICommand PayrollCommand { get; }
+        public ICommand AlphalistCommand { get; }
 
         public ICommand LoadFilterCommand { get; }
 
@@ -89,6 +90,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             NavigationService<TimesheetViewModel> timesheetNavigation,
             NavigationService<EmployeeViewModel> employeeNavigation,
             NavigationService<PayrollViewModel> payrollNavigation,
+            NavigationService<AlphalistViewModel> alphalistNavigation,
             NavigationService<BillingViewModel> billingNavigation
         )
         {
@@ -100,6 +102,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             EmployeeCommand = new NavigateCommand<EmployeeViewModel>(employeeNavigation);
             BillingCommand = new NavigateCommand<BillingViewModel>(billingNavigation);
             PayrollCommand = new NavigateCommand<PayrollViewModel>(payrollNavigation);
+            AlphalistCommand = new NavigateCommand<AlphalistViewModel>(alphalistNavigation);
 
             cutoffIds = new string[] { };
             payrollCodes = new string[] { };

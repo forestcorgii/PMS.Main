@@ -5,11 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Pms.Adjustments.ServiceLayer.EfCore.BillingProviderExtensions;
 
 namespace Pms.Main.FrontEnd.Wpf.Stores
 {
     public class BillingStore : IStore
     {
+        public IEnumerable<string> AdjustmentNames { get; set; }
+        private string _payrollCode { get; set; }
+
         private string _cutoffId;
         private BillingModel _model;
 
@@ -55,11 +59,12 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             IEnumerable<Billing> billings = new List<Billing>();
             await Task.Run(() =>
             {
-                billings = _model.GetBillings(_cutoffId.Substring(0,4));
+                billings = _model.GetBillings(_cutoffId.Substring(0, 4));
             });
 
             _billings = billings;
-            Billings = billings;
+            Billings = _billings.Where(ts => ts.PayrollCode == _payrollCode);
+            AdjustmentNames = Billings.ExtractAdjustmentNames();
             Reloaded?.Invoke();
         }
 
@@ -70,11 +75,21 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             await Reload();
         }
 
-        public void SetPayrollCode(string payrollCode)
+        public void SetAdjustmentName(string adjustmentName)
         {
-            Billings = _billings.Where(ts => ts.PayrollCode == payrollCode);
+            Billings = _billings
+                .Where(ts => ts.PayrollCode == _payrollCode)
+                .Where(ts => ts.AdjustmentName == adjustmentName);
             Reloaded?.Invoke();
         }
-        
+
+        public void SetPayrollCode(string payrollCode)
+        {
+            _payrollCode = payrollCode;
+            Billings = _billings.Where(ts => ts.PayrollCode == _payrollCode);
+            AdjustmentNames = Billings.ExtractAdjustmentNames();
+            Reloaded?.Invoke();
+        }
+
     }
 }

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Pms.Main.FrontEnd.Wpf.Views.TimesheetView"
+﻿<UserControl x:Class="Pms.Main.FrontEnd.Wpf.Views.Timesheets.TimesheetView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -26,9 +26,10 @@
             </WrapPanel>
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
-                <Button Content="Download" Command="{Binding DownloadCommand}" VerticalAlignment="Center" HorizontalAlignment="Right" Style="{StaticResource PrimaryButton}"/>
-                <Button Content="Evaluate" Command="{Binding EvaluateCommand}" VerticalAlignment="Center" HorizontalAlignment="Right" Style="{StaticResource PrimaryButton}"/>
-                <Button Content="Export" Command="{Binding ExportCommand}" VerticalAlignment="Center" HorizontalAlignment="Right" Style="{StaticResource PrimaryButton}"/>
+                <Button Content="Download" Command="{Binding DownloadCommand}" Margin="4"/>
+                <Button Content="Evaluate" Command="{Binding EvaluateCommand}" Margin="4" />
+                <Button Content="Export" Command="{Binding ExportCommand}" Margin="4" />
+                <!--<Button Content="Import" Command="{Binding ImportCommand}" Margin="4" />-->
             </StackPanel>
         </Grid>
 
@@ -40,6 +41,7 @@
                 <DataGridTextColumn Header="Full Name" Binding="{Binding Fullname}"/>
                 <DataGridTextColumn Header="Payroll Code" Binding="{Binding PayrollCode}"/>
                 <DataGridTextColumn Header="Bank Category" Binding="{Binding BankCategory}"/>
+                <DataGridTextColumn Header="Bank" Binding="{Binding Bank}"/>
                 <DataGridTextColumn Header="Department" Binding="{Binding Location}"/>
                 <DataGridTextColumn Header="Total Hours" Binding="{Binding TotalHours}"/>
                 <DataGridTextColumn Header="OT" Binding="{Binding TotalOT}"/>

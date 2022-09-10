@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Pms.Adjustments.Domain.Services;
 using Pms.Adjustments.ServiceLayer.EfCore;
+using Pms.Adjustments.ServiceLayer.Files;
 using Pms.Employees.Domain.Services;
 using Pms.Employees.ServiceLayer;
 using Pms.Employees.ServiceLayer.Files;
@@ -30,21 +31,21 @@ namespace Pms.Main.FrontEnd.Wpf.Builders
             services.AddSingleton<IProvideEmployeeService, EmployeeProvider>();
             services.AddSingleton<IManageEmployeeService, EmployeeManager>();
             services.AddSingleton<IEmployeeFinder, FindEmployeeService>();
-            services.AddSingleton<IImportEmployeeService, ImportEmployeeService>();
+            services.AddSingleton<IImportEmployeeService, EmployeeBankInformationImporter>();
+            services.AddSingleton<EmployeeEEFileImporter>();
 
-            services.AddSingleton<IProvideTimesheetService, ProvideTimesheetService>();
+            services.AddSingleton<IProvideTimesheetService, TimesheetProvider>();
             services.AddSingleton<IDownloadContentProvider, DownloadContentProvider>();
-            services.AddSingleton<ITimesheetSaving, SaveTimesheetBizLogic>();
+            services.AddSingleton<TimesheetManager>();
 
             services.AddSingleton<IManageBillingService, BillingManager>();
             services.AddSingleton<IProvideBillingService, BillingProvider>();
             services.AddSingleton<IGenerateBillingService, BillingGenerator>();
+            services.AddSingleton<BillingExporter>();
 
             services.AddSingleton<IManagePayrollService, PayrollManager>();
             services.AddSingleton<IProvidePayrollService, PayrollProvider>();
-            services.AddSingleton<IImportPayrollService, PayRegisterImport>();
-            services.AddSingleton<LBPExport>();
-            services.AddSingleton<ThirteenthMonthExport>();
+            //services.AddSingleton<IImportPayrollService, PayRegisterImportBase>();
 
 
             return services;

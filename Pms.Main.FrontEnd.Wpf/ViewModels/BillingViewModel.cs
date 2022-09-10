@@ -14,6 +14,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 {
     public class BillingViewModel : ViewModelBase
     {
+
         private ObservableCollection<Billing> _billings;
         public ObservableCollection<Billing> Billings
         {
@@ -28,19 +29,32 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         private BillingStore _store;
         private BillingModel _model;
 
+        private string _adjustmentName;
+        private ObservableCollection<string> _adjustmentNames;
+
+        public string AdjustmentName
+        {
+            get => _adjustmentName; set
+            {
+                SetProperty(ref _adjustmentName, value);
+                _store.SetAdjustmentName(_adjustmentName);
+            }
+        }
+        public ObservableCollection<string> AdjustmentNames { get => _adjustmentNames; set => SetProperty(ref _adjustmentNames, value); }
+
         public BillingViewModel(BillingStore store, BillingModel model, MainStore mainStore, EmployeeModel employeeModel)
         {
             _store = store;
             _store.Reloaded += BillingsReloaded;
-            
+
             _billings = new ObservableCollection<Billing>();
             Billings = new ObservableCollection<Billing>(_store.Billings);
 
             _model = model;
 
-            ExportBillings = new ListingCommand( store);
+            ExportBillings = new BillingExportCommand(this, _model, store, mainStore);
             GenerateBillings = new BillingGenerationCommand(this, _model, store, mainStore, employeeModel);
-            ListBillings = new ListingCommand( store);
+            ListBillings = new ListingCommand(store);
             ListBillings.Execute(null);
         }
 
@@ -53,6 +67,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         public void BillingsReloaded()
         {
             Billings = new ObservableCollection<Billing>(_store.Billings);
+            AdjustmentNames = new ObservableCollection<string>(_store.AdjustmentNames);
         }
     }
 }
