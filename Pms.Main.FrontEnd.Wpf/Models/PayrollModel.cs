@@ -1,4 +1,5 @@
-﻿using Pms.Payrolls.Domain;
+﻿using Pms.Employees.Domain;
+using Pms.Payrolls.Domain;
 using Pms.Payrolls.Domain.Services;
 using Pms.Payrolls.Domain.SupportTypes;
 using Pms.Payrolls.ServiceLayer.Files;
@@ -53,22 +54,19 @@ namespace Pms.Main.FrontEnd.Wpf.Models
         public void ExportAlphalist(IEnumerable<AlphalistDetail> alphalists, int year, Company company)
         {
             AlphalistExporter exporter = new();
-            exporter.StartExport(alphalists, year, company);
+            exporter.StartExport(alphalists, year,company.CompanyId, company.MinimumRate);
         }
         
         public void ExportAlphalistVerifier(IEnumerable<IEnumerable<Payroll>> employeePayrolls, int year, Company company)
         {
             AlphalistVerifierExporter exporter = new();
-            exporter.StartExport(employeePayrolls, year, company);
+            exporter.StartExport(employeePayrolls, year, company.CompanyId);
         }
 
         public IEnumerable<string> ListNoEEPayrolls() =>
             _provider.GetNoEEPayrolls().ExtractEEIds();
 
-        public IEnumerable<Company> ListCompanies() =>
-            _provider.GetAllCompanies().ToList();
-
-        internal void Save(Payroll payroll, string payrollCode, BankChoices bankType, string companyId)
+        internal void Save(Payroll payroll, string payrollCode,  string companyId)
         {
             payroll.PayrollCode = payrollCode;
             payroll.CompanyId = companyId;

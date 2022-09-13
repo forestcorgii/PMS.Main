@@ -35,14 +35,14 @@
         </Menu>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="8">
-            <TextBlock  VerticalAlignment="Center" Margin="6">Process:</TextBlock>
+            <!--<TextBlock  VerticalAlignment="Center" Margin="6">Process:</TextBlock>
             <ComboBox Text="{Binding Process, UpdateSourceTrigger=PropertyChanged}" 
                               ItemsSource="{Binding ProcessTypes}" 
-                              Width="65" VerticalAlignment="Center" IsEditable="True"/>
-            <TextBlock  VerticalAlignment="Center" Margin="6">Company:</TextBlock>
+                              Width="65" VerticalAlignment="Center" IsEditable="True"/>-->
+            <!--<TextBlock  VerticalAlignment="Center" Margin="6">Company:</TextBlock>
             <ComboBox Text="{Binding CompanyId, UpdateSourceTrigger=PropertyChanged}" 
                               ItemsSource="{Binding CompanyIds}" 
-                              Width="175" VerticalAlignment="Center" IsEditable="True"/>
+                              Width="175" VerticalAlignment="Center" IsEditable="True"/>-->
             <!--<TextBlock  VerticalAlignment="Center" Margin="6">Bank:</TextBlock>
             <ComboBox Text="{Binding Bank, UpdateSourceTrigger=PropertyChanged}" 
                               ItemsSource="{Binding BankTypes}" 

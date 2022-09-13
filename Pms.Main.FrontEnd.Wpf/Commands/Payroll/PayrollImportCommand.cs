@@ -7,10 +7,12 @@ using Pms.Payrolls.Domain;
 using Pms.Payrolls.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using static Pms.Payrolls.Domain.Enums;
 
 namespace Pms.Main.FrontEnd.Wpf.Commands
 {
@@ -41,16 +43,17 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                 bool? isValid = openFile.ShowDialog();
                 if (isValid is not null && isValid == true)
                 {
-                    _viewModel.SetProgress($"Saving extracted Payrolls.", openFile.FileNames.Length);
                     foreach (string payRegister in openFile.FileNames)
                     {
                         try
                         {
-                            IEnumerable<Payroll> extractedPayrolls = _model.Import(payRegister, _viewModel.Process);
+                            IEnumerable<Payroll> extractedPayrolls = _model.Import(payRegister, (ImportProcessChoices)_mainStore.PayrollCode.Process);
+                            _viewModel.SetProgress($"Saving extracted Payrolls from {Path.GetFileName(payRegister)}.", extractedPayrolls.Count());
                             foreach (Payroll payroll in extractedPayrolls)
                             {
-                                payroll.PayrollCode = _mainStore.PayrollCode;
-                                _model.Save(payroll, _mainStore.PayrollCode, _viewModel.Bank, _viewModel.CompanyId);
+                                payroll.PayrollCode = _mainStore.PayrollCode.PayrollCodeId;
+                                _model.Save(payroll, _mainStore.PayrollCode.PayrollCodeId, _mainStore.PayrollCode.CompanyId);
+                                _viewModel.ProgressValue++;
                             }
                         }
                         catch (PayrollRegisterHeaderNotFoundException ex)
@@ -71,7 +74,6 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                             );
                             break;
                         }
-                        _viewModel.ProgressValue++;
                     }
                 }
             });

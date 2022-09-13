@@ -15,26 +15,23 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
     {
         #region MAIN
         public Cutoff Cutoff { get; private set; }
-        public string PayrollCode { get; private set; } = "";
-        public string Site
-        {
-            get
-            {
-                if ((PayrollCode != "" && PayrollCode[0] == 'L') || PayrollCode == "P4A")
-                    return "LEYTE";
-                else
-                    return "MANILA";
-            }
-        }
+        public PayrollCode PayrollCode { get; set; }
+
+        public string Site => PayrollCode.Site;
+
+        public IEnumerable<string> CompanyIds { get; set; }
+        public IEnumerable<Company> Companies { get; set; }
+        public IEnumerable<PayrollCode> PayrollCodes { get; set; }
 
         public string[] CutoffIds { get; private set; }
-        public string[] PayrollCodes { get; private set; }
+
         public Action? Reloaded { get; set; }
         private Lazy<Task> _initializeLazy;
         #endregion
 
-        private TimesheetModel _timesheet;
-        private PayrollModel _payroll;
+        private EmployeeModel _employeeModel;
+        private TimesheetModel _timesheetModel;
+        private PayrollModel _payrollModel;
 
         private readonly TimesheetStore _timesheetStore;
         private readonly EmployeeStore _employeeStore;
@@ -42,19 +39,26 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         private readonly PayrollStore _payrollStore;
 
 
-        public MainStore(TimesheetModel timesheet, PayrollModel payroll, TimesheetStore timesheetStore, EmployeeStore employeeStore, BillingStore billingStore, PayrollStore payrollStore)
+        public MainStore(
+            TimesheetModel timesheetModel,
+            PayrollModel payrollModel,
+            EmployeeModel employeeModel,
+            TimesheetStore timesheetStore,
+            EmployeeStore employeeStore,
+            BillingStore billingStore,
+            PayrollStore payrollStore)
         {
             _timesheetStore = timesheetStore;
             _employeeStore = employeeStore;
             _billingStore = billingStore;
             _payrollStore = payrollStore;
 
-            _timesheet = timesheet;
-            _payroll = payroll;
+            _employeeModel = employeeModel;
+            _payrollModel = payrollModel;
+            _timesheetModel = timesheetModel;
 
             Cutoff = new Cutoff();
             CutoffIds = new string[] { };
-            PayrollCodes = new string[] { };
             _initializeLazy = new Lazy<Task>(Initialize);
         }
 
@@ -81,23 +85,27 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         public async Task Initialize()
         {
             string[] cutoffIds = new string[] { };
-            string[] payrollCodes = new string[] { };
+            IEnumerable<PayrollCode> payrollCodes = new List<PayrollCode>();
+            IEnumerable<Company> companies = new List<Company>();
             await Task.Run(() =>
             {
-                cutoffIds = _timesheet
+                cutoffIds = _timesheetModel
                     .ListCutoffIds()
-                    .Union(_payroll.ListCutoffIds())
+                    .Union(_payrollModel.ListCutoffIds())
                     .OrderByDescending(c => c)
                     .ToArray();
-                payrollCodes = _timesheet
-                    .ListPayrollCodes()
-                    .Union(_payroll.ListPayrollCodes())
-                    .OrderBy(c => c)
-                    .ToArray();
+
+                payrollCodes = _employeeModel.ListPayrollCodes();
+                companies = _employeeModel.ListCompanies();
             });
+
+            Companies = companies;
+            CompanyIds = companies.Select(c => c.CompanyId);
+
 
             CutoffIds = cutoffIds;
             PayrollCodes = payrollCodes;
+            //PayrollCodes = payrollCodes;
             Reloaded?.Invoke();
         }
 
@@ -111,15 +119,15 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             _payrollStore.SetCutoffId(cutoff.CutoffId);
         }
 
-        public void SetPayrollCode(string payrollCode)
+        public void SetPayrollCode(string payrollCodeId)
         {
-            PayrollCode = payrollCode;
+            PayrollCode = PayrollCodes.Where(pc => pc.PayrollCodeId == payrollCodeId).First();
             Cutoff.SetSite(Site);
 
-            _timesheetStore.SetPayrollCode(payrollCode);
-            _employeeStore.SetPayrollCode(payrollCode);
-            _billingStore.SetPayrollCode(payrollCode);
-            _payrollStore.SetPayrollCode(payrollCode);
+            _timesheetStore.SetPayrollCode(PayrollCode.Name);
+            _employeeStore.SetPayrollCode(PayrollCode.Name);
+            _billingStore.SetPayrollCode(PayrollCode.Name);
+            _payrollStore.SetPayrollCode(PayrollCode);
         }
     }
 }

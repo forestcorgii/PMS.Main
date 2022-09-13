@@ -36,16 +36,13 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
         public async void Execute(object? parameter)
         {
             Cutoff cutoff = _cutoffStore.Cutoff;
-            string payrollCode = _cutoffStore.PayrollCode;
+            string payrollCode = _cutoffStore.PayrollCode.Name;
             string site = _cutoffStore.Site;
 
             if (parameter is null)
             {
                 _viewModel.SetProgress("Retrieving Download content summary", 1);
-                int[] pages;
-                //if (_viewModel.options == DownloadOptions.UnconfirmedOnly)
-                //    pages = _cutoffTimesheet.GetPageWithUnconfirmedTS(cutoff, payrollCode);
-                //else 
+                int[] pages; 
                 pages = await _cutoffTimesheet.DownloadContentSummary(cutoff, payrollCode, site);
 
                 await StartDownload(pages, cutoff, payrollCode, site);
@@ -65,7 +62,6 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                 {
                     try
                     {
-
                         IEnumerable<Timesheet> timesheets = await _cutoffTimesheet.DownloadContent(cutoff, payrollCode, site, page);
                         foreach (Timesheet timesheet in timesheets)
                             _viewModel.Timesheets.Add(timesheet);

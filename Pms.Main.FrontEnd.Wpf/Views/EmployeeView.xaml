@@ -37,6 +37,7 @@
             <MenuItem Header="Import">
                 <MenuItem Header="Bank Info" Command="{Binding BankImportCommand}"/>
                 <MenuItem Header="Government Info" IsEnabled="False" Command="{Binding BankImportCommand}"/>
+                <MenuItem Header="EE Data" Command="{Binding EEDataImportCommand}"/>
             </MenuItem>
         </Menu>
         <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

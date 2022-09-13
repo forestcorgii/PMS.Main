@@ -40,7 +40,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
         {
             await Task.Run(() =>
             {
-                string[] eeIds = _employeeModel.FilterEmployees("", _mainStore.PayrollCode).Select(ee => ee.EEId).ToArray();
+                string[] eeIds = _employeeModel.FilterEmployees("", _mainStore.PayrollCode.PayrollCodeId).Select(ee => ee.EEId).ToArray();
                 List<Billing> billings = new();
 
                 _viewModel.SetProgress("Billings Generation on going.", eeIds.Length);
@@ -53,7 +53,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                 _viewModel.SetProgress("Saving Generated billings.", billings.Count);
                 foreach (Billing billing in billings)
                 {
-                    billing.PayrollCode = _mainStore.PayrollCode;
+                    billing.PayrollCode = _mainStore.PayrollCode.PayrollCodeId;
                     _model.AddBilling(billing);
                     _viewModel.ProgressValue++;
                 }

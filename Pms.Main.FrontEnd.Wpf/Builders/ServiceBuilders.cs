@@ -2,8 +2,8 @@
 using Pms.Adjustments.Domain.Services;
 using Pms.Adjustments.ServiceLayer.EfCore;
 using Pms.Adjustments.ServiceLayer.Files;
-using Pms.Employees.Domain.Services;
 using Pms.Employees.ServiceLayer;
+using Pms.Employees.ServiceLayer.EfCore;
 using Pms.Employees.ServiceLayer.Files;
 using Pms.Employees.ServiceLayer.HRMS.Service;
 using Pms.Main.FrontEnd.Wpf.Stores;
@@ -28,11 +28,15 @@ namespace Pms.Main.FrontEnd.Wpf.Builders
     {
         public static ServiceCollection AddServices(this ServiceCollection services)
         {
-            services.AddSingleton<IProvideEmployeeService, EmployeeProvider>();
-            services.AddSingleton<IManageEmployeeService, EmployeeManager>();
-            services.AddSingleton<IEmployeeFinder, FindEmployeeService>();
-            services.AddSingleton<IImportEmployeeService, EmployeeBankInformationImporter>();
-            services.AddSingleton<EmployeeEEFileImporter>();
+            services.AddSingleton<CompanyManager>();
+            services.AddSingleton<PayrollCodeManager>();
+            
+            services.AddSingleton<EmployeeProvider>();
+            services.AddSingleton<EmployeeManager>();
+            services.AddSingleton<FindEmployeeService>();
+            services.AddSingleton<EmployeeBankInformationImporter>();
+
+
 
             services.AddSingleton<IProvideTimesheetService, TimesheetProvider>();
             services.AddSingleton<IDownloadContentProvider, DownloadContentProvider>();

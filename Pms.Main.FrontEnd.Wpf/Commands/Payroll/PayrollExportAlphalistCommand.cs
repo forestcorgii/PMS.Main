@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
+using Pms.Employees.Domain;
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
@@ -47,9 +48,9 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                     _viewModel.SetProgress("Exporting Alphalist.", 1);
 
                     Cutoff cutoff = new(_mainStore.Cutoff.CutoffId);
-                    string payrollCode = _mainStore.PayrollCode;
-                    string companyId = _viewModel.CompanyId;
-                    Company company = _store.Companies.Where(c => c.CompanyId == companyId).First();
+                    string payrollCode = _mainStore.PayrollCode.PayrollCodeId;
+                    string companyId = _mainStore.PayrollCode.CompanyId;
+                    Company company = new();
 
                     IEnumerable<Payroll> payrolls = _model.Get(cutoff.YearCovered, companyId);
                     var employeePayrolls = payrolls.GroupBy(py => py.EEId).Select(py => py.ToList()).ToList();

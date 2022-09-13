@@ -1,7 +1,9 @@
 ﻿using Pms.Employees.Domain;
-using Pms.Employees.Domain.Services;
+using Pms.Employees.ServiceLayer;
 using Pms.Employees.ServiceLayer.EfCore;
+using Pms.Employees.ServiceLayer.Files;
 using Pms.Employees.ServiceLayer.HRMS;
+using Pms.Employees.ServiceLayer.HRMS.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,17 +14,19 @@ namespace Pms.Main.FrontEnd.Wpf.Models
 {
     public class EmployeeModel
     {
-        IProvideEmployeeService _employeeProvider;
-        IManageEmployeeService _employeeManager;
-        IEmployeeFinder _employeeFinder;
-        IImportEmployeeService _employeeImporter;
+        PayrollCodeManager _payrollCodeManager;
+        CompanyManager _companyManager;
+        EmployeeProvider _employeeProvider;
+        EmployeeManager _employeeManager;
+        FindEmployeeService _employeeFinder;
 
-        public EmployeeModel(IProvideEmployeeService employeeProvider, IManageEmployeeService employeeManager, IEmployeeFinder employeeFinder, IImportEmployeeService employeeImporter)
+        public EmployeeModel(EmployeeProvider employeeProvider, EmployeeManager employeeManager, FindEmployeeService employeeFinder, PayrollCodeManager payrollCodeManager, CompanyManager companyManager)
         {
             _employeeProvider = employeeProvider;
             _employeeManager = employeeManager;
             _employeeFinder = employeeFinder;
-            _employeeImporter = employeeImporter;
+            _payrollCodeManager = payrollCodeManager;
+            _companyManager = companyManager;
         }
 
         public bool Exists(string eeId) =>
@@ -36,6 +40,9 @@ namespace Pms.Main.FrontEnd.Wpf.Models
             _employeeManager.Save(employee);
 
         public void Save(IGovernmentInformation employee) =>
+            _employeeManager.Save(employee);
+
+        public void Save(IEEDataInformation employee) =>
             _employeeManager.Save(employee);
 
 
@@ -52,7 +59,23 @@ namespace Pms.Main.FrontEnd.Wpf.Models
             _employeeProvider.GetEmployees();
 
 
-        public IEnumerable<IBankInformation> Import(string payRegisterPath) =>
-            _employeeImporter.StartImport(payRegisterPath);
+        public IEnumerable<Company> ListCompanies() =>
+            _companyManager.GetAllCompanies().ToList();
+
+        public IEnumerable<PayrollCode> ListPayrollCodes() =>
+                    _payrollCodeManager.GetPayrollCodes().ToList();
+
+
+        public IEnumerable<IBankInformation> ImportBankInformation(string payRegisterPath)
+        {
+            EmployeeBankInformationImporter importer = new();
+            return importer.StartImport(payRegisterPath);
+        }
+
+        public IEnumerable<IEEDataInformation> ImportEEData(string eeDataPath)
+        {
+            EmployeeEEDataImporter importer = new();
+            return importer.StartImport(eeDataPath);
+        }
     }
 }

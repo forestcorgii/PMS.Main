@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Pms.Employees.Domain;
 
 namespace Pms.Main.FrontEnd.Wpf.ViewModels
 {
@@ -28,8 +29,8 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             get => cutoffIds;
             private set => SetProperty(ref cutoffIds, value);
         }
-        public string[] payrollCodes;
-        public string[] PayrollCodes
+        public IEnumerable<PayrollCode> payrollCodes;
+        public IEnumerable<PayrollCode> PayrollCodes
         {
             get => payrollCodes;
             private set => SetProperty(ref payrollCodes, value);
@@ -105,7 +106,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             AlphalistCommand = new NavigateCommand<AlphalistViewModel>(alphalistNavigation);
 
             cutoffIds = new string[] { };
-            payrollCodes = new string[] { };
+            payrollCodes = new List<PayrollCode>();
 
             LoadFilterCommand = new ListingCommand(_mainStore);
             LoadFilterCommand.Execute(null);

@@ -42,7 +42,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
             {
                 Cutoff cutoff = _store.Cutoff;
                 string cutoffId = cutoff.CutoffId;
-                string payrollCode = _store.PayrollCode;
+                string payrollCode = _store.PayrollCode.PayrollCodeId;
 
                 IEnumerable<Timesheet> timesheets = _model.GetTimesheets(cutoffId).FilterByPayrollCode(payrollCode);
                 IEnumerable<Timesheet> twoPeriodTimesheets = _model.GetTwoPeriodTimesheets(cutoffId).FilterByPayrollCode(payrollCode);

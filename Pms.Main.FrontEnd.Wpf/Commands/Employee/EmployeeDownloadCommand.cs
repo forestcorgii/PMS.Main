@@ -69,36 +69,36 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                     try
                     {
                         IPersonalInformation employee;
-                    IPersonalInformation employeeFoundOnServer = await _model.FindEmployeeAsync(eeId, _mainStore.Site);
-                    IPersonalInformation employeeFoundLocally = _model.FindEmployee(eeId);
+                        IPersonalInformation employeeFoundOnServer = await _model.FindEmployeeAsync(eeId, _mainStore.Site);
+                        IPersonalInformation employeeFoundLocally = _model.FindEmployee(eeId);
 
-                    if (employeeFoundOnServer is null && employeeFoundLocally is null)
-                    {
-                        employee = new Employee() { EEId = eeId, Active = false };
-                        _model.Save(employee);
+                        if (employeeFoundOnServer is null && employeeFoundLocally is null)
+                        {
+                            employee = new Employee() { EEId = eeId, Active = false };
+                            _model.Save(employee);
+                        }
+                        else if (employeeFoundOnServer is null && employeeFoundLocally is not null)
+                        {
+                            employeeFoundLocally.Active = false;
+                            _model.Save(employeeFoundLocally);
+                        }
+                        else if (employeeFoundOnServer is not null)
+                        {
+                            employeeFoundOnServer.Active = true;
+                            _model.Save(employeeFoundOnServer);
+                        }
                     }
-                    else if (employeeFoundOnServer is null && employeeFoundLocally is not null)
-                    {
-                        employeeFoundLocally.Active = false;
-                        _model.Save(employeeFoundLocally);
-                    }
-                    else if (employeeFoundOnServer is not null)
-                    {
-                        employeeFoundOnServer.Active = true;
-                        _model.Save(employeeFoundOnServer);
-                    }
-                }
                     catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message,
-                        "Employee Sync Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error
-                    );
-                break;
-            }
+                    {
+                        MessageBox.Show(ex.Message,
+                                "Employee Sync Error",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error
+                            );
+                        break;
+                    }
 
-            _viewModel.ProgressValue++;
+                    _viewModel.ProgressValue++;
                 }
             }
             catch (HttpRequestException)

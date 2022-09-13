@@ -1,29 +1,26 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Win32;
 using Pms.Employees.Domain;
-using Pms.Employees.Domain.Exceptions;
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
 using Pms.Payrolls.Domain;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using static Pms.Main.FrontEnd.Wpf.Utils.MessageBoxes;
 
 namespace Pms.Main.FrontEnd.Wpf.Commands
 {
-    public class EmployeeBankImportCommand : IRelayCommand
+    public class EmployeeEEDataImportCommand : IRelayCommand
     {
         private readonly EmployeeModel _model;
         private readonly ViewModelBase _viewModel;
 
 
-        public EmployeeBankImportCommand(ViewModelBase viewModel, EmployeeModel model)
+        public EmployeeEEDataImportCommand(ViewModelBase viewModel, EmployeeModel model)
         {
             _model = model;
             _viewModel = viewModel;
@@ -45,17 +42,22 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                     {
                         try
                         {
-                            IEnumerable<IBankInformation> extractedEmployee = _model.ImportBankInformation(filename);
-                            
-                            _viewModel.SetProgress($"Saving Extracted employees bank information from {Path.GetFileName(filename)}.", extractedEmployee.Count());
-                            foreach (IBankInformation employee in extractedEmployee)
+                            IEnumerable<IEEDataInformation> extractedEmployee = _model.ImportEEData(filename);
+                        _viewModel.SetProgress("Saving Employees EE Data information.", extractedEmployee.Count());
+                            foreach (IEEDataInformation employee in extractedEmployee)
                             {
-                                try { _model.Save(employee); }
-                                catch (InvalidEmployeeFieldValueException ex) { ShowError(ex.Message, Path.GetFileName(filename)); }
+                                _model.Save(employee);
                                 _viewModel.ProgressValue++;
                             }
                         }
-                        catch (Exception ex) { ShowError(ex.Message, Path.GetFileName(filename)); }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message,
+                                  "EE Data Import Error",
+                                  MessageBoxButton.OK,
+                                  MessageBoxImage.Error
+                              );
+                        }
                     }
                     _viewModel.SetAsFinishProgress();
                 }

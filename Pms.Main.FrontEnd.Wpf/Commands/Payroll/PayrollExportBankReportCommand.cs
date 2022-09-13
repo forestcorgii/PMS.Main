@@ -43,7 +43,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                     _viewModel.SetProgress("Exporting Payrolls.", 1);
 
                     string cutoffId = _mainStore.Cutoff.CutoffId;
-                    string payrollCode = _mainStore.PayrollCode;
+                    string payrollCode = _mainStore.PayrollCode.Name;
 
                     IEnumerable<Payroll> payrolls = _model.Get(cutoffId).Where(p => p.PayrollCode == payrollCode);
 

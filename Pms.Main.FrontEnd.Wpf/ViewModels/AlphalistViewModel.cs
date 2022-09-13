@@ -28,7 +28,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             _store.Reloaded += PayrollsReloaded;
 
             SaveToBirProgram = new PayrollImportAlphalistCommand(this, model, store, mainStore);
-            CompanyIds = new ObservableCollection<string>(store.CompanyIds);
+            //CompanyIds = new ObservableCollection<string>(store.CompanyIds);
         }
 
         public override void Dispose()
@@ -39,7 +39,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
         private void PayrollsReloaded()
         {
-            CompanyIds = new ObservableCollection<string>(_store.CompanyIds);
+            //CompanyIds = new ObservableCollection<string>(_store.CompanyIds);
         }
     }
 }

@@ -12,7 +12,9 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
     public class EmployeeStore : IStore
     {
         private string _payrollCode { get; set; } = string.Empty;
+
         public bool IncludeArchived;
+
         public string Filter = string.Empty;
 
         private EmployeeModel _employeeModel;
@@ -59,7 +61,9 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
                 employees = _employeeModel.GetEmployees();
             });
 
+
             _employees = employees;
+
             ReloadFilter();
 
             Reloaded?.Invoke();

@@ -1,7 +1,9 @@
 ﻿using Pms.Employees.Domain;
-using Pms.Employees.Domain.Services;
+using Pms.Employees.ServiceLayer;
 using Pms.Employees.ServiceLayer.EfCore;
+using Pms.Employees.ServiceLayer.Files;
 using Pms.Employees.ServiceLayer.HRMS;
+using Pms.Employees.ServiceLayer.HRMS.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,17 +14,15 @@ namespace Pms.Employees.FrontEnd.Models
 {
     public class EmployeeModel
     {
-        IProvideEmployeeService _employeeProvider;
-        IManageEmployeeService _employeeManager;
-        IEmployeeFinder _employeeFinder;
-        IImportEmployeeService _employeeImporter;
+        EmployeeProvider _employeeProvider;
+        EmployeeManager _employeeManager;
+        FindEmployeeService _employeeFinder;
 
-        public EmployeeModel(IProvideEmployeeService employeeProvider, IManageEmployeeService employeeManager, IEmployeeFinder employeeFinder, IImportEmployeeService employeeImporter)
+        public EmployeeModel(EmployeeProvider employeeProvider, EmployeeManager employeeManager, FindEmployeeService employeeFinder)
         {
             _employeeProvider = employeeProvider;
             _employeeManager = employeeManager;
             _employeeFinder = employeeFinder;
-            _employeeImporter = employeeImporter;
         }
 
         public bool Exists(string eeId) =>
@@ -52,7 +52,6 @@ namespace Pms.Employees.FrontEnd.Models
             _employeeProvider.GetEmployees();
 
 
-        public IEnumerable<IBankInformation> Import(string payRegisterPath) =>
-            _employeeImporter.StartImport(payRegisterPath);
+        
     }
 }

@@ -32,7 +32,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
         public async void Execute(object? parameter)
         {
             string cutoffId = _mainStore.Cutoff.CutoffId;
-            string payrollCode = _mainStore.PayrollCode;
+            string payrollCode = _mainStore.PayrollCode.PayrollCodeId;
 
             int[] missingPages = _model.GetMissingPages(cutoffId, payrollCode);
             if (missingPages is not null && missingPages.Length == 0)
@@ -69,7 +69,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                    {
                        List<Timesheet> timesheets = _model
                            .GetTimesheets(_mainStore.Cutoff.CutoffId)
-                           .Where(ts => ts.EE.PayrollCode == _mainStore.PayrollCode)
+                           .Where(ts => ts.EE.PayrollCode == _mainStore.PayrollCode.PayrollCodeId)
                            .ToList();
 
                        _viewModel.SetProgress("Filling Employee detail to Timesheets", timesheets.Count());

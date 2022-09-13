@@ -86,19 +86,4 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
     }
 }
 
-
-
-
-//private string name;
-//public string Name
-//{
-//    get => name;
-//    set => SetProperty(ref name, value);
-//}
-
-//private string name;
-//public string Name
-//{
-//    get => name;
-//    set => SetProperty(ref name, value);
-//}
+ 

@@ -57,12 +57,14 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         public ICommand LoadEmployeesCommand { get; }
         public ICommand DownloadCommand { get; }
         public ICommand BankImportCommand { get; }
+        public ICommand EEDataImportCommand { get; }
         public ICommand SaveCommand { get; }
 
         public EmployeeViewModel(MainStore mainStore, EmployeeStore employeeStore, EmployeeModel employeeModel)
         {
             DownloadCommand = new EmployeeDownloadCommand(this, mainStore, employeeStore, employeeModel);
             BankImportCommand = new EmployeeBankImportCommand(this, employeeModel);
+            EEDataImportCommand = new EmployeeEEDataImportCommand(this, employeeModel);
             SaveCommand = new EmployeeSaveCommand(this, employeeModel, mainStore);
 
             LoadEmployeesCommand = new ListingCommand(employeeStore);

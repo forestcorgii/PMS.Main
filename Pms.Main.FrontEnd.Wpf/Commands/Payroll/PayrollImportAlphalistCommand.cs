@@ -1,5 +1,6 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Win32;
+using Pms.Employees.Domain;
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
@@ -60,7 +61,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                             {
                                 Cutoff cutoff = new(_mainStore.Cutoff.CutoffId);
                                 string companyId = _viewModel.CompanyId;
-                                Company company = _store.Companies.Where(c => c.CompanyId == companyId).First();
+                                CompanyView company = new();//_store.Companies.Where(c => c.CompanyId == companyId).First();
 
                                 AlphalistImport importer = new();
                                 importer.ImportToBIRProgram(payRegister, _viewModel.BirDbfDirectory, company);

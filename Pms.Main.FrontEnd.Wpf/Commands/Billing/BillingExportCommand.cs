@@ -41,7 +41,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                 {
                     _viewModel.SetProgress("Exporting Payrolls for Land Bank.",1);
                     string cutoffId = _mainStore.Cutoff.CutoffId;
-                    string payrollCode= _mainStore.PayrollCode;
+                    string payrollCode= _mainStore.PayrollCode.PayrollCodeId;
                     string adjustmentName= _viewModel.AdjustmentName;
                     IEnumerable<Billing> billings = _viewModel.Billings;
 

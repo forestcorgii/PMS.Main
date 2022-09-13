@@ -1,4 +1,5 @@
-﻿using Pms.Main.FrontEnd.Wpf.Models;
+﻿using Pms.Employees.Domain;
+using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Payrolls.Domain;
 using System;
 using System.Collections.Generic;
@@ -13,19 +14,13 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
     public class PayrollStore : IStore
     {
         private string _cutoffId { get; set; } = string.Empty;
-        private string _payrollCode = string.Empty;
+        private PayrollCode _payrollCode;
 
-        public BankChoices Bank = BankChoices.LBP;
-        public string CompanyId = "";
-
-        public IEnumerable<string> CompanyIds { get; set; }
-        public IEnumerable<Company> Companies { get; set; }
         public IEnumerable<Payroll> _payrolls { get; set; }
-
         public ObservableCollection<Payroll> Payrolls;
-        public ImportProcessChoices Process = ImportProcessChoices.PD;
 
         public IEnumerable<Payroll> PayrollsSetter { set => Payrolls = new ObservableCollection<Payroll>(value); }
+
 
 
         private readonly PayrollModel _model;
@@ -41,7 +36,7 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             Payrolls = new ObservableCollection<Payroll>();
             _model = model;
 
-            CompanyIds = new List<string>();
+            _payrollCode = new();
         }
 
 
@@ -67,20 +62,16 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         private async Task Initialize()
         {
             IEnumerable<Payroll> payrolls = new List<Payroll>();
-            IEnumerable<Company> companies = new List<Company>();
             await Task.Run(() =>
             {
                 payrolls = _model.Get(_cutoffId);
-                companies = _model.ListCompanies();
             });
 
             _payrolls = payrolls;
             PayrollsSetter = payrolls
-                .SetPayrollCode(_payrollCode)
-                .SetCompanyId(CompanyId);
+                .SetPayrollCode(_payrollCode.Name)
+                .SetCompanyId(_payrollCode.CompanyId);
 
-            Companies = companies;
-            CompanyIds = companies.Select(c => c.CompanyId);
 
             Reloaded?.Invoke();
         }
@@ -89,8 +80,8 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         public void ReloadFilter()
         {
             PayrollsSetter = _payrolls
-                .SetPayrollCode(_payrollCode)
-                .SetCompanyId(CompanyId);
+                .SetPayrollCode(_payrollCode.Name)
+                .SetCompanyId(_payrollCode.CompanyId);
 
             Reloaded?.Invoke();
         }
@@ -102,7 +93,7 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             await Reload();
         }
 
-        public void SetPayrollCode(string payrollCode)
+        public void SetPayrollCode(PayrollCode payrollCode)
         {
             _payrollCode = payrollCode;
             ReloadFilter();

@@ -42,11 +42,11 @@ namespace Pms.Employees.FrontEnd.Commands
                     {
                         try
                         {
-                            IEnumerable<IBankInformation> extractedEmployee = _model.Import(filename);
-                            foreach (IBankInformation employee in extractedEmployee)
-                                _model.Save(employee);
+                            //IEnumerable<IBankInformation> extractedEmployee = _model.Import(filename);
+                            //foreach (IBankInformation employee in extractedEmployee)
+                            //    _model.Save(employee);
 
-                            _viewModel.ProgressValue++;
+                            //_viewModel.ProgressValue++;
                         }
                         catch (Exception ex)
                         {

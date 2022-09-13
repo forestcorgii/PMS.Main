@@ -40,39 +40,39 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
 
         #region Filter Fields
-        public ImportProcessChoices Process
-        {
-            get => _store.Process;
-            set
-            {
-                SetProperty(ref _store.Process, value);
-                _store.ReloadFilter();
-            }
-        }
-        public BankChoices Bank
-        {
-            get => _store.Bank;
-            set
-            {
-                SetProperty(ref _store.Bank, value);
-                _store.ReloadFilter();
-            }
-        }
-        public string CompanyId
-        {
-            get => _store.CompanyId;
-            set
-            {
-                SetProperty(ref _store.CompanyId, value);
-                _store.ReloadFilter();
-            }
-        }
+        //public ImportProcessChoices Process
+        //{
+        //    get => _store.Process;
+        //    set
+        //    {
+        //        SetProperty(ref _store.Process, value);
+        //        _store.ReloadFilter();
+        //    }
+        //}
+        //public BankChoices Bank
+        //{
+        //    get => _store.Bank;
+        //    set
+        //    {
+        //        SetProperty(ref _store.Bank, value);
+        //        _store.ReloadFilter();
+        //    }
+        //}
+        //public string CompanyId
+        //{
+        //    get => _store.CompanyId;
+        //    set
+        //    {
+        //        SetProperty(ref _store.CompanyId, value);
+        //        _store.ReloadFilter();
+        //    }
+        //}
         #endregion
 
         #region Field Options
-        public ObservableCollection<string> CompanyIds { get; set; }
-        public ObservableCollection<ImportProcessChoices> ProcessTypes => new ObservableCollection<ImportProcessChoices>(Enum.GetValues(typeof(ImportProcessChoices)).Cast<ImportProcessChoices>());
-        public ObservableCollection<BankChoices> BankTypes => new ObservableCollection<BankChoices>(Enum.GetValues(typeof(BankChoices)).Cast<BankChoices>());
+        //public ObservableCollection<string> CompanyIds { get; set; }
+        //public ObservableCollection<ImportProcessChoices> ProcessTypes => new ObservableCollection<ImportProcessChoices>(Enum.GetValues(typeof(ImportProcessChoices)).Cast<ImportProcessChoices>());
+        //public ObservableCollection<BankChoices> BankTypes => new ObservableCollection<BankChoices>(Enum.GetValues(typeof(BankChoices)).Cast<BankChoices>());
         #endregion
 
         #region Commands
@@ -100,7 +100,6 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             EmployeeDownloadCommand = new EmployeeDownloadCommand(this, mainStore, employeeStore, employeeModel);
 
             Payrolls = new ObservableCollection<Payroll>(_store.Payrolls);
-            CompanyIds = new ObservableCollection<string>(_store.CompanyIds);
         }
 
         public override void Dispose()
@@ -111,8 +110,6 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
         private void PayrollsReloaded()
         {
-            CompanyIds = new ObservableCollection<string>(_store.CompanyIds);
-
             Payrolls = new ObservableCollection<Payroll>(_store.Payrolls);
             ChkCount = Payrolls.Count(p => p.EE.Bank == BankChoices.CHK);
             LbpCount = Payrolls.Count(p => p.EE.Bank == BankChoices.LBP);

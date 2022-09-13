@@ -41,12 +41,12 @@ namespace Pms.Main.FrontEnd.Wpf.Builders
             using (EmployeeDbContext dbContext = employeeDbContextFactory.CreateDbContext())
                 dbContext.Database.Migrate();
 
-            IDbContextFactory<AdjustmentDbContext> adjustmentDbContextFactory = serviceProvider.GetRequiredService<IDbContextFactory<AdjustmentDbContext>>();
-            using (AdjustmentDbContext dbContext = adjustmentDbContextFactory.CreateDbContext())
-                dbContext.Database.Migrate();
-
             IDbContextFactory<PayrollDbContext> payrollDbContextFactory = serviceProvider.GetRequiredService<IDbContextFactory<PayrollDbContext>>();
             using (PayrollDbContext dbContext = payrollDbContextFactory.CreateDbContext())
+                dbContext.Database.Migrate();
+
+            IDbContextFactory<AdjustmentDbContext> adjustmentDbContextFactory = serviceProvider.GetRequiredService<IDbContextFactory<AdjustmentDbContext>>();
+            using (AdjustmentDbContext dbContext = adjustmentDbContextFactory.CreateDbContext())
                 dbContext.Database.Migrate();
 
 
