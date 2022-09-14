@@ -1,4 +1,5 @@
 ﻿using Pms.Adjustments.Domain;
+using Pms.Employees.Domain;
 using Pms.Main.FrontEnd.Wpf.Models;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
     public class BillingStore : IStore
     {
         public IEnumerable<string> AdjustmentNames { get; set; }
-        private string _payrollCode { get; set; }
+        private PayrollCode _payrollCode { get; set; }
 
         private string _cutoffId;
         private BillingModel _model;
@@ -63,7 +64,7 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             });
 
             _billings = billings;
-            Billings = _billings.Where(ts => ts.PayrollCode == _payrollCode);
+            Billings = _billings.Where(ts => ts.PayrollCode == _payrollCode.PayrollCodeId);
             AdjustmentNames = Billings.ExtractAdjustmentNames();
             Reloaded?.Invoke();
         }
@@ -78,15 +79,15 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         public void SetAdjustmentName(string adjustmentName)
         {
             Billings = _billings
-                .Where(ts => ts.PayrollCode == _payrollCode)
+                .Where(ts => ts.PayrollCode == _payrollCode.PayrollCodeId)
                 .Where(ts => ts.AdjustmentName == adjustmentName);
             Reloaded?.Invoke();
         }
 
-        public void SetPayrollCode(string payrollCode)
+        public void SetPayrollCode(PayrollCode payrollCode)
         {
             _payrollCode = payrollCode;
-            Billings = _billings.Where(ts => ts.PayrollCode == _payrollCode);
+            Billings = _billings.Where(ts => ts.PayrollCode == _payrollCode.PayrollCodeId);
             AdjustmentNames = Billings.ExtractAdjustmentNames();
             Reloaded?.Invoke();
         }

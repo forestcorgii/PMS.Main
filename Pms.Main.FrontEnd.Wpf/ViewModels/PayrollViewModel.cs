@@ -37,44 +37,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         public int UnknownEECount { get => unknownEECount; set => SetProperty(ref unknownEECount, value); }
 
 
-
-
-        #region Filter Fields
-        //public ImportProcessChoices Process
-        //{
-        //    get => _store.Process;
-        //    set
-        //    {
-        //        SetProperty(ref _store.Process, value);
-        //        _store.ReloadFilter();
-        //    }
-        //}
-        //public BankChoices Bank
-        //{
-        //    get => _store.Bank;
-        //    set
-        //    {
-        //        SetProperty(ref _store.Bank, value);
-        //        _store.ReloadFilter();
-        //    }
-        //}
-        //public string CompanyId
-        //{
-        //    get => _store.CompanyId;
-        //    set
-        //    {
-        //        SetProperty(ref _store.CompanyId, value);
-        //        _store.ReloadFilter();
-        //    }
-        //}
-        #endregion
-
-        #region Field Options
-        //public ObservableCollection<string> CompanyIds { get; set; }
-        //public ObservableCollection<ImportProcessChoices> ProcessTypes => new ObservableCollection<ImportProcessChoices>(Enum.GetValues(typeof(ImportProcessChoices)).Cast<ImportProcessChoices>());
-        //public ObservableCollection<BankChoices> BankTypes => new ObservableCollection<BankChoices>(Enum.GetValues(typeof(BankChoices)).Cast<BankChoices>());
-        #endregion
-
+ 
         #region Commands
         public ICommand PayrollListing { get; }
         public ICommand PayrollImport { get; }

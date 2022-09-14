@@ -6,12 +6,7 @@
              xmlns:local="clr-namespace:Pms.Main.FrontEnd.Wpf.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"             
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-    Background="{DynamicResource MaterialDesignPaper}"
-    TextElement.FontWeight="Medium"
-    TextElement.FontSize="14"
-    FontFamily="{materialDesign:MaterialDesignFont}"             
+            
 >
     <Grid>
         <Grid.ColumnDefinitions>
@@ -24,7 +19,7 @@
             <!--<RowDefinition Height="25"/>-->
         </Grid.RowDefinitions>
 
-        <Menu materialDesign:ColorZoneAssist.Mode="PrimaryLight"/>
+        <Menu/>
         <StackPanel Orientation="Vertical" Grid.Row="1">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="8">
                 <TextBlock  VerticalAlignment="Center" Margin="6">Company:</TextBlock>

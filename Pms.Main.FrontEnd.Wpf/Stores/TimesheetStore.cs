@@ -1,4 +1,5 @@
-﻿using Pms.Main.FrontEnd.Wpf.Models;
+﻿using Pms.Employees.Domain;
+using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Timesheets.Domain;
 using Pms.Timesheets.Domain.SupportTypes;
 using System;
@@ -71,9 +72,9 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             await Reload();
         }
 
-        public void SetPayrollCode(string payrollCode)
+        public void SetPayrollCode(PayrollCode payrollCode)
         {
-            Timesheets = _timesheets.Where(ts => ts.PayrollCode == payrollCode);
+            Timesheets = _timesheets.Where(ts => ts.PayrollCode == payrollCode.PayrollCodeId);
             Reloaded?.Invoke();
         }
     }

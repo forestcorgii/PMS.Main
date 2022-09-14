@@ -11,13 +11,7 @@
     
              xmlns:viewmodels="clr-namespace:Pms.Main.FrontEnd.Wpf.ViewModels" 
     d:DataContext="{d:DesignInstance Type=viewmodels:EmployeeViewModel}"
-    
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
-             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-    Background="{DynamicResource MaterialDesignPaper}"
-    TextElement.FontWeight="Medium"
-    TextElement.FontSize="14"
-    FontFamily="{materialDesign:MaterialDesignFont}"             
+             
 >
     <UserControl.Resources>
     </UserControl.Resources>

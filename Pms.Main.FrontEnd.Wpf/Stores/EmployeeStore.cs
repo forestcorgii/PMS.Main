@@ -11,7 +11,7 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
 {
     public class EmployeeStore : IStore
     {
-        private string _payrollCode { get; set; } = string.Empty;
+        private PayrollCode _payrollCode { get; set; }
 
         public bool IncludeArchived;
 
@@ -31,6 +31,8 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
 
             _employees = new List<Employee>();
             Employees = _employees;
+
+            _payrollCode = new();
         }
 
 
@@ -73,14 +75,14 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         public void ReloadFilter()
         {
             Employees = _employees
-                .FilterPayrollCode(_payrollCode)
+                .FilterPayrollCode(_payrollCode.PayrollCodeId)
                 .IncludeArchived(IncludeArchived)
                 .FilterSearchInput(Filter);
 
             Reloaded?.Invoke();
         }
 
-        public void SetPayrollCode(string payrollCode)
+        public void SetPayrollCode(PayrollCode payrollCode)
         {
             _payrollCode = payrollCode;
             ReloadFilter();

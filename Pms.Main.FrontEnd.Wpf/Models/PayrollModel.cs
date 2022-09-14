@@ -29,6 +29,9 @@ namespace Pms.Main.FrontEnd.Wpf.Models
         public IEnumerable<Payroll> Get(string cutoffId) =>
             _provider.GetPayrolls(cutoffId);
 
+        public IEnumerable<Payroll> Get(string cutoffId, string payrollCode) =>
+                    _provider.GetPayrolls(cutoffId, payrollCode);
+
         public IEnumerable<Payroll> Get(int yearCovered, string companyId) =>
             _provider.GetPayrolls(yearCovered, companyId);
 
@@ -48,15 +51,15 @@ namespace Pms.Main.FrontEnd.Wpf.Models
         public void ExportBankReport(IEnumerable<Payroll> payrolls, string cutoffId, string payrollCode)
         {
             BankReportBase exporter = new(cutoffId, payrollCode);
-            exporter.StartExport(payrolls);
+            exporter.StartExport(payrolls.Where(p => p.NetPay > 0.01));
         }
 
         public void ExportAlphalist(IEnumerable<AlphalistDetail> alphalists, int year, Company company)
         {
             AlphalistExporter exporter = new();
-            exporter.StartExport(alphalists, year,company.CompanyId, company.MinimumRate);
+            exporter.StartExport(alphalists, year, company.CompanyId, company.MinimumRate);
         }
-        
+
         public void ExportAlphalistVerifier(IEnumerable<IEnumerable<Payroll>> employeePayrolls, int year, Company company)
         {
             AlphalistVerifierExporter exporter = new();
@@ -66,7 +69,7 @@ namespace Pms.Main.FrontEnd.Wpf.Models
         public IEnumerable<string> ListNoEEPayrolls() =>
             _provider.GetNoEEPayrolls().ExtractEEIds();
 
-        internal void Save(Payroll payroll, string payrollCode,  string companyId)
+        internal void Save(Payroll payroll, string payrollCode, string companyId)
         {
             payroll.PayrollCode = payrollCode;
             payroll.CompanyId = companyId;

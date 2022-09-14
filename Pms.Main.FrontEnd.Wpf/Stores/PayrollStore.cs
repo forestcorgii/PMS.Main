@@ -21,8 +21,6 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
 
         public IEnumerable<Payroll> PayrollsSetter { set => Payrolls = new ObservableCollection<Payroll>(value); }
 
-
-
         private readonly PayrollModel _model;
 
         public Lazy<Task> _initializeLazy { get; set; }
@@ -69,7 +67,7 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
 
             _payrolls = payrolls;
             PayrollsSetter = payrolls
-                .SetPayrollCode(_payrollCode.Name)
+                .SetPayrollCode(_payrollCode.PayrollCodeId)
                 .SetCompanyId(_payrollCode.CompanyId);
 
 
@@ -80,7 +78,7 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         public void ReloadFilter()
         {
             PayrollsSetter = _payrolls
-                .SetPayrollCode(_payrollCode.Name)
+                .SetPayrollCode(_payrollCode.PayrollCodeId)
                 .SetCompanyId(_payrollCode.CompanyId);
 
             Reloaded?.Invoke();
@@ -102,8 +100,6 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
 
     static class PayrollFilterExtension
     {
-        //public static IEnumerable<Payroll> SetBankType(this IEnumerable<Payroll> payrolls, BankChoices bank) =>
-        //    payrolls.Where(p => p.Bank == bank);
 
         public static IEnumerable<Payroll> SetCompanyId(this IEnumerable<Payroll> payrolls, string companyId)
         {

@@ -46,7 +46,8 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             TimesheetStore timesheetStore,
             EmployeeStore employeeStore,
             BillingStore billingStore,
-            PayrollStore payrollStore)
+            PayrollStore payrollStore
+        )
         {
             _timesheetStore = timesheetStore;
             _employeeStore = employeeStore;
@@ -124,9 +125,9 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             PayrollCode = PayrollCodes.Where(pc => pc.PayrollCodeId == payrollCodeId).First();
             Cutoff.SetSite(Site);
 
-            _timesheetStore.SetPayrollCode(PayrollCode.Name);
-            _employeeStore.SetPayrollCode(PayrollCode.Name);
-            _billingStore.SetPayrollCode(PayrollCode.Name);
+            _timesheetStore.SetPayrollCode(PayrollCode);
+            _employeeStore.SetPayrollCode(PayrollCode);
+            _billingStore.SetPayrollCode(PayrollCode);
             _payrollStore.SetPayrollCode(PayrollCode);
         }
     }

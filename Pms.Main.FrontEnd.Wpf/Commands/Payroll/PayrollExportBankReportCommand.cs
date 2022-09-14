@@ -43,9 +43,9 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                     _viewModel.SetProgress("Exporting Payrolls.", 1);
 
                     string cutoffId = _mainStore.Cutoff.CutoffId;
-                    string payrollCode = _mainStore.PayrollCode.Name;
+                    string payrollCode = _mainStore.PayrollCode.PayrollCodeId;
 
-                    IEnumerable<Payroll> payrolls = _model.Get(cutoffId).Where(p => p.PayrollCode == payrollCode);
+                    IEnumerable<Payroll> payrolls = _model.Get(cutoffId, payrollCode);
 
                     _model.ExportBankReport(payrolls, cutoffId, payrollCode);
                     _viewModel.SetAsFinishProgress();

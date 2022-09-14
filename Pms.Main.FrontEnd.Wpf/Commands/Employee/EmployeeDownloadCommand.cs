@@ -95,7 +95,6 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Error
                             );
-                        break;
                     }
 
                     _viewModel.ProgressValue++;

@@ -33,16 +33,17 @@ namespace Pms.Main.FrontEnd.Wpf.Builders
 
 
             IServiceProvider serviceProvider = services.BuildServiceProvider();
+
+            IDbContextFactory<PayrollDbContext> payrollDbContextFactory = serviceProvider.GetRequiredService<IDbContextFactory<PayrollDbContext>>();
+            using (PayrollDbContext dbContext = payrollDbContextFactory.CreateDbContext())
+                dbContext.Database.Migrate();
+
             IDbContextFactory<TimesheetDbContext> timesheetDbContextFactory = serviceProvider.GetRequiredService<IDbContextFactory<TimesheetDbContext>>();
             using (TimesheetDbContext dbContext = timesheetDbContextFactory.CreateDbContext())
                 dbContext.Database.Migrate();
 
             IDbContextFactory<EmployeeDbContext> employeeDbContextFactory = serviceProvider.GetRequiredService<IDbContextFactory<EmployeeDbContext>>();
             using (EmployeeDbContext dbContext = employeeDbContextFactory.CreateDbContext())
-                dbContext.Database.Migrate();
-
-            IDbContextFactory<PayrollDbContext> payrollDbContextFactory = serviceProvider.GetRequiredService<IDbContextFactory<PayrollDbContext>>();
-            using (PayrollDbContext dbContext = payrollDbContextFactory.CreateDbContext())
                 dbContext.Database.Migrate();
 
             IDbContextFactory<AdjustmentDbContext> adjustmentDbContextFactory = serviceProvider.GetRequiredService<IDbContextFactory<AdjustmentDbContext>>();

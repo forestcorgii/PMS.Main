@@ -14,7 +14,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pms.Employees.FrontEnd", "P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pms.Main.FrontEnd.Common", "Pms.Main.FrontEnd.Common\Pms.Main.FrontEnd.Common.csproj", "{46E3A25F-E452-4CEA-A72B-96A626566E6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pms.Main.FrontEnd.Government", "Pms.Main.FrontEnd.Government\Pms.Main.FrontEnd.Government.csproj", "{6DFAB485-E1AC-48C4-B61E-6898BF72F2DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pms.Main.FrontEnd.Government", "Pms.Main.FrontEnd.Government\Pms.Main.FrontEnd.Government.csproj", "{6DFAB485-E1AC-48C4-B61E-6898BF72F2DC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pms.Main.FrontEnd.Alphalist", "Pms.Main.FrontEnd.Alphalist\Pms.Main.FrontEnd.Alphalist.csproj", "{381E037F-0C49-4C15-9E23-776F78D82A27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +40,10 @@ Global
 		{6DFAB485-E1AC-48C4-B61E-6898BF72F2DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DFAB485-E1AC-48C4-B61E-6898BF72F2DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DFAB485-E1AC-48C4-B61E-6898BF72F2DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{381E037F-0C49-4C15-9E23-776F78D82A27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{381E037F-0C49-4C15-9E23-776F78D82A27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{381E037F-0C49-4C15-9E23-776F78D82A27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{381E037F-0C49-4C15-9E23-776F78D82A27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,12 +7,7 @@
         mc:Ignorable="d"
         d:DesignHeight="450" d:DesignWidth="800"
              
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-    Background="{DynamicResource MaterialDesignPaper}"
-    TextElement.FontWeight="Medium"
-    TextElement.FontSize="14"
-    FontFamily="{materialDesign:MaterialDesignFont}"             
+            
 >
     <Grid>
         <Grid.ColumnDefinitions>
@@ -25,7 +20,7 @@
             <!--<RowDefinition Height="25"/>-->
         </Grid.RowDefinitions>
 
-        <Menu materialDesign:ColorZoneAssist.Mode="PrimaryLight">
+        <Menu>
             <MenuItem Header="Import">
                 <MenuItem Header="Pay Register" Command="{Binding PayrollImport}"></MenuItem>
             </MenuItem>
@@ -99,6 +94,8 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="EE Id" Binding="{Binding EEId}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Fullname" Binding="{Binding EE.Fullname}" Width="175" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Bank" Binding="{Binding EE.Bank}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Company" Binding="{Binding CompanyId}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Gross Pay" Binding="{Binding GrossPay, StringFormat={}{0:N2}}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Net Pay" Binding="{Binding NetPay, StringFormat={}{0:N2}}" IsReadOnly="True"/>
                 </DataGrid.Columns>
