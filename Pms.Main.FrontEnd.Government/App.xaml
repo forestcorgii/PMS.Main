@@ -2,8 +2,17 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Pms.Main.FrontEnd.Government"
-             StartupUri="MainWindow.xaml">
+            xmlns:views="clr-namespace:Pms.Main.FrontEnd.Government.Views"
+            xmlns:vms="clr-namespace:Pms.Main.FrontEnd.Government.ViewModels"
+>
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <DataTemplate DataType="{x:Type vms:PayrollListingViewModel}">
+                <views:PayrollListingView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vms:PayrollDetailViewModel}">
+                <views:PayrollDetailView/>
+            </DataTemplate>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
