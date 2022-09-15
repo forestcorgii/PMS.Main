@@ -1,6 +1,5 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
-using Pms.Main.FrontEnd.Wpf.Services;
 using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.Commands;
 using Pms.Timesheets.Domain.SupportTypes;
@@ -14,6 +13,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Pms.Employees.Domain;
+using Pms.Main.FrontEnd.Common.Stores;
+using Pms.Main.FrontEnd.Common.Commands;
+using Pms.Main.FrontEnd.Common.Services;
 
 namespace Pms.Main.FrontEnd.Wpf.ViewModels
 {
@@ -58,25 +60,13 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
 
         private string payrollCode = "";
-        [MaxLength(6)]
-        [CustomValidation(typeof(MainViewModel), nameof(ValidatePayrollCode))]
         public string PayrollCode
         {
             get => payrollCode;
             set
             {
                 SetProperty(ref payrollCode, value, true);
-                if (PayrollCodeValidator.Validate(payrollCode))
-                    _mainStore.SetPayrollCode(payrollCode);
             }
-        }
-        public static ValidationResult ValidatePayrollCode(string name, ValidationContext context)
-        {
-            MainViewModel instance = (MainViewModel)context.ObjectInstance;
-            if (PayrollCodeValidator.Validate(instance.PayrollCode))
-                return ValidationResult.Success;
-
-            return new("Invalid Payroll Code.");
         }
 
         public ICommand TimesheetCommand { get; }
