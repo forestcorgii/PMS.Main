@@ -8,10 +8,12 @@ using Pms.Main.FrontEnd.Wpf.ViewModels;
 using Pms.Payrolls.Domain;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using static Pms.Main.FrontEnd.Wpf.Utils.MessageBoxes;
 
 namespace Pms.Main.FrontEnd.Wpf.Commands
 {
@@ -46,14 +48,8 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
 
                     _viewModel.SetProgress("Changes has been saved.", 0);
                 }
-                catch (InvalidEmployeeFieldValueException ex)
-                {
-                    MessageBox.Show(ex.Message,
-                        "Employee Save Import Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error
-                    );
-                }
+                catch (InvalidEmployeeFieldValueException ex) { ShowError(ex.Message, ""); }
+                catch (DuplicateBankInformationException ex) { ShowError(ex.Message, ""); }
             }
             else
                 _viewModel.SetProgress("No Changes has been saved.", 0);

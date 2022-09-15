@@ -52,6 +52,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                             {
                                 try { _model.Save(employee); }
                                 catch (InvalidEmployeeFieldValueException ex) { ShowError(ex.Message, Path.GetFileName(filename)); }
+                                catch (DuplicateBankInformationException ex) { ShowError(ex.Message, Path.GetFileName(filename)); }
                                 _viewModel.ProgressValue++;
                             }
                         }
