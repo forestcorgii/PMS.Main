@@ -17,12 +17,12 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
 
         private BillingViewModel _viewModel;
         private BillingModel _model;
-        private EmployeeModel _employeeModel;
+        private MasterlistModel _employeeModel;
         private BillingStore _store;
         private MainStore _mainStore;
 
 
-        public BillingGenerationCommand(BillingViewModel viewModel, BillingModel model, BillingStore store, MainStore mainStore, EmployeeModel employeeModel)
+        public BillingGenerationCommand(BillingViewModel viewModel, BillingModel model, BillingStore store, MainStore mainStore, MasterlistModel employeeModel)
         {
             _model = model;
             _viewModel = viewModel;

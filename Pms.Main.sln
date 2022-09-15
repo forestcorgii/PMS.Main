@@ -10,13 +10,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pms.Employees.FrontEnd", "Pms.Employees.FrontEnd\Pms.Employees.FrontEnd.csproj", "{1E80E133-9E77-4E61-933A-124320B567E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pms.Masterlists.FrontEnd", "Pms.Employees.FrontEnd\Pms.Masterlists.FrontEnd.csproj", "{1E80E133-9E77-4E61-933A-124320B567E4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pms.Main.FrontEnd.Common", "Pms.Main.FrontEnd.Common\Pms.Main.FrontEnd.Common.csproj", "{46E3A25F-E452-4CEA-A72B-96A626566E6F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pms.Main.FrontEnd.Government", "Pms.Main.FrontEnd.Government\Pms.Main.FrontEnd.Government.csproj", "{6DFAB485-E1AC-48C4-B61E-6898BF72F2DC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pms.Main.FrontEnd.Alphalist", "Pms.Main.FrontEnd.Alphalist\Pms.Main.FrontEnd.Alphalist.csproj", "{381E037F-0C49-4C15-9E23-776F78D82A27}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app", "app", "{58D3CF70-166C-4917-8C32-6BA64FFEE533}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2AFA4858-AC97-43CC-928E-A3992CE0FDEE} = {58D3CF70-166C-4917-8C32-6BA64FFEE533}
+		{6DFAB485-E1AC-48C4-B61E-6898BF72F2DC} = {58D3CF70-166C-4917-8C32-6BA64FFEE533}
+		{381E037F-0C49-4C15-9E23-776F78D82A27} = {58D3CF70-166C-4917-8C32-6BA64FFEE533}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {76B6539B-CD0A-45CE-9DC8-42AF287AE800}

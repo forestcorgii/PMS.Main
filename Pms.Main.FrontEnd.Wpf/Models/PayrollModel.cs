@@ -1,4 +1,4 @@
-﻿using Pms.Employees.Domain;
+﻿using Pms.Masterlists.Domain;
 using Pms.Payrolls.Domain;
 using Pms.Payrolls.Domain.Services;
 using Pms.Payrolls.Domain.SupportTypes;

@@ -2,10 +2,10 @@
 using Pms.Adjustments.Domain.Services;
 using Pms.Adjustments.ServiceLayer.EfCore;
 using Pms.Adjustments.ServiceLayer.Files;
-using Pms.Employees.ServiceLayer;
-using Pms.Employees.ServiceLayer.EfCore;
-using Pms.Employees.ServiceLayer.Files;
-using Pms.Employees.ServiceLayer.HRMS.Service;
+using Pms.Masterlists.ServiceLayer;
+using Pms.Masterlists.ServiceLayer.EfCore;
+using Pms.Masterlists.ServiceLayer.Files;
+using Pms.Masterlists.ServiceLayer.HRMS.Service;
 using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Payrolls.Domain.Services;
 using Pms.Payrolls.ServiceLayer.EfCore;

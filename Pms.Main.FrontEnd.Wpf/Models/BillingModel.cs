@@ -1,7 +1,7 @@
 ﻿using Pms.Adjustments.Domain;
 using Pms.Adjustments.Domain.Services;
 using Pms.Adjustments.ServiceLayer.Files;
-using Pms.Employees.ServiceLayer.EfCore;
+using Pms.Masterlists.ServiceLayer.EfCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;

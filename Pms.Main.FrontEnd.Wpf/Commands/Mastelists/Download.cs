@@ -1,7 +1,7 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
-using Pms.Employees.Domain;
-using Pms.Employees.Domain.Exceptions;
-using Pms.Employees.ServiceLayer.HRMS.Exceptions;
+using Pms.Masterlists.Domain;
+using Pms.Masterlists.Domain.Exceptions;
+using Pms.Masterlists.ServiceLayer.HRMS.Exceptions;
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
@@ -16,11 +16,11 @@ using System.Windows;
 
 namespace Pms.Main.FrontEnd.Wpf.Commands
 {
-    public class EmployeeDownloadCommand : IAsyncRelayCommand
+    public class Download : IAsyncRelayCommand
     {
         private ViewModelBase _viewModel;
-        private EmployeeModel _model;
-        private EmployeeStore _store;
+        private MasterlistModel _model;
+        private MasterlistStore _store;
         private MainStore _mainStore;
 
         public Task? ExecutionTask { get; }
@@ -34,7 +34,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
         public event EventHandler? CanExecuteChanged;
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public EmployeeDownloadCommand(ViewModelBase viewModel, MainStore mainStore, EmployeeStore store, EmployeeModel model)
+        public Download(ViewModelBase viewModel, MainStore mainStore, MasterlistStore store, MasterlistModel model)
         {
             _viewModel = viewModel;
             _mainStore = mainStore;

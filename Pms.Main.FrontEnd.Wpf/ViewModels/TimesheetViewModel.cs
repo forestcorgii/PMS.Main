@@ -1,6 +1,6 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
-using Pms.Employees.Domain;
+using Pms.Masterlists.Domain;
 using Pms.Main.FrontEnd.Wpf.Commands;
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Main.FrontEnd.Wpf.Stores;
@@ -55,7 +55,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         public ICommand LoadTimesheetCommand { get; }
 
 
-        public TimesheetViewModel(TimesheetModel cutoffTimesheet, EmployeeModel employeeModel, MainStore cutoffStore, TimesheetStore timesheetStore, EmployeeStore employeeStore)
+        public TimesheetViewModel(TimesheetModel cutoffTimesheet, MasterlistModel employeeModel, MainStore cutoffStore, TimesheetStore timesheetStore, MasterlistStore employeeStore)
         {
             _timesheetStore = timesheetStore;
             _timesheetStore.Reloaded += _cutoffStore_TimesheetsReloaded;
@@ -63,7 +63,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             LoadTimesheetCommand = new ListingCommand(_timesheetStore);
             LoadFilterCommand = new FilterListingCommand(cutoffStore);
 
-            EmployeeDownloadCommand = new EmployeeDownloadCommand(this, cutoffStore, employeeStore, employeeModel);
+            EmployeeDownloadCommand = new Download(this, cutoffStore, employeeStore, employeeModel);
 
             DownloadCommand = new TimesheetDownloadCommand(this, cutoffStore, cutoffTimesheet);
             EvaluateCommand = new TimesheetEvaluationCommand(this, cutoffTimesheet, cutoffStore);

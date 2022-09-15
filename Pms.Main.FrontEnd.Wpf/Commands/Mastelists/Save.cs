@@ -1,7 +1,7 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Win32;
-using Pms.Employees.Domain;
-using Pms.Employees.Domain.Exceptions;
+using Pms.Masterlists.Domain;
+using Pms.Masterlists.Domain.Exceptions;
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
@@ -17,14 +17,14 @@ using static Pms.Main.FrontEnd.Wpf.Utils.MessageBoxes;
 
 namespace Pms.Main.FrontEnd.Wpf.Commands
 {
-    public class EmployeeSaveCommand : IRelayCommand
+    public class Save : IRelayCommand
     {
-        private readonly EmployeeModel _model;
-        private readonly EmployeeViewModel _viewModel;
+        private readonly MasterlistModel _model;
+        private readonly MasterlistViewModel _viewModel;
         private readonly MainStore _mainStore;
 
 
-        public EmployeeSaveCommand(EmployeeViewModel viewModel, EmployeeModel model, MainStore mainStore)
+        public Save(MasterlistViewModel viewModel, MasterlistModel model, MainStore mainStore)
         {
             _model = model;
             _viewModel = viewModel;
@@ -48,7 +48,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
 
                     _viewModel.SetProgress("Changes has been saved.", 0);
                 }
-                catch (InvalidEmployeeFieldValueException ex) { ShowError(ex.Message, ""); }
+                catch (InvalidFieldValueException ex) { ShowError(ex.Message, ""); }
                 catch (DuplicateBankInformationException ex) { ShowError(ex.Message, ""); }
             }
             else

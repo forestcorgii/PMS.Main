@@ -1,4 +1,4 @@
-﻿using Pms.Employees.Domain;
+﻿using Pms.Masterlists.Domain;
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Timesheets.Domain;
 using Pms.Timesheets.Domain.SupportTypes;
@@ -29,12 +29,12 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         private Lazy<Task> _initializeLazy;
         #endregion
 
-        private EmployeeModel _employeeModel;
+        private MasterlistModel _employeeModel;
         private TimesheetModel _timesheetModel;
         private PayrollModel _payrollModel;
 
         private readonly TimesheetStore _timesheetStore;
-        private readonly EmployeeStore _employeeStore;
+        private readonly MasterlistStore _employeeStore;
         private readonly BillingStore _billingStore;
         private readonly PayrollStore _payrollStore;
 
@@ -42,9 +42,9 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         public MainStore(
             TimesheetModel timesheetModel,
             PayrollModel payrollModel,
-            EmployeeModel employeeModel,
+            MasterlistModel employeeModel,
             TimesheetStore timesheetStore,
-            EmployeeStore employeeStore,
+            MasterlistStore employeeStore,
             BillingStore billingStore,
             PayrollStore payrollStore
         )

@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Pms.Employees.Domain;
+using Pms.Masterlists.Domain;
 using Pms.Main.FrontEnd.Common.Stores;
 using Pms.Main.FrontEnd.Common.Commands;
 using Pms.Main.FrontEnd.Common.Services;
@@ -79,7 +79,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
         public MainViewModel(MainStore mainStore, NavigationStore navigationStore,
             NavigationService<TimesheetViewModel> timesheetNavigation,
-            NavigationService<EmployeeViewModel> employeeNavigation,
+            NavigationService<MasterlistViewModel> employeeNavigation,
             NavigationService<PayrollViewModel> payrollNavigation,
             NavigationService<AlphalistViewModel> alphalistNavigation,
             NavigationService<BillingViewModel> billingNavigation
@@ -90,7 +90,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             _mainStore.Reloaded += _cutoffStore_FiltersReloaded;
 
             TimesheetCommand = new NavigateCommand<TimesheetViewModel>(timesheetNavigation);
-            EmployeeCommand = new NavigateCommand<EmployeeViewModel>(employeeNavigation);
+            EmployeeCommand = new NavigateCommand<MasterlistViewModel>(employeeNavigation);
             BillingCommand = new NavigateCommand<BillingViewModel>(billingNavigation);
             PayrollCommand = new NavigateCommand<PayrollViewModel>(payrollNavigation);
             AlphalistCommand = new NavigateCommand<AlphalistViewModel>(alphalistNavigation);

@@ -1,9 +1,9 @@
-﻿using Pms.Employees.Domain;
-using Pms.Employees.ServiceLayer;
-using Pms.Employees.ServiceLayer.EfCore;
-using Pms.Employees.ServiceLayer.Files;
-using Pms.Employees.ServiceLayer.HRMS;
-using Pms.Employees.ServiceLayer.HRMS.Service;
+﻿using Pms.Masterlists.Domain;
+using Pms.Masterlists.ServiceLayer;
+using Pms.Masterlists.ServiceLayer.EfCore;
+using Pms.Masterlists.ServiceLayer.Files;
+using Pms.Masterlists.ServiceLayer.HRMS;
+using Pms.Masterlists.ServiceLayer.HRMS.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Pms.Main.FrontEnd.Wpf.Models
 {
-    public class EmployeeModel
+    public class MasterlistModel
     {
         PayrollCodeManager _payrollCodeManager;
         CompanyManager _companyManager;
@@ -20,7 +20,7 @@ namespace Pms.Main.FrontEnd.Wpf.Models
         EmployeeManager _employeeManager;
         FindEmployeeService _employeeFinder;
 
-        public EmployeeModel(EmployeeProvider employeeProvider, EmployeeManager employeeManager, FindEmployeeService employeeFinder, PayrollCodeManager payrollCodeManager, CompanyManager companyManager)
+        public MasterlistModel(EmployeeProvider employeeProvider, EmployeeManager employeeManager, FindEmployeeService employeeFinder, PayrollCodeManager payrollCodeManager, CompanyManager companyManager)
         {
             _employeeProvider = employeeProvider;
             _employeeManager = employeeManager;

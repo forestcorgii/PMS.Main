@@ -1,5 +1,5 @@
 ﻿using Pms.Adjustments.Domain;
-using Pms.Employees.Domain;
+using Pms.Masterlists.Domain;
 using Pms.Main.FrontEnd.Wpf.Models;
 using System;
 using System.Collections.Generic;

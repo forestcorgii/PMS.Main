@@ -48,7 +48,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
         private PayrollStore _store;
 
-        public PayrollViewModel(PayrollStore store, MainStore mainStore, PayrollModel model, EmployeeStore employeeStore, EmployeeModel employeeModel)
+        public PayrollViewModel(PayrollStore store, MainStore mainStore, PayrollModel model, MasterlistStore employeeStore, MasterlistModel employeeModel)
         {
             _store = store;
             _store.Reloaded += PayrollsReloaded;
@@ -60,7 +60,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             PayrollBankReportExport = new PayrollExportBankReportCommand(this, model, store, mainStore);
             PayrollAlphalistExport = new PayrollExportAlphalistCommand(this, model, store, mainStore);
 
-            EmployeeDownloadCommand = new EmployeeDownloadCommand(this, mainStore, employeeStore, employeeModel);
+            EmployeeDownloadCommand = new Download(this, mainStore, employeeStore, employeeModel);
 
             Payrolls = new ObservableCollection<Payroll>(_store.Payrolls);
         }

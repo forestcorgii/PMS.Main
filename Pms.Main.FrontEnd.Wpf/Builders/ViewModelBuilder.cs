@@ -18,9 +18,9 @@ namespace Pms.Main.FrontEnd.Wpf.Builders
             services.AddSingleton<Func<TimesheetViewModel>>((s) => () => s.GetRequiredService<TimesheetViewModel>());
             services.AddSingleton<NavigationService<TimesheetViewModel>>();
 
-            services.AddTransient<EmployeeViewModel>();
-            services.AddSingleton<Func<EmployeeViewModel>>((s) => () => s.GetRequiredService<EmployeeViewModel>());
-            services.AddSingleton<NavigationService<EmployeeViewModel>>();
+            services.AddTransient<MasterlistViewModel>();
+            services.AddSingleton<Func<MasterlistViewModel>>((s) => () => s.GetRequiredService<MasterlistViewModel>());
+            services.AddSingleton<NavigationService<MasterlistViewModel>>();
 
             services.AddTransient<BillingViewModel>();
             services.AddSingleton<Func<BillingViewModel>>((s) => () => s.GetRequiredService<BillingViewModel>());

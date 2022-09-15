@@ -42,7 +42,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         }
         public ObservableCollection<string> AdjustmentNames { get => _adjustmentNames; set => SetProperty(ref _adjustmentNames, value); }
 
-        public BillingViewModel(BillingStore store, BillingModel model, MainStore mainStore, EmployeeModel employeeModel)
+        public BillingViewModel(BillingStore store, BillingModel model, MainStore mainStore, MasterlistModel employeeModel)
         {
             _store = store;
             _store.Reloaded += BillingsReloaded;

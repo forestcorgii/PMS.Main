@@ -1,4 +1,4 @@
-﻿using Pms.Employees.Domain;
+﻿using Pms.Masterlists.Domain;
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Timesheets.Domain.SupportTypes;
 using System;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Pms.Main.FrontEnd.Wpf.Stores
 {
-    public class EmployeeStore : IStore
+    public class MasterlistStore : IStore
     {
         private PayrollCode _payrollCode { get; set; }
 
@@ -17,14 +17,14 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
 
         public string Filter = string.Empty;
 
-        private EmployeeModel _employeeModel;
+        private MasterlistModel _employeeModel;
         private IEnumerable<Employee> _employees;
         public IEnumerable<Employee> Employees { get; private set; }
         private Lazy<Task> _initializeLazy;
 
         public Action? Reloaded { get; set; }
 
-        public EmployeeStore(EmployeeModel employeeModel)
+        public MasterlistStore(MasterlistModel employeeModel)
         {
             _employeeModel = employeeModel;
             _initializeLazy = new Lazy<Task>(Initialize);

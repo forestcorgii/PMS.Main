@@ -1,5 +1,5 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Pms.Employees.Domain;
+using Pms.Masterlists.Domain;
 using Pms.Main.FrontEnd.Wpf.Commands;
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Main.FrontEnd.Wpf.Stores;
@@ -10,13 +10,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using static Pms.Employees.Domain.Enums;
+using static Pms.Masterlists.Domain.Enums;
 
 namespace Pms.Main.FrontEnd.Wpf.ViewModels
 {
-    public class EmployeeViewModel : ViewModelBase
+    public class MasterlistViewModel : ViewModelBase
     {
-        private EmployeeStore _store { get; set; }
+        private MasterlistStore _store { get; set; }
 
         public string Filter
         {
@@ -60,12 +60,12 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         public ICommand EEDataImportCommand { get; }
         public ICommand SaveCommand { get; }
 
-        public EmployeeViewModel(MainStore mainStore, EmployeeStore employeeStore, EmployeeModel employeeModel)
+        public MasterlistViewModel(MainStore mainStore, MasterlistStore employeeStore, MasterlistModel employeeModel)
         {
-            DownloadCommand = new EmployeeDownloadCommand(this, mainStore, employeeStore, employeeModel);
-            BankImportCommand = new EmployeeBankImportCommand(this, employeeModel);
-            EEDataImportCommand = new EmployeeEEDataImportCommand(this, employeeModel);
-            SaveCommand = new EmployeeSaveCommand(this, employeeModel, mainStore);
+            DownloadCommand = new Download(this, mainStore, employeeStore, employeeModel);
+            BankImportCommand = new BankImport(this, employeeModel);
+            EEDataImportCommand = new EEDataImport(this, employeeModel);
+            SaveCommand = new Save(this, employeeModel, mainStore);
 
             LoadEmployeesCommand = new ListingCommand(employeeStore);
             LoadEmployeesCommand.Execute(null);

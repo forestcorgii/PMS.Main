@@ -16,7 +16,7 @@ namespace Pms.Main.FrontEnd.Wpf.Builders
             services.AddSingleton<MainStore>();
             services.AddSingleton<NavigationStore>();
             services.AddSingleton<TimesheetStore>();
-            services.AddSingleton<EmployeeStore>();
+            services.AddSingleton<MasterlistStore>();
             services.AddSingleton<BillingStore>();
             services.AddSingleton<PayrollStore>();
 
