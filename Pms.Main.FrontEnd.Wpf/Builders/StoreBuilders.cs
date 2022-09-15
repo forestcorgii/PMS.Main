@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Pms.Main.FrontEnd.Common.Stores;
 using Pms.Main.FrontEnd.Wpf.Stores;
 using System;
 using System.Collections.Generic;
