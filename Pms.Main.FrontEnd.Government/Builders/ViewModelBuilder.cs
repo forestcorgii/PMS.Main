@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Pms.Main.FrontEnd.Common.Services;
+using Pms.Main.FrontEnd.Common;
 using Pms.Main.FrontEnd.Government.ViewModels;
 using System;
 using System.Collections.Generic;

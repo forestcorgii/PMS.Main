@@ -1,5 +1,5 @@
 ﻿using Pms.Adjustments.Domain.Models;
-using Pms.Employees.Domain;
+using Pms.Masterlists.Domain;
 using Pms.Main.FrontEnd.Common;
 using Pms.Main.FrontEnd.Government.Models;
 using System;

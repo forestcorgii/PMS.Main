@@ -36,11 +36,9 @@
 
         <DataGrid  Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Timesheets}">
             <DataGrid.Columns>
-                <!--<DataGridTextColumn Header="Timesheet Id" Binding="{Binding TimesheetId}"/>-->
                 <DataGridTextColumn Header="EE Id" Binding="{Binding EEId}"/>
                 <DataGridTextColumn Header="Full Name" Binding="{Binding Fullname}"/>
                 <DataGridTextColumn Header="Payroll Code" Binding="{Binding PayrollCode}"/>
-                <DataGridTextColumn Header="Bank Category" Binding="{Binding BankCategory}"/>
                 <DataGridTextColumn Header="Bank" Binding="{Binding Bank}"/>
                 <DataGridTextColumn Header="Department" Binding="{Binding Location}"/>
                 <DataGridTextColumn Header="Total Hours" Binding="{Binding TotalHours}"/>

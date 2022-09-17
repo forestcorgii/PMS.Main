@@ -1,4 +1,4 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pms.Main.FrontEnd.Wpf.ViewModels
 {
-    public class ViewModelBase : ObservableObject
+    public class ViewModelBase :  ObservableRecipient
     {
         protected double progressValue = 0;
         public double ProgressValue

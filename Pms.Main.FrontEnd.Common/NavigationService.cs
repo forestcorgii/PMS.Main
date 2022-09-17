@@ -1,12 +1,11 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Pms.Main.FrontEnd.Common.Stores;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pms.Main.FrontEnd.Common.Services
+namespace Pms.Main.FrontEnd.Common
 {
     public class NavigationService<TViewModel> where TViewModel : ObservableObject
     {

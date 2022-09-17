@@ -2,10 +2,8 @@
 using Microsoft.Win32;
 using Pms.Masterlists.Domain;
 using Pms.Masterlists.Domain.Exceptions;
-using Pms.Main.FrontEnd.Wpf.Models;
-using Pms.Main.FrontEnd.Wpf.Stores;
-using Pms.Main.FrontEnd.Wpf.ViewModels;
-using Pms.Payrolls.Domain;
+using Pms.Masterlists.FrontEnd.Models;
+using Pms.Masterlists.FrontEnd.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,17 +11,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using static Pms.Main.FrontEnd.Wpf.MessageBoxes;
+//using static Pms.Main.FrontEnd.Wpf.Utils.MessageBoxes;
 
-namespace Pms.Main.FrontEnd.Wpf.Commands
+using Pms.Main.FrontEnd.Common;
+
+namespace Pms.Masterlists.FrontEnd.Commands
 {
     public class BankImport : IRelayCommand
     {
-        private readonly MasterlistModel _model;
-        private readonly ViewModelBase _viewModel;
+        private readonly Models.Employees _model;
+        private readonly EmployeeListingVm _viewModel;
 
 
-        public BankImport(ViewModelBase viewModel, MasterlistModel model)
+        public BankImport(EmployeeListingVm viewModel, Models.Employees model)
         {
             _model = model;
             _viewModel = viewModel;
@@ -46,17 +46,20 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                         try
                         {
                             IEnumerable<IBankInformation> extractedEmployee = _model.ImportBankInformation(filename);
-                            
+
                             _viewModel.SetProgress($"Saving Extracted employees bank information from {Path.GetFileName(filename)}.", extractedEmployee.Count());
                             foreach (IBankInformation employee in extractedEmployee)
                             {
                                 try { _model.Save(employee); }
-                                catch (InvalidFieldValueException ex) { ShowError(ex.Message, Path.GetFileName(filename)); }
-                                catch (DuplicateBankInformationException ex) { ShowError(ex.Message, Path.GetFileName(filename)); }
+                                catch (InvalidFieldValueException ex) { MessageBoxes.ShowError(ex.Message, Path.GetFileName(filename)); }
+                                catch (DuplicateBankInformationException ex) { MessageBoxes.ShowError(ex.Message, Path.GetFileName(filename)); }
                                 _viewModel.ProgressValue++;
                             }
                         }
-                        catch (Exception ex) { ShowError(ex.Message, Path.GetFileName(filename)); }
+                        catch (Exception ex)
+                        {
+                            MessageBoxes.ShowError(ex.Message, Path.GetFileName(filename));
+                        }
                     }
                     _viewModel.SetAsFinishProgress();
                 }

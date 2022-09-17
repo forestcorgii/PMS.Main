@@ -1,6 +1,6 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
-using Pms.Employees.FrontEnd.Stores;
-using Pms.Employees.FrontEnd.ViewModels;
+using Pms.Masterlists.FrontEnd.Stores;
+using Pms.Masterlists.FrontEnd.ViewModels;
 using Pms.Main.FrontEnd.Common;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pms.Employees.FrontEnd.Commands
+namespace Pms.Masterlists.FrontEnd.Commands
 {
     public class ListingCommand : IRelayCommand
     {

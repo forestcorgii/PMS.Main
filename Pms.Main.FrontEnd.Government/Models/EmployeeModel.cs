@@ -1,9 +1,9 @@
-﻿using Pms.Employees.Domain;
-using Pms.Employees.ServiceLayer;
-using Pms.Employees.ServiceLayer.EfCore;
-using Pms.Employees.ServiceLayer.Files;
-using Pms.Employees.ServiceLayer.HRMS;
-using Pms.Employees.ServiceLayer.HRMS.Service;
+﻿using Pms.Masterlists.Domain;
+using Pms.Masterlists.ServiceLayer;
+using Pms.Masterlists.ServiceLayer.EfCore;
+using Pms.Masterlists.ServiceLayer.Files;
+using Pms.Masterlists.ServiceLayer.HRMS;
+using Pms.Masterlists.ServiceLayer.HRMS.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,10 +43,6 @@ namespace Pms.Main.FrontEnd.Government.Models
         public void Save(IEEDataInformation employee) =>
             _employeeManager.Save(employee);
          
-
-        public IEnumerable<Employee> FilterEmployees(string searchString, string payrollCode) =>
-            _employeeProvider.FilterEmployees(searchString, payrollCode);
-
         public IEnumerable<Employee> GetEmployees() =>
             _employeeProvider.GetEmployees();
 

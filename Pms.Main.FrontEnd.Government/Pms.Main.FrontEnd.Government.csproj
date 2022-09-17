@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Pms.Adjustments" Version="1.0.0-preview003" />
-    <PackageReference Include="Pms.Employees" Version="1.0.0-preview002" />
+    <PackageReference Include="Pms.Masterlists" Version="1.0.0-preview001" />
     <PackageReference Include="Pms.Payrolls" Version="1.0.0-preview003" />
   </ItemGroup>
 

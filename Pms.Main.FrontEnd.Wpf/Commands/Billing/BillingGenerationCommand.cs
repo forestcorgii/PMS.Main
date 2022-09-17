@@ -40,7 +40,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
         {
             await Task.Run(() =>
             {
-                string[] eeIds = _employeeModel.FilterEmployees("", _mainStore.PayrollCode.PayrollCodeId).Select(ee => ee.EEId).ToArray();
+                string[] eeIds = _employeeModel.GetEmployees().Where(ee => ee.PayrollCode == _mainStore.PayrollCode.PayrollCodeId).Select(ee => ee.EEId).ToArray();
                 List<Billing> billings = new();
 
                 _viewModel.SetProgress("Billings Generation on going.", eeIds.Length);

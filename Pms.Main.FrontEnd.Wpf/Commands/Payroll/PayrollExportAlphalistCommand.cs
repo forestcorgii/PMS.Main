@@ -48,20 +48,20 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                     _viewModel.SetProgress("Exporting Alphalist.", 1);
 
                     Cutoff cutoff = new(_mainStore.Cutoff.CutoffId);
-                    string payrollCode = _mainStore.PayrollCode.PayrollCodeId;
-                    string companyId = _mainStore.PayrollCode.CompanyId;
-                    Company company = new();
+                    Company? company = _mainStore.Companies.Where(c => c.CompanyId == _mainStore.PayrollCode.CompanyId).FirstOrDefault();
+                    if (company is not null)
+                    {
+                        IEnumerable<Payroll> payrolls = _model.Get(cutoff.YearCovered, _mainStore.PayrollCode.CompanyId);
+                        var employeePayrolls = payrolls.GroupBy(py => py.EEId).Select(py => py.ToList()).ToList();
 
-                    IEnumerable<Payroll> payrolls = _model.Get(cutoff.YearCovered, companyId);
-                    var employeePayrolls = payrolls.GroupBy(py => py.EEId).Select(py => py.ToList()).ToList();
+                        List<AlphalistDetail> alphalists = new();
+                        foreach (var employeePayroll in employeePayrolls)
+                            alphalists.Add(new AutomatedAlphalistDetail(employeePayroll, company.MinimumRate, cutoff.YearCovered).CreateAlphalistDetail());
 
-                    List<AlphalistDetail> alphalists = new();
-                    foreach (var employeePayroll in employeePayrolls)
-                        alphalists.Add(new AutomatedAlphalistDetail(employeePayroll, company.MinimumRate).CreateAlphalistDetail());
-
-                    _model.ExportAlphalist(alphalists, cutoff.YearCovered, company);
-                    _model.ExportAlphalistVerifier(employeePayrolls, cutoff.YearCovered, company);
-                    _viewModel.SetAsFinishProgress();
+                        _model.ExportAlphalist(alphalists, cutoff.YearCovered, company);
+                        _model.ExportAlphalistVerifier(employeePayrolls, cutoff.YearCovered, company);
+                        _viewModel.SetAsFinishProgress();
+                    }
                 });
             }
             catch (Exception ex)

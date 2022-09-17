@@ -1,9 +1,11 @@
-﻿using Pms.Masterlists.Domain;
+﻿using Microsoft.Toolkit.Mvvm.Input;
+using Pms.Main.FrontEnd.Common;
+using Pms.Masterlists.Domain;
 using Pms.Masterlists.Domain.Exceptions;
+using Pms.Masterlists.FrontEnd.Models;
+using Pms.Masterlists.FrontEnd.Stores;
+using Pms.Masterlists.FrontEnd.ViewModels;
 using Pms.Masterlists.ServiceLayer.HRMS.Exceptions;
-using Pms.Main.FrontEnd.Wpf.Models;
-using Pms.Main.FrontEnd.Wpf.Stores;
-using Pms.Main.FrontEnd.Wpf.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,16 +14,14 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using CommunityToolkit.Mvvm.Input;
 
-namespace Pms.Main.FrontEnd.Wpf.Commands
+namespace Pms.Masterlists.FrontEnd.Commands
 {
     public class Download : IAsyncRelayCommand
     {
-        private ViewModelBase _viewModel;
-        private MasterlistModel _model;
+        private EmployeeListingVm _viewModel;
+        private Models.Employees _model;
         private MasterlistStore _store;
-        private MainStore _mainStore;
 
         public Task? ExecutionTask { get; }
 
@@ -34,10 +34,9 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
         public event EventHandler? CanExecuteChanged;
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public Download(ViewModelBase viewModel, MainStore mainStore, MasterlistStore store, MasterlistModel model)
+        public Download(EmployeeListingVm viewModel, MasterlistStore store, Models.Employees model)
         {
             _viewModel = viewModel;
-            _mainStore = mainStore;
             _store = store;
             _model = model;
 
@@ -69,7 +68,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                     try
                     {
                         IPersonalInformation employee;
-                        IPersonalInformation employeeFoundOnServer = await _model.FindEmployeeAsync(eeId, _mainStore.Site);
+                        IPersonalInformation employeeFoundOnServer = await _model.FindEmployeeAsync(eeId, _store.Site.ToString());
                         IPersonalInformation employeeFoundLocally = _model.FindEmployee(eeId);
 
                         if (employeeFoundOnServer is null && employeeFoundLocally is null)
@@ -88,14 +87,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                             _model.Save(employeeFoundOnServer);
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message,
-                                "Employee Sync Error",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error
-                            );
-                    }
+                    catch (Exception ex) { MessageBoxes.ShowError(ex.Message, "Employee Sync Error"); }
 
                     _viewModel.ProgressValue++;
                 }

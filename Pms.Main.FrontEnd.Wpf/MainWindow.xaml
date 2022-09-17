@@ -21,8 +21,14 @@
                 <RowDefinition Height="35" />
                 <RowDefinition/>
             </Grid.RowDefinitions>
-
+            
             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="8,0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock  VerticalAlignment="Center" Margin="6">Company:</TextBlock>
+                    <ComboBox Text="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged}" 
+                              ItemsSource="{Binding Companies}" 
+                              Width="125" VerticalAlignment="Center" IsEditable="True"/>
+                </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock  VerticalAlignment="Center" Margin="6">Cutoff Id:</TextBlock>
                     <ComboBox Text="{Binding CutoffId, UpdateSourceTrigger=PropertyChanged}" 

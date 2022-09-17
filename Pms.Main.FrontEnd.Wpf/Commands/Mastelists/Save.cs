@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using static Pms.Main.FrontEnd.Wpf.Utils.MessageBoxes;
+using static Pms.Main.FrontEnd.Wpf.MessageBoxes;
 
 namespace Pms.Main.FrontEnd.Wpf.Commands
 {

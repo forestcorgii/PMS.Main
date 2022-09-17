@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Pms.Main.FrontEnd.Common.Stores;
+using Pms.Main.FrontEnd.Common;
 using Pms.Main.FrontEnd.Government.Stores;
 using System;
 using System.Collections.Generic;

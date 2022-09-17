@@ -7,10 +7,10 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Pms.Employees.ServiceLayer.HRMS.Adapter;
-using Pms.Employees.Domain;
+using Pms.Masterlists.ServiceLayer.HRMS.Adapter;
+using Pms.Masterlists.Domain;
 
-namespace Pms.Employees.FrontEnd.Views
+namespace Pms.Masterlists.FrontEnd.Views
 {
     /// <summary>
     /// Interaction logic for Employee.xaml

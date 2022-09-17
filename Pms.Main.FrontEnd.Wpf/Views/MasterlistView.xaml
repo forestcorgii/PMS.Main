@@ -10,7 +10,7 @@
              d:DesignHeight="550" d:DesignWidth="800"
     
              xmlns:viewmodels="clr-namespace:Pms.Main.FrontEnd.Wpf.ViewModels" 
-    d:DataContext="{d:DesignInstance Type=viewmodels:EmployeeViewModel}"
+    d:DataContext="{d:DesignInstance Type=viewmodels:MasterlistViewModel}"
              
 >
     <UserControl.Resources>
@@ -83,7 +83,6 @@
                     <StackPanel>
                         <WrapPanel>
                             <TextBox Width="56"  Grid.Row="6" Grid.Column="1" Margin="4" Text="{Binding SelectedEmployee.PayrollCode}" />
-                            <TextBox Width="86"  Grid.Row="7" Grid.Column="1" Margin="4" Text="{Binding SelectedEmployee.BankCategory}" />
                             <ComboBox Width="86"  Grid.Row="7" Grid.Column="1" Margin="4" Text="{Binding SelectedEmployee.Bank, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding BankTypes}"/>
                             <TextBox Width="126"  Grid.Row="9" Grid.Column="1" Margin="4" Text="{Binding SelectedEmployee.AccountNumber}" />
                             <TextBox Width="126"  Grid.Row="10" Grid.Column="1" Margin="4" Text="{Binding SelectedEmployee.CardNumber}" />
@@ -138,7 +137,6 @@
                     <DataGridTextColumn Header="Middle Name" Binding="{Binding MiddleName}"/>
                     
                     <DataGridTextColumn Header="Payroll Code" Binding="{Binding PayrollCode}"/>
-                    <DataGridTextColumn Header="Bank Category" Binding="{Binding BankCategory}"/>
                     <DataGridTextColumn Header="Bank Name" Binding="{Binding Bank}"/>
                     <DataGridTextColumn Header="Account Number" Binding="{Binding AccountNumber}"/>
                     <DataGridTextColumn Header="Card Number" Binding="{Binding CardNumber}"/>

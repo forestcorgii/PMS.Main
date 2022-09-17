@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using static Pms.Masterlists.Domain.Enums;
+using Pms.Masterlists.Domain.Enums;
 
 namespace Pms.Main.FrontEnd.Wpf.ViewModels
 {

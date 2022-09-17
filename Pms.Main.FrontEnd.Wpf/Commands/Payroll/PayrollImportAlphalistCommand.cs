@@ -60,19 +60,23 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                             try
                             {
                                 Cutoff cutoff = new(_mainStore.Cutoff.CutoffId);
-                                string companyId = _viewModel.CompanyId;
-                                CompanyView company = new();//_store.Companies.Where(c => c.CompanyId == companyId).First();
-
-                                AlphalistImport importer = new();
-                                importer.ImportToBIRProgram(payRegister, _viewModel.BirDbfDirectory, company);
+                                string payrollCode = _mainStore.PayrollCode.PayrollCodeId;
+                                string companyId = _mainStore.PayrollCode.CompanyId;
+                                Company? company = _mainStore.Companies.Where(c => c.CompanyId == companyId).FirstOrDefault();
+                                if (company is not null)
+                                {
+                                    AlphalistImport importer = new();
+                                    importer.ImportToBIRProgram(payRegister, _viewModel.BirDbfDirectory, 
+                                        new CompanyView(company.RegisteredName, company.TIN, company.BranchCode, company.Region),
+                                        cutoff.YearCovered
+                                    );
+                                }
+                                else
+                                    MessageBoxes.ShowError("Company is null.", "Alphalist Import Error");
                             }
                             catch (Exception ex)
                             {
-                                MessageBox.Show(ex.Message,
-                                    "Alphalist Import Error",
-                                    MessageBoxButton.OK,
-                                    MessageBoxImage.Error
-                                );
+                                MessageBoxes.ShowError(ex.Message, "Alphalist Import Error");
                             }
 
                         }

@@ -52,9 +52,6 @@ namespace Pms.Main.FrontEnd.Wpf.Models
         public Employee FindEmployee(string eeId) =>
             _employeeProvider.FindEmployee(eeId);
 
-        public IEnumerable<Employee> FilterEmployees(string searchString, string payrollCode) =>
-            _employeeProvider.FilterEmployees(searchString, payrollCode);
-
         public IEnumerable<Employee> GetEmployees() =>
             _employeeProvider.GetEmployees();
 

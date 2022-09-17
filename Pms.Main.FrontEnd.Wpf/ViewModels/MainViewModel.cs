@@ -1,6 +1,4 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
-using Pms.Main.FrontEnd.Wpf.Stores;
+﻿using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.Commands;
 using Pms.Timesheets.Domain.SupportTypes;
 using System;
@@ -13,17 +11,47 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Pms.Masterlists.Domain;
-using Pms.Main.FrontEnd.Common.Stores;
-using Pms.Main.FrontEnd.Common.Commands;
-using Pms.Main.FrontEnd.Common.Services;
+using Pms.Main.FrontEnd.Common;
+using CommunityToolkit.Mvvm.Messaging.Messages;
+using Pms.Main.FrontEnd.Wpf.Messages;
+using Microsoft.Toolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using System.Collections.ObjectModel;
 
 namespace Pms.Main.FrontEnd.Wpf.ViewModels
 {
-    public class MainViewModel : ObservableValidator
+    public class MainViewModel : ObservableRecipient
     {
-        private readonly MainStore _mainStore;
-        private readonly NavigationStore _navigationStore;
-        public ObservableObject CurrentViewModel => _navigationStore.CurrentViewModel;
+        private string companyName;
+        public string CompanyName
+        {
+            get => companyName; 
+            set
+            {
+                SetProperty(ref companyName, value);
+                Company = companies.Where(c => c.CompanyId == companyName).First();
+                SendCompanyMessage();
+            }
+        }
+        
+        private Company Company;
+        
+        private IEnumerable<Company> companies;
+        public IEnumerable<Company> Companies { get => companies; set => SetProperty(ref companies, value); }
+
+        private IEnumerable<PayrollCode> payrollCodes;
+        public IEnumerable<PayrollCode> PayrollCodes { get => payrollCodes; set => SetProperty(ref payrollCodes, value); }
+        private string payrollCode;
+        public string PayrollCode
+        {
+            get => payrollCode;
+            set
+            {
+                SetProperty(ref payrollCode, value);
+                _mainStore.SetPayrollCode(payrollCode);
+            }
+        }
 
         public string[] cutoffIds;
         public string[] CutoffIds
@@ -31,17 +59,8 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             get => cutoffIds;
             private set => SetProperty(ref cutoffIds, value);
         }
-        public IEnumerable<PayrollCode> payrollCodes;
-        public IEnumerable<PayrollCode> PayrollCodes
-        {
-            get => payrollCodes;
-            private set => SetProperty(ref payrollCodes, value);
-        }
-
         private string cutoffId = "";
-        [Required]
-        [MinLength(6)]
-        [MaxLength(7)]
+
         public string CutoffId
         {
             get => cutoffId;
@@ -53,21 +72,13 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
                 {
                     Cutoff cutoff = new Cutoff(cutoffId);
                     _mainStore.SetCutoff(cutoff);
-                    ClearErrors(nameof(CutoffId));
                 }
             }
         }
 
-
-        private string payrollCode = "";
-        public string PayrollCode
-        {
-            get => payrollCode;
-            set
-            {
-                SetProperty(ref payrollCode, value, true);
-            }
-        }
+        private readonly MainStore _mainStore;
+        private readonly NavigationStore _navigationStore;
+        public ObservableObject CurrentViewModel => _navigationStore.CurrentViewModel;
 
         public ICommand TimesheetCommand { get; }
         public ICommand EmployeeCommand { get; }
@@ -96,7 +107,6 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             AlphalistCommand = new NavigateCommand<AlphalistViewModel>(alphalistNavigation);
 
             cutoffIds = new string[] { };
-            payrollCodes = new List<PayrollCode>();
 
             LoadFilterCommand = new ListingCommand(_mainStore);
             LoadFilterCommand.Execute(null);
@@ -104,6 +114,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             TimesheetCommand.Execute(null);
 
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
+            IsActive = true;
         }
 
         private void _cutoffStore_FiltersReloaded()
@@ -111,11 +122,22 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             CutoffId = _mainStore.Cutoff.CutoffId;
             CutoffIds = _mainStore.CutoffIds;
             PayrollCodes = _mainStore.PayrollCodes;
+            Companies = _mainStore.Companies;
         }
 
 
         private void OnCurrentViewModelChanged() =>
             OnPropertyChanged(nameof(CurrentViewModel));
 
+
+        protected override void OnActivated()
+        {
+            Messenger.Register<MainViewModel, CurrentCompanyRequestMessage>(this, (r, m) => m.Reply(r.Company));
+        }
+
+        public void SendCompanyMessage()
+        {
+            Messenger.Send(new SelectedCompanyChangedMessage(Company));
+        }
     }
 }

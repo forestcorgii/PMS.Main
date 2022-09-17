@@ -7,22 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Pms.Adjustments.Domain.Models;
-using Pms.Employees.Domain;
-using Pms.Main.FrontEnd.Common.Commands;
-using Pms.Main.FrontEnd.Common.Services;
-using Pms.Main.FrontEnd.Common.Stores;
+using Pms.Masterlists.Domain; 
 using Pms.Main.FrontEnd.Government.Commands;
 using Pms.Main.FrontEnd.Government.Stores;
+using Pms.Main.FrontEnd.Common;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Pms.Main.FrontEnd.Government.ViewModels
 {
     public class MainViewModel : ObservableValidator
     {
         private readonly MainStore _mainStore;
-        private readonly NavigationStore _navigationStore;
-        public ObservableObject CurrentViewModel => _navigationStore.CurrentViewModel;
+        //private readonly NavigationStore _navigationStore;
+        //public ObservableObject CurrentViewModel => _navigationStore.CurrentViewModel;
 
         public string[] cutoffIds;
         public string[] CutoffIds
@@ -71,12 +69,12 @@ namespace Pms.Main.FrontEnd.Government.ViewModels
 
         public ICommand LoadFilterCommand { get; }
 
-        public MainViewModel(MainStore mainStore, NavigationStore navigationStore,
+        public MainViewModel(MainStore mainStore, 
             NavigationService<PayrollListingViewModel> payrollNavigation,
             NavigationService<PayrollDetailViewModel> payrollDetailNavigation
         )
         {
-            _navigationStore = navigationStore;
+            //_navigationStore = navigationStore;
             _mainStore = mainStore;
             _mainStore.Reloaded += _cutoffStore_FiltersReloaded;
 
@@ -88,7 +86,7 @@ namespace Pms.Main.FrontEnd.Government.ViewModels
             LoadFilterCommand = new ListingCommand(_mainStore);
             LoadFilterCommand.Execute(null);
 
-            _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
+            //_navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
         }
 
         private void _cutoffStore_FiltersReloaded()
@@ -99,8 +97,8 @@ namespace Pms.Main.FrontEnd.Government.ViewModels
         }
 
 
-        private void OnCurrentViewModelChanged() =>
-            OnPropertyChanged(nameof(CurrentViewModel));
+        //private void OnCurrentViewModelChanged() =>
+        //    OnPropertyChanged(nameof(CurrentViewModel));
 
     }
 }

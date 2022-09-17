@@ -71,7 +71,7 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                MessageBoxes.ShowError(ex.Message,"");
                 _initializeLazy = new Lazy<Task>(Initialize);
                 throw;
             }
@@ -123,7 +123,6 @@ namespace Pms.Main.FrontEnd.Wpf.Stores
         public void SetPayrollCode(string payrollCodeId)
         {
             PayrollCode = PayrollCodes.Where(pc => pc.PayrollCodeId == payrollCodeId).First();
-            Cutoff.SetSite(Site);
 
             _timesheetStore.SetPayrollCode(PayrollCode);
             _employeeStore.SetPayrollCode(PayrollCode);

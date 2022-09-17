@@ -36,8 +36,6 @@ namespace Pms.Main.FrontEnd.Wpf.Builders
             services.AddSingleton<FindEmployeeService>();
             services.AddSingleton<EmployeeBankInformationImporter>();
 
-
-
             services.AddSingleton<IProvideTimesheetService, TimesheetProvider>();
             services.AddSingleton<IDownloadContentProvider, DownloadContentProvider>();
             services.AddSingleton<TimesheetManager>();

@@ -1,25 +1,25 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Win32;
-using Pms.Employees.Domain;
-using Pms.Employees.FrontEnd.Models;
-using Pms.Employees.FrontEnd.Stores;
-using Pms.Employees.FrontEnd.ViewModels;
+using Pms.Masterlists.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Pms.Masterlists.FrontEnd.Models;
+using Pms.Masterlists.FrontEnd.ViewModels;
+using Pms.Main.FrontEnd.Common;
 
-namespace Pms.Employees.FrontEnd.Commands
+namespace Pms.Masterlists.FrontEnd.Commands
 {
-    public class EmployeeBankImportCommand : IRelayCommand
+    public class EEDataImport : IRelayCommand
     {
-        private readonly EmployeeModel _model;
-        private readonly EmployeeViewModel _viewModel;
+        private readonly Models.Employees _model;
+        private readonly EmployeeListingVm _viewModel;
 
 
-        public EmployeeBankImportCommand(EmployeeViewModel viewModel, EmployeeModel model)
+        public EEDataImport(EmployeeListingVm viewModel, Models.Employees model)
         {
             _model = model;
             _viewModel = viewModel;
@@ -37,23 +37,22 @@ namespace Pms.Employees.FrontEnd.Commands
                 bool? isValid = openFile.ShowDialog();
                 if (isValid is not null && isValid == true)
                 {
-                    _viewModel.SetProgress("Saving Employees bank information.", openFile.FileNames.Length);
                     foreach (string filename in openFile.FileNames)
                     {
                         try
                         {
-                            //IEnumerable<IBankInformation> extractedEmployee = _model.Import(filename);
-                            //foreach (IBankInformation employee in extractedEmployee)
-                            //    _model.Save(employee);
-
-                            //_viewModel.ProgressValue++;
+                            IEnumerable<IEEDataInformation> extractedEmployee = _model.ImportEEData(filename);
+                            _viewModel.SetProgress("Saving Employees EE Data information.", extractedEmployee.Count());
+                            foreach (IEEDataInformation employee in extractedEmployee)
+                            {
+                                _model.Save(employee);
+                                _viewModel.ProgressValue++;
+                            }
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.Message,
-                                  "Bank Import Error",
-                                  MessageBoxButton.OK,
-                                  MessageBoxImage.Error
+                            MessageBoxes.ShowError(ex.Message,
+                                  "EE Data Import Error"
                               );
                         }
                     }

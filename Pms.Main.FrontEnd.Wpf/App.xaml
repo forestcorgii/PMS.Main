@@ -21,7 +21,7 @@
             <DataTemplate DataType="{x:Type vms:TimesheetViewModel}">
                 <timesheetViews:TimesheetView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vms:EmployeeViewModel}">
+            <DataTemplate DataType="{x:Type vms:MasterlistViewModel}">
                 <views:EmployeeView/>
             </DataTemplate> 
             <DataTemplate DataType="{x:Type vms:BillingViewModel}">

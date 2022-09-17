@@ -1,6 +1,4 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
-using Pms.Masterlists.Domain;
+﻿using Pms.Masterlists.Domain;
 using Pms.Main.FrontEnd.Wpf.Commands;
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Main.FrontEnd.Wpf.Stores;
@@ -19,6 +17,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using static Pms.Timesheets.ServiceLayer.TimeSystem.Services.Enums;
+using Pms.Main.FrontEnd.Wpf.Messages;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace Pms.Main.FrontEnd.Wpf.ViewModels
 {
@@ -38,6 +40,8 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
 
         private ObservableCollection<Timesheet> _timesheets;
+        private Company company1;
+
         public ObservableCollection<Timesheet> Timesheets
         {
             get => _timesheets;
@@ -71,6 +75,8 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
             _timesheets = new();
             Timesheets = new ObservableCollection<Timesheet>(_timesheetStore.Timesheets);
+
+            IsActive = true;
         }
 
         public override void Dispose()
@@ -78,12 +84,21 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             _timesheetStore.Reloaded -= _cutoffStore_TimesheetsReloaded;
             base.Dispose();
         }
-
         private void _cutoffStore_TimesheetsReloaded()
         {
             Timesheets = new ObservableCollection<Timesheet>(_timesheetStore.Timesheets);
         }
+
+
+        public Company Company { get; set; }
+        public PayrollCode PayrollCode { get; set; }
+        public Cutoff Cutoff { get; set; }
+        protected override void OnActivated()
+        {
+            Messenger.Register<TimesheetViewModel, SelectedCompanyChangedMessage>(this, (r, m) => r.Company = m.Value);
+            Messenger.Register<TimesheetViewModel, SelectedPayrollCodeChangedMessage>(this, (r, m) => r.PayrollCode = m.Value);
+            Messenger.Register<TimesheetViewModel, SelectedCutoffChangedMessage>(this, (r, m) => r.Cutoff = m.Value);
+        }
     }
 }
 
- 
