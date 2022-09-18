@@ -1,8 +1,6 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Pms.Masterlists.Domain;
+﻿using Pms.Masterlists.Domain;
 using Pms.Main.FrontEnd.Wpf.Commands;
 using Pms.Main.FrontEnd.Wpf.Models;
-using Pms.Main.FrontEnd.Wpf.Stores;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,31 +9,27 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Pms.Masterlists.Domain.Enums;
+using Pms.Main.FrontEnd.Wpf.Messages;
+using CommunityToolkit.Mvvm.Messaging;
+using Pms.Main.FrontEnd.Wpf.Commands.Masterlists;
+using Pms.Main.FrontEnd.Common;
 
 namespace Pms.Main.FrontEnd.Wpf.ViewModels
 {
     public class MasterlistViewModel : ViewModelBase
     {
-        private MasterlistStore _store { get; set; }
-
-        public string Filter
+        private string searchInput = string.Empty;
+        public string SearchInput
         {
-            get => _store.Filter;
-            set
-            {
-                SetProperty(ref _store.Filter, value);
-                _store.ReloadFilter();
-            }
+            get => searchInput;
+            set => SetProperty(ref searchInput, value);
         }
-        
+
+        private bool includeArchived;
         public bool IncludeArchived
         {
-            get => _store.IncludeArchived;
-            set
-            {
-                SetProperty(ref _store.IncludeArchived, value);
-                _store.ReloadFilter();
-            }
+            get => includeArchived;
+            set => SetProperty(ref includeArchived, value);
         }
 
         private Employee _selectedEmployee;
@@ -45,8 +39,8 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             set => SetProperty(ref _selectedEmployee, value);
         }
 
-        private ObservableCollection<Employee> _employees;
-        public ObservableCollection<Employee> Employees
+        private IEnumerable<Employee> _employees;
+        public IEnumerable<Employee> Employees
         {
             get => _employees;
             set => SetProperty(ref _employees, value);
@@ -60,38 +54,56 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         public ICommand EEDataImportCommand { get; }
         public ICommand SaveCommand { get; }
 
-        public MasterlistViewModel(MainStore mainStore, MasterlistStore employeeStore, MasterlistModel employeeModel)
+        public MasterlistViewModel(MasterlistModel model)
         {
-            DownloadCommand = new Download(this, mainStore, employeeStore, employeeModel);
-            BankImportCommand = new BankImport(this, employeeModel);
-            EEDataImportCommand = new EEDataImport(this, employeeModel);
-            SaveCommand = new Save(this, employeeModel, mainStore);
-
-            LoadEmployeesCommand = new ListingCommand(employeeStore);
+            DownloadCommand = new Download(this, model);
+            BankImportCommand = new BankImport(this, model);
+            EEDataImportCommand = new EEDataImport(this, model);
+            SaveCommand = new Save(this, model);
+             
+            LoadEmployeesCommand = new Commands.Masterlists.Listing(this, model);
             LoadEmployeesCommand.Execute(null);
 
             _selectedEmployee = new();
 
-            _store = employeeStore;
-            _store.Reloaded += _cutoffStore_EmployeesReloaded;
-
-            _employees = new ObservableCollection<Employee>();
-            Employees = new ObservableCollection<Employee>(_store.Employees);
+            IsActive = true;
         }
 
         public override void Dispose()
         {
-            _store.Reloaded -= _cutoffStore_EmployeesReloaded;
+            IsActive = false;
+
+            Messenger.Unregister<SelectedSiteChangedMessage>(this);
+            Messenger.Unregister<SelectedCompanyChangedMessage>(this);
+            Messenger.Unregister<SelectedPayrollCodeChangedMessage>(this);
+
             base.Dispose();
         }
 
-        private void _cutoffStore_EmployeesReloaded()
+
+        protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
         {
-            Employees = new ObservableCollection<Employee>(_store.Employees);
-            if (Employees.Count == 1)
-                SelectedEmployee = Employees.First();
+            if ((new string[] { nameof(Site), nameof(CompanyId), nameof(PayrollCodeId), nameof(IncludeArchived), nameof(SearchInput) }).Any(p => p == e.PropertyName))
+                LoadEmployeesCommand.Execute(null);
+
+            base.OnPropertyChanged(e);
         }
 
 
+        private SiteChoices site = SiteChoices.MANILA;
+        public SiteChoices Site { get => site; set => SetProperty(ref site, value); }
+
+        private string companyId = string.Empty;
+        public string CompanyId { get => companyId; set => SetProperty(ref companyId, value); }
+
+        private string payrollCodeId = string.Empty;
+        public string PayrollCodeId { get => payrollCodeId; set => SetProperty(ref payrollCodeId, value); }
+
+        protected override void OnActivated()
+        {
+            Messenger.Register<MasterlistViewModel, SelectedSiteChangedMessage>(this, (r, m) => r.Site = m.Value);
+            Messenger.Register<MasterlistViewModel, SelectedCompanyChangedMessage>(this, (r, m) => r.CompanyId = m.Value.CompanyId);
+            Messenger.Register<MasterlistViewModel, SelectedPayrollCodeChangedMessage>(this, (r, m) => r.PayrollCodeId = m.Value.PayrollCodeId);
+        }
     }
 }

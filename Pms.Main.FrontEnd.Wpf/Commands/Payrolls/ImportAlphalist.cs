@@ -2,7 +2,6 @@
 using Microsoft.Win32;
 using Pms.Masterlists.Domain;
 using Pms.Main.FrontEnd.Wpf.Models;
-using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
 using Pms.Payrolls.Domain;
 using Pms.Payrolls.Domain.SupportTypes;
@@ -16,25 +15,21 @@ using System.Threading.Tasks;
 using System.Windows;
 using static Pms.Payrolls.Domain.Enums;
 
-namespace Pms.Main.FrontEnd.Wpf.Commands
+namespace Pms.Main.FrontEnd.Wpf.Commands.Payrolls
 {
-    public class PayrollImportAlphalistCommand : IRelayCommand
+    public class ImportAlphalist : IRelayCommand
     {
         public event EventHandler? CanExecuteChanged;
 
-        private readonly PayrollStore _store;
-        private readonly MainStore _mainStore;
         private readonly AlphalistViewModel _viewModel;
         private readonly PayrollModel _model;
 
         private bool _canExecute { get; set; } = true;
 
-        public PayrollImportAlphalistCommand(AlphalistViewModel viewModel, PayrollModel model, PayrollStore store, MainStore mainStore)
+        public ImportAlphalist(AlphalistViewModel viewModel, PayrollModel model)
         {
-            _store = store;
             _viewModel = viewModel;
             _model = model;
-            _mainStore = mainStore;
         }
 
 
@@ -59,24 +54,22 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                         {
                             try
                             {
-                                Cutoff cutoff = new(_mainStore.Cutoff.CutoffId);
-                                string payrollCode = _mainStore.PayrollCode.PayrollCodeId;
-                                string companyId = _mainStore.PayrollCode.CompanyId;
-                                Company? company = _mainStore.Companies.Where(c => c.CompanyId == companyId).FirstOrDefault();
+                                string payrollCode = _viewModel.PayrollCodeId;
+                                Company? company = _viewModel.Company;
                                 if (company is not null)
                                 {
                                     AlphalistImport importer = new();
                                     importer.ImportToBIRProgram(payRegister, _viewModel.BirDbfDirectory, 
                                         new CompanyView(company.RegisteredName, company.TIN, company.BranchCode, company.Region),
-                                        cutoff.YearCovered
+                                        _viewModel.Cutoff.YearCovered
                                     );
                                 }
                                 else
-                                    MessageBoxes.ShowError("Company is null.", "Alphalist Import Error");
+                                    MessageBoxes.Error("Company is null.", "Alphalist Import Error");
                             }
                             catch (Exception ex)
                             {
-                                MessageBoxes.ShowError(ex.Message, "Alphalist Import Error");
+                                MessageBoxes.Error(ex.Message, "Alphalist Import Error");
                             }
 
                         }

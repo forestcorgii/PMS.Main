@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Messaging.Messages;
-using Pms.Payrolls.Domain;
+using Pms.Timesheets.Domain.SupportTypes;
 
 namespace Pms.Main.FrontEnd.Wpf.Messages
 {

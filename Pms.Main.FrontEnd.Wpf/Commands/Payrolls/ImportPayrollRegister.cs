@@ -1,7 +1,6 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Win32;
 using Pms.Main.FrontEnd.Wpf.Models;
-using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
 using Pms.Payrolls.Domain;
 using Pms.Payrolls.Domain.Exceptions;
@@ -14,20 +13,18 @@ using System.Threading.Tasks;
 using System.Windows;
 using static Pms.Payrolls.Domain.Enums;
 
-namespace Pms.Main.FrontEnd.Wpf.Commands
+namespace Pms.Main.FrontEnd.Wpf.Commands.Payrolls
 {
-    public class PayrollImportCommand : IRelayCommand
+    public class ImportPayrollRegister : IRelayCommand
     {
         private readonly PayrollModel _model;
         private readonly PayrollViewModel _viewModel;
-        private readonly MainStore _mainStore;
 
 
-        public PayrollImportCommand(PayrollViewModel viewModel, PayrollModel model, MainStore mainStore)
+        public ImportPayrollRegister(PayrollViewModel viewModel, PayrollModel model)
         {
             _model = model;
             _viewModel = viewModel;
-            _mainStore = mainStore;
 
             _canExecute = true;
         }
@@ -47,31 +44,24 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                     {
                         try
                         {
-                            IEnumerable<Payroll> extractedPayrolls = _model.Import(payRegister, (ImportProcessChoices)_mainStore.PayrollCode.Process);
+                            IEnumerable<Payroll> extractedPayrolls = _model.Import(payRegister, (ImportProcessChoices)_viewModel.PayrollCode.Process);
                             _viewModel.SetProgress($"Saving extracted Payrolls from {Path.GetFileName(payRegister)}.", extractedPayrolls.Count());
                             foreach (Payroll payroll in extractedPayrolls)
                             {
-                                payroll.PayrollCode = _mainStore.PayrollCode.PayrollCodeId;
-                                _model.Save(payroll, _mainStore.PayrollCode.PayrollCodeId, _mainStore.PayrollCode.CompanyId);
+                                _model.Save(payroll, _viewModel.PayrollCode.PayrollCodeId, _viewModel.Company.CompanyId);
                                 _viewModel.ProgressValue++;
                             }
                         }
                         catch (PayrollRegisterHeaderNotFoundException ex)
                         {
-                            MessageBox.Show($"{ex.Header} was not found in {ex.PayrollRegisterFilePath}.\nMake sure Your select the right Process type.",
-                                "Payroll Import Error",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error
-                            );
+                            MessageBoxes.Error($"{ex.Header} was not found in {ex.PayrollRegisterFilePath}.\nMake sure Your select the right Process type.",
+                                "Payroll Import Error");
                             break;
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.Message,
-                                "Payroll Import Error",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error
-                            );
+                            MessageBoxes.Error(ex.Message,
+                                "Payroll Import Error");
                             break;
                         }
                     }

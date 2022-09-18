@@ -1,31 +1,26 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
 using Pms.Adjustments.Domain;
 using Pms.Main.FrontEnd.Wpf.Models;
-using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Pms.Main.FrontEnd.Wpf.Commands
+namespace Pms.Main.FrontEnd.Wpf.Commands.Billings
 {
-    public class BillingExportCommand : IRelayCommand
+    public class Export : IRelayCommand
     {
         public event EventHandler? CanExecuteChanged;
 
-        private readonly BillingStore _store;
-        private readonly MainStore _mainStore;
         private readonly BillingViewModel _viewModel;
         private readonly BillingModel _model;
 
         private bool _canExecute { get; set; } = true;
 
-        public BillingExportCommand(BillingViewModel viewModel, BillingModel model, BillingStore store, MainStore mainStore)
+        public Export(BillingViewModel viewModel, BillingModel model)
         {
-            _store = store;
             _viewModel = viewModel;
             _model = model;
-            _mainStore = mainStore;
         }
 
 
@@ -40,8 +35,8 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                 await Task.Run(() =>
                 {
                     _viewModel.SetProgress("Exporting Payrolls for Land Bank.",1);
-                    string cutoffId = _mainStore.Cutoff.CutoffId;
-                    string payrollCode= _mainStore.PayrollCode.PayrollCodeId;
+                    string cutoffId = _viewModel.CutoffId;
+                    string payrollCode= _viewModel.PayrollCodeId;
                     string adjustmentName= _viewModel.AdjustmentName;
                     IEnumerable<Billing> billings = _viewModel.Billings;
 

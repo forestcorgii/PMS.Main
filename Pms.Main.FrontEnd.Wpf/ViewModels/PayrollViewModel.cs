@@ -1,7 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using Pms.Main.FrontEnd.Common;
 using Pms.Main.FrontEnd.Wpf.Commands;
+using Pms.Main.FrontEnd.Wpf.Commands.Payrolls;
+using Pms.Main.FrontEnd.Wpf.Messages;
 using Pms.Main.FrontEnd.Wpf.Models;
-using Pms.Main.FrontEnd.Wpf.Stores;
+using Pms.Masterlists.Domain;
 using Pms.Payrolls.Domain;
 using System;
 using System.Collections.Generic;
@@ -16,7 +20,8 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 {
     public class PayrollViewModel : ViewModelBase
     {
-        public ObservableCollection<Payroll> Payrolls { get => _store.Payrolls; set => SetProperty(ref _store.Payrolls, value); }
+        private IEnumerable<Payroll> payrolls;
+        public IEnumerable<Payroll> Payrolls { get => payrolls; set => SetProperty(ref payrolls, value); }
 
         private int chkCount;
         public int ChkCount { get => chkCount; set => SetProperty(ref chkCount, value); }
@@ -37,7 +42,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         public int UnknownEECount { get => unknownEECount; set => SetProperty(ref unknownEECount, value); }
 
 
- 
+
         #region Commands
         public ICommand PayrollListing { get; }
         public ICommand PayrollImport { get; }
@@ -46,40 +51,45 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         public IAsyncRelayCommand EmployeeDownloadCommand { get; }
         #endregion
 
-        private PayrollStore _store;
 
-        public PayrollViewModel(PayrollStore store, MainStore mainStore, PayrollModel model, MasterlistStore employeeStore, MasterlistModel employeeModel)
+        public PayrollViewModel(PayrollModel model)
         {
-            _store = store;
-            _store.Reloaded += PayrollsReloaded;
 
-            PayrollListing = new ListingCommand(store);
+            PayrollListing = new Commands.Payrolls.Listing(this, model);
             PayrollListing.Execute(null);
 
-            PayrollImport = new PayrollImportCommand(this, model, mainStore);
-            PayrollBankReportExport = new PayrollExportBankReportCommand(this, model, store, mainStore);
-            PayrollAlphalistExport = new PayrollExportAlphalistCommand(this, model, store, mainStore);
-
-            EmployeeDownloadCommand = new Download(this, mainStore, employeeStore, employeeModel);
-
-            Payrolls = new ObservableCollection<Payroll>(_store.Payrolls);
+            PayrollImport = new ImportPayrollRegister(this, model);
+            PayrollBankReportExport = new ExportBankReport(this, model);
+            PayrollAlphalistExport = new ExportAlphalist(this, model);
         }
 
-        public override void Dispose()
+
+
+        protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
         {
-            _store.Reloaded -= PayrollsReloaded;
-            base.Dispose();
+            if ((new string[] { nameof(Company), nameof(PayrollCode), nameof(Cutoff) }).Any(p => p == e.PropertyName))
+                PayrollListing.Execute(null);
+
+            base.OnPropertyChanged(e);
         }
 
-        private void PayrollsReloaded()
+
+
+
+        private Company company = new Company();
+        public Company Company { get => company; set => SetProperty(ref company, value); }
+
+        private PayrollCode payrollCode = new PayrollCode();
+        public PayrollCode PayrollCode { get => payrollCode; set => SetProperty(ref payrollCode, value); }
+
+        private Cutoff cutoff = new Cutoff();
+        public Cutoff Cutoff { get => cutoff; set => SetProperty(ref cutoff, value); }
+
+        protected override void OnActivated()
         {
-            Payrolls = new ObservableCollection<Payroll>(_store.Payrolls);
-            ChkCount = Payrolls.Count(p => p.EE.Bank == BankChoices.CHK);
-            LbpCount = Payrolls.Count(p => p.EE.Bank == BankChoices.LBP);
-            CbcCount = Payrolls.Count(p => p.EE.Bank == BankChoices.CBC);
-            MtacCount = Payrolls.Count(p => p.EE.Bank == BankChoices.MTAC);
-            MpaloCount = Payrolls.Count(p => p.EE.Bank == BankChoices.MPALO);
-            UnknownEECount = Payrolls.Count(p => p.EE is null || p.EE.FirstName == string.Empty);
+            Messenger.Register<PayrollViewModel, SelectedCompanyChangedMessage>(this, (r, m) => r.Company = m.Value);
+            Messenger.Register<PayrollViewModel, SelectedPayrollCodeChangedMessage>(this, (r, m) => r.PayrollCode = m.Value);
+            Messenger.Register<PayrollViewModel, SelectedCutoffChangedMessage>(this, (r, m) => r.Cutoff = new Cutoff(m.Value.CutoffId));
         }
     }
 }

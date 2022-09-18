@@ -5,11 +5,25 @@ namespace Pms.Main.FrontEnd.Wpf
 {
     public class MessageBoxes
     {
-        public static void ShowError(string message, string caption) =>
+        public static void Error(string message, string caption = "") =>
             MessageBox.Show(message,
                 caption,
                 MessageBoxButton.OK,
                 MessageBoxImage.Error
             );
+
+        public static void Prompt(string message, string caption = "") =>
+            MessageBox.Show(message,
+                caption,
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
+
+        public static bool Inquire(string message, string caption = "") =>
+            MessageBox.Show(message,
+                caption,
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question
+            ) == MessageBoxResult.OK;
     }
 }
