@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Pms.Adjustments.Persistence;
 using Pms.Masterlists.Persistence;
 using Pms.Masterlists.ServiceLayer.HRMS.Adapter;
-using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Payrolls.Persistence;
 using Pms.Timesheets.Persistence;
 using Pms.Timesheets.ServiceLayer.TimeSystem.Adapter;

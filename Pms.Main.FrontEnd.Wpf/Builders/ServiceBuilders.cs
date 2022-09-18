@@ -6,7 +6,6 @@ using Pms.Masterlists.ServiceLayer;
 using Pms.Masterlists.ServiceLayer.EfCore;
 using Pms.Masterlists.ServiceLayer.Files;
 using Pms.Masterlists.ServiceLayer.HRMS.Service;
-using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Payrolls.Domain.Services;
 using Pms.Payrolls.ServiceLayer.EfCore;
 using Pms.Payrolls.ServiceLayer.Files;

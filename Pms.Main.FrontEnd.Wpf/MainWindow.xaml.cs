@@ -1,5 +1,4 @@
-﻿using Pms.Main.FrontEnd.Wpf.Stores;
-using Pms.Timesheets.Domain.SupportTypes;
+﻿using Pms.Timesheets.Domain.SupportTypes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
