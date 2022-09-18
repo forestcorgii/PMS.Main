@@ -53,7 +53,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Filter:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-            <TextBox Grid.Column="1" Margin="8,3" Text="{Binding Path=Filter, UpdateSourceTrigger=PropertyChanged, Delay=150}" CharacterCasing="Upper" VerticalAlignment="Center"/>
+            <TextBox Grid.Column="1" Margin="8,3" Text="{Binding Path=SearchInput, UpdateSourceTrigger=PropertyChanged, Delay=150}" CharacterCasing="Upper" VerticalAlignment="Center"/>
             <CheckBox Grid.Column="2" IsChecked="{Binding IncludeArchived}" Content="Include Archived"/>
         </Grid>
 

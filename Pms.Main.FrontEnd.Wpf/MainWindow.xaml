@@ -24,8 +24,14 @@
             
             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="8,0">
                 <StackPanel Orientation="Horizontal">
+                    <TextBlock  VerticalAlignment="Center" Margin="6">Site:</TextBlock>
+                    <ComboBox Text="{Binding Site, UpdateSourceTrigger=PropertyChanged}" 
+                              ItemsSource="{Binding Sites}" 
+                              Width="125" VerticalAlignment="Center" IsEditable="True"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
                     <TextBlock  VerticalAlignment="Center" Margin="6">Company:</TextBlock>
-                    <ComboBox Text="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged}" 
+                    <ComboBox Text="{Binding CompanyId, UpdateSourceTrigger=PropertyChanged}" 
                               ItemsSource="{Binding Companies}" 
                               Width="125" VerticalAlignment="Center" IsEditable="True"/>
                 </StackPanel>
@@ -37,7 +43,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock  VerticalAlignment="Center" Margin="6">PayrollCode:</TextBlock>
-                    <ComboBox Text="{Binding PayrollCode, UpdateSourceTrigger=PropertyChanged}" 
+                    <ComboBox Text="{Binding PayrollCodeId, UpdateSourceTrigger=PropertyChanged}" 
                               ItemsSource="{Binding PayrollCodes}" 
                               Width="125" VerticalAlignment="Center" IsEditable="True"/>
                 </StackPanel>

@@ -10,20 +10,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Pms.Main.FrontEnd.Wpf.Commands
+namespace Pms.Main.FrontEnd.Wpf.Commands.Timesheets
 {
-    public class TimesheetEvaluationCommand : IRelayCommand
+    public class Evaluation : IRelayCommand
     {
         private TimesheetViewModel _viewModel;
-        private MainStore _mainStore;
         private TimesheetModel _model;
 
         public event EventHandler? CanExecuteChanged;
 
-        public TimesheetEvaluationCommand(TimesheetViewModel viewModel, TimesheetModel model, MainStore mainStore)
+        public Evaluation(TimesheetViewModel viewModel, TimesheetModel model)
         {
             _viewModel = viewModel;
-            _mainStore = mainStore;
             _model = model;
         }
 
@@ -31,8 +29,8 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
 
         public async void Execute(object? parameter)
         {
-            string cutoffId = _mainStore.Cutoff.CutoffId;
-            string payrollCode = _mainStore.PayrollCode.PayrollCodeId;
+            string cutoffId = _viewModel.Cutoff.CutoffId;
+            string payrollCode = _viewModel.PayrollCode.PayrollCodeId;
 
             int[] missingPages = _model.GetMissingPages(cutoffId, payrollCode);
             if (missingPages is not null && missingPages.Length == 0)
@@ -40,9 +38,6 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                 try
                 {
                     IEnumerable<string> noEETimesheets = _model.ListTimesheetNoEETimesheet(cutoffId);
-
-                    if (noEETimesheets.Any())
-                        await _viewModel.EmployeeDownloadCommand.ExecuteAsync(noEETimesheets.ToArray());
 
                     await FillEmployeeDetail();
                 }
@@ -53,9 +48,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
             }
             else
                 _viewModel.DownloadCommand.Execute(missingPages);
-
-            _viewModel.LoadTimesheetCommand.Execute(true);
-            _viewModel.LoadFilterCommand.Execute(null);
+            _viewModel.LoadTimesheets.Execute(null);
         }
 
 
@@ -63,13 +56,13 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
         {
             return Task.Run(() =>
            {
-               if (_mainStore.Cutoff is not null)
+               if (_viewModel.Cutoff is not null)
                {
                    try
                    {
                        List<Timesheet> timesheets = _model
-                           .GetTimesheets(_mainStore.Cutoff.CutoffId)
-                           .Where(ts => ts.EE.PayrollCode == _mainStore.PayrollCode.PayrollCodeId)
+                           .GetTimesheets(_viewModel.Cutoff.CutoffId)
+                           .Where(ts => ts.EE.PayrollCode == _viewModel.PayrollCode.PayrollCodeId)
                            .ToList();
 
                        _viewModel.SetProgress("Filling Employee detail to Timesheets", timesheets.Count());
@@ -80,14 +73,8 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                            _viewModel.ProgressValue++;
                        }
                    }
-                   catch (Exception ex)
-                   {
-                       MessageBox.Show(ex.Message,
-                            "Timesheet Evaluation Error",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Error
-                        );
-                   }
+                   catch (Exception ex) { MessageBoxes.Error(ex.Message, "Timesheet Evaluation Error"); }
+
                    _viewModel.SetAsFinishProgress();
                }
            });

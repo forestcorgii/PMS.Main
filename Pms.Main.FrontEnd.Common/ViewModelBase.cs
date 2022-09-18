@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pms.Main.FrontEnd.Common
 {
-    public class ViewModelBase : ObservableObject
+    public class ViewModelBase : ObservableRecipient
     {
         protected double progressValue = 0;
         public double ProgressValue
@@ -16,7 +16,7 @@ namespace Pms.Main.FrontEnd.Common
             set => SetProperty(ref progressValue, value);
         }
 
-        protected double progressMaximum = 0;
+        protected double progressMaximum = 100;
         public double ProgressMaximum
         {
             get => progressMaximum;
@@ -41,7 +41,7 @@ namespace Pms.Main.FrontEnd.Common
         public void SetAsFinishProgress()
         {
             StatusMessage = "DONE";
-            ProgressMaximum = 0;
+            ProgressMaximum = 100;
             ProgressValue = 0;
         }
 

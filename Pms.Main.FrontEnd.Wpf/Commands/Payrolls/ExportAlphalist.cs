@@ -1,7 +1,6 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
 using Pms.Masterlists.Domain;
 using Pms.Main.FrontEnd.Wpf.Models;
-using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
 using Pms.Payrolls.Domain;
 using Pms.Payrolls.Domain.SupportTypes;
@@ -13,25 +12,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Pms.Main.FrontEnd.Wpf.Commands
+namespace Pms.Main.FrontEnd.Wpf.Commands.Payrolls
 {
-    public class PayrollExportAlphalistCommand : IRelayCommand
+    public class ExportAlphalist : IRelayCommand
     {
         public event EventHandler? CanExecuteChanged;
 
-        private readonly PayrollStore _store;
-        private readonly MainStore _mainStore;
         private readonly PayrollViewModel _viewModel;
         private readonly PayrollModel _model;
 
         private bool _canExecute { get; set; } = true;
 
-        public PayrollExportAlphalistCommand(PayrollViewModel viewModel, PayrollModel model, PayrollStore store, MainStore mainStore)
+        public ExportAlphalist(PayrollViewModel viewModel, PayrollModel model)
         {
-            _store = store;
             _viewModel = viewModel;
             _model = model;
-            _mainStore = mainStore;
         }
 
 
@@ -47,11 +42,11 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                 {
                     _viewModel.SetProgress("Exporting Alphalist.", 1);
 
-                    Cutoff cutoff = new(_mainStore.Cutoff.CutoffId);
-                    Company? company = _mainStore.Companies.Where(c => c.CompanyId == _mainStore.PayrollCode.CompanyId).FirstOrDefault();
+                    Cutoff cutoff = new(_viewModel.Cutoff.CutoffId);
+                    Company? company = _viewModel.Company;
                     if (company is not null)
                     {
-                        IEnumerable<Payroll> payrolls = _model.Get(cutoff.YearCovered, _mainStore.PayrollCode.CompanyId);
+                        IEnumerable<Payroll> payrolls = _model.Get(cutoff.YearCovered, _viewModel.PayrollCode.CompanyId);
                         var employeePayrolls = payrolls.GroupBy(py => py.EEId).Select(py => py.ToList()).ToList();
 
                         List<AlphalistDetail> alphalists = new();
@@ -66,11 +61,8 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message,
-                    "Alphalist Export Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
+                MessageBoxes.Error(ex.Message,
+                    "Alphalist Export Error");
             }
             _canExecute = true;
             NotifyCanExecuteChanged();

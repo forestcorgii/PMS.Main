@@ -2,7 +2,6 @@
 using Microsoft.Win32;
 using Pms.Masterlists.Domain;
 using Pms.Main.FrontEnd.Wpf.Models;
-using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
 using Pms.Payrolls.Domain;
 using System;
@@ -17,10 +16,10 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
     public class EEDataImport : IRelayCommand
     {
         private readonly MasterlistModel _model;
-        private readonly ViewModelBase _viewModel;
+        private readonly MasterlistViewModel _viewModel;
 
 
-        public EEDataImport(ViewModelBase viewModel, MasterlistModel model)
+        public EEDataImport(MasterlistViewModel viewModel, MasterlistModel model)
         {
             _model = model;
             _viewModel = viewModel;
@@ -52,11 +51,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.Message,
-                                  "EE Data Import Error",
-                                  MessageBoxButton.OK,
-                                  MessageBoxImage.Error
-                              );
+                            MessageBoxes.Error(ex.Message,    "EE Data Import Error");
                         }
                     }
                     _viewModel.SetAsFinishProgress();

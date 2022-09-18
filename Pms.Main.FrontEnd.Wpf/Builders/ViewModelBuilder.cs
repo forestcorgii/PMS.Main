@@ -14,23 +14,23 @@ namespace Pms.Main.FrontEnd.Wpf.Builders
         public static ServiceCollection AddViewModels(this ServiceCollection services)
         {
 
-            services.AddTransient<TimesheetViewModel>();
+            services.AddSingleton<TimesheetViewModel>();
             services.AddSingleton<Func<TimesheetViewModel>>((s) => () => s.GetRequiredService<TimesheetViewModel>());
             services.AddSingleton<NavigationService<TimesheetViewModel>>();
 
-            services.AddTransient<MasterlistViewModel>();
+            services.AddSingleton<MasterlistViewModel>();
             services.AddSingleton<Func<MasterlistViewModel>>((s) => () => s.GetRequiredService<MasterlistViewModel>());
             services.AddSingleton<NavigationService<MasterlistViewModel>>();
 
-            services.AddTransient<BillingViewModel>();
+            services.AddSingleton<BillingViewModel>();
             services.AddSingleton<Func<BillingViewModel>>((s) => () => s.GetRequiredService<BillingViewModel>());
             services.AddSingleton<NavigationService<BillingViewModel>>();
 
-            services.AddTransient<PayrollViewModel>();
+            services.AddSingleton<PayrollViewModel>();
             services.AddSingleton<Func<PayrollViewModel>>((s) => () => s.GetRequiredService<PayrollViewModel>());
             services.AddSingleton<NavigationService<PayrollViewModel>>();
 
-            services.AddTransient<AlphalistViewModel>();
+            services.AddSingleton<AlphalistViewModel>();
             services.AddSingleton<Func<AlphalistViewModel>>((s) => () => s.GetRequiredService<AlphalistViewModel>());
             services.AddSingleton<NavigationService<AlphalistViewModel>>();
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
 using Pms.Adjustments.Domain;
 using Pms.Main.FrontEnd.Wpf.Models;
-using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -9,25 +8,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pms.Main.FrontEnd.Wpf.Commands
+namespace Pms.Main.FrontEnd.Wpf.Commands.Billings
 {
-    public class BillingGenerationCommand : IRelayCommand
+    public class Generate : IRelayCommand
     {
         public event EventHandler? CanExecuteChanged;
 
         private BillingViewModel _viewModel;
         private BillingModel _model;
         private MasterlistModel _employeeModel;
-        private BillingStore _store;
-        private MainStore _mainStore;
 
 
-        public BillingGenerationCommand(BillingViewModel viewModel, BillingModel model, BillingStore store, MainStore mainStore, MasterlistModel employeeModel)
+        public Generate(BillingViewModel viewModel, BillingModel model, MasterlistModel employeeModel)
         {
             _model = model;
             _viewModel = viewModel;
-            _store = store;
-            _mainStore = mainStore;
             _employeeModel = employeeModel;
         }
 
@@ -40,20 +35,20 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
         {
             await Task.Run(() =>
             {
-                string[] eeIds = _employeeModel.GetEmployees().Where(ee => ee.PayrollCode == _mainStore.PayrollCode.PayrollCodeId).Select(ee => ee.EEId).ToArray();
+                string[] eeIds = _employeeModel.GetEmployees().Where(ee => ee.PayrollCode == _viewModel.PayrollCodeId.PayrollCodeId).Select(ee => ee.EEId).ToArray();
                 List<Billing> billings = new();
 
                 _viewModel.SetProgress("Billings Generation on going.", eeIds.Length);
                 foreach (string eeId in eeIds)
                 {
-                    billings.AddRange(_model.GenerateBillings(_mainStore.Cutoff.CutoffId, eeId));
+                    billings.AddRange(_model.GenerateBillings(_viewModel.CutoffId.CutoffId, eeId));
                     _viewModel.ProgressValue++;
                 }
 
                 _viewModel.SetProgress("Saving Generated billings.", billings.Count);
                 foreach (Billing billing in billings)
                 {
-                    billing.PayrollCode = _mainStore.PayrollCode.PayrollCodeId;
+                    billing.PayrollCode = _viewModel.PayrollCodeId.PayrollCodeId;
                     _model.AddBilling(billing);
                     _viewModel.ProgressValue++;
                 }

@@ -13,5 +13,5 @@ namespace Pms.Main.FrontEnd.Wpf.Messages
         public SelectedPayrollCodeChangedMessage(PayrollCode value) : base(value) { }
     }
 
-    public sealed class CurrentPayrollCodeRequestMessage : RequestMessage<Company> { }
+    public sealed class CurrentPayrollCodeRequestMessage : RequestMessage<PayrollCode> { }
 }

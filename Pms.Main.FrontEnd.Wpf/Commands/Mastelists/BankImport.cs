@@ -3,7 +3,6 @@ using Microsoft.Win32;
 using Pms.Masterlists.Domain;
 using Pms.Masterlists.Domain.Exceptions;
 using Pms.Main.FrontEnd.Wpf.Models;
-using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
 using Pms.Payrolls.Domain;
 using System;
@@ -20,10 +19,10 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
     public class BankImport : IRelayCommand
     {
         private readonly MasterlistModel _model;
-        private readonly ViewModelBase _viewModel;
+        private readonly MasterlistViewModel _viewModel;
 
 
-        public BankImport(ViewModelBase viewModel, MasterlistModel model)
+        public BankImport(MasterlistViewModel viewModel, MasterlistModel model)
         {
             _model = model;
             _viewModel = viewModel;
@@ -51,12 +50,12 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                             foreach (IBankInformation employee in extractedEmployee)
                             {
                                 try { _model.Save(employee); }
-                                catch (InvalidFieldValueException ex) { ShowError(ex.Message, Path.GetFileName(filename)); }
-                                catch (DuplicateBankInformationException ex) { ShowError(ex.Message, Path.GetFileName(filename)); }
+                                catch (InvalidFieldValueException ex) { Error(ex.Message, Path.GetFileName(filename)); }
+                                catch (DuplicateBankInformationException ex) { Error(ex.Message, Path.GetFileName(filename)); }
                                 _viewModel.ProgressValue++;
                             }
                         }
-                        catch (Exception ex) { ShowError(ex.Message, Path.GetFileName(filename)); }
+                        catch (Exception ex) { Error(ex.Message, Path.GetFileName(filename)); }
                     }
                     _viewModel.SetAsFinishProgress();
                 }

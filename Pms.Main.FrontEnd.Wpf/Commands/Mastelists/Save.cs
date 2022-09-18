@@ -3,7 +3,6 @@ using Microsoft.Win32;
 using Pms.Masterlists.Domain;
 using Pms.Masterlists.Domain.Exceptions;
 using Pms.Main.FrontEnd.Wpf.Models;
-using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
 using Pms.Payrolls.Domain;
 using System;
@@ -21,14 +20,12 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
     {
         private readonly MasterlistModel _model;
         private readonly MasterlistViewModel _viewModel;
-        private readonly MainStore _mainStore;
 
 
-        public Save(MasterlistViewModel viewModel, MasterlistModel model, MainStore mainStore)
+        public Save(MasterlistViewModel viewModel, MasterlistModel model)
         {
             _model = model;
             _viewModel = viewModel;
-            _mainStore = mainStore;
 
             _canExecute = true;
         }
@@ -48,8 +45,8 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
 
                     _viewModel.SetProgress("Changes has been saved.", 0);
                 }
-                catch (InvalidFieldValueException ex) { ShowError(ex.Message, ""); }
-                catch (DuplicateBankInformationException ex) { ShowError(ex.Message, ""); }
+                catch (InvalidFieldValueException ex) { Error(ex.Message, ""); }
+                catch (DuplicateBankInformationException ex) { Error(ex.Message, ""); }
             }
             else
                 _viewModel.SetProgress("No Changes has been saved.", 0);

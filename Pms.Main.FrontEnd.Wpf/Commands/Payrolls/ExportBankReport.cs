@@ -1,6 +1,5 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
 using Pms.Main.FrontEnd.Wpf.Models;
-using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
 using Pms.Payrolls.Domain;
 using System;
@@ -10,25 +9,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Pms.Main.FrontEnd.Wpf.Commands
+namespace Pms.Main.FrontEnd.Wpf.Commands.Payrolls
 {
-    public class PayrollExportBankReportCommand : IRelayCommand
+    public class ExportBankReport : IRelayCommand
     {
         public event EventHandler? CanExecuteChanged;
 
-        private readonly PayrollStore _store;
-        private readonly MainStore _mainStore;
         private readonly PayrollViewModel _viewModel;
         private readonly PayrollModel _model;
 
         private bool _canExecute { get; set; } = true;
 
-        public PayrollExportBankReportCommand(PayrollViewModel viewModel, PayrollModel model, PayrollStore store, MainStore mainStore)
+        public ExportBankReport(PayrollViewModel viewModel, PayrollModel model)
         {
-            _store = store;
             _viewModel = viewModel;
             _model = model;
-            _mainStore = mainStore;
         }
 
         public bool CanExecute(object? parameter) => _canExecute;
@@ -42,8 +37,8 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                 {
                     _viewModel.SetProgress("Exporting Payrolls.", 1);
 
-                    string cutoffId = _mainStore.Cutoff.CutoffId;
-                    string payrollCode = _mainStore.PayrollCode.PayrollCodeId;
+                    string cutoffId = _viewModel.Cutoff.CutoffId;
+                    string payrollCode = _viewModel.PayrollCode.PayrollCodeId;
 
                     IEnumerable<Payroll> payrolls = _model.Get(cutoffId, payrollCode);
 
@@ -53,11 +48,8 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Source,
-                    "Bank Report Export Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
+                MessageBoxes.Error(ex.Message,
+                    "Bank Report Export Error");
             }
             _canExecute = true;
             NotifyCanExecuteChanged();

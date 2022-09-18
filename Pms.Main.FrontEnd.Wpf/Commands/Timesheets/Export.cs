@@ -1,6 +1,5 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
 using Pms.Main.FrontEnd.Wpf.Models;
-using Pms.Main.FrontEnd.Wpf.Stores;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
 using Pms.Timesheets.Domain;
 using Pms.Timesheets.Domain.SupportTypes;
@@ -13,36 +12,33 @@ using System.Text;
 using System.Threading.Tasks;
 using static Pms.Payrolls.Domain.TimesheetEnums;
 
-namespace Pms.Main.FrontEnd.Wpf.Commands
+namespace Pms.Main.FrontEnd.Wpf.Commands.Timesheets
 {
-    public class TimesheetExportCommand : IRelayCommand
+    public class Export : IRelayCommand
     {
         private readonly TimesheetViewModel _viewModel;
-        private MainStore _store;
         private TimesheetModel _model;
 
         public event EventHandler? CanExecuteChanged;
 
-        public TimesheetExportCommand(TimesheetViewModel viewModel, TimesheetModel model, MainStore store)
+        public Export(TimesheetViewModel viewModel, TimesheetModel model)
         {
             _viewModel = viewModel;
-            _store = store;
             _model = model;
         }
 
-
-        public bool CanExecute(object? parameter)
-        {
-            return true;
-        }
+        private bool executable = true;
+        public bool CanExecute(object? parameter) => executable;
 
         public async void Execute(object? parameter)
         {
+            executable = false;
+
             await Task.Run(() =>
             {
-                Cutoff cutoff = _store.Cutoff;
+                Cutoff cutoff = _viewModel.Cutoff;
                 string cutoffId = cutoff.CutoffId;
-                string payrollCode = _store.PayrollCode.PayrollCodeId;
+                string payrollCode = _viewModel.PayrollCode.PayrollCodeId;
 
                 IEnumerable<Timesheet> timesheets = _model.GetTimesheets(cutoffId).FilterByPayrollCode(payrollCode);
                 IEnumerable<Timesheet> twoPeriodTimesheets = _model.GetTwoPeriodTimesheets(cutoffId).FilterByPayrollCode(payrollCode);
@@ -71,16 +67,18 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                 }
                 _viewModel.SetAsFinishProgress();
             });
+
+            executable = true;
         }
 
-        public void ExportFeedback(Cutoff cutoff, string payrollCode, TimesheetBankChoices bankCategory, List<Timesheet> exportable, List<Timesheet> unconfirmedTimesheetsWithAttendance, List<Timesheet> unconfirmedTimesheetsWithoutAttendance)
+        public void ExportFeedback(Cutoff cutoff, string payrollCode, TimesheetBankChoices bank, List<Timesheet> exportable, List<Timesheet> unconfirmedTimesheetsWithAttendance, List<Timesheet> unconfirmedTimesheetsWithoutAttendance)
         {
             try
             {
-                TimesheetFeedbackExporter service = new(cutoff, payrollCode, bankCategory, exportable, unconfirmedTimesheetsWithAttendance, unconfirmedTimesheetsWithoutAttendance);
+                TimesheetFeedbackExporter service = new(cutoff, payrollCode, bank, exportable, unconfirmedTimesheetsWithAttendance, unconfirmedTimesheetsWithoutAttendance);
 
                 string efiledir = $@"{AppDomain.CurrentDomain.BaseDirectory}\EXPORT\{cutoff.CutoffId}\{payrollCode}";
-                string efilepath = $@"{efiledir}\{payrollCode}_{bankCategory}_{cutoff.CutoffId}-FEEDBACK.XLS";
+                string efilepath = $@"{efiledir}\{payrollCode}_{bank}_{cutoff.CutoffId}-FEEDBACK.XLS";
                 System.IO.Directory.CreateDirectory(efiledir);
                 service.StartExport(efilepath);
             }
@@ -90,14 +88,14 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
             }
         }
 
-        public void ExportEFile(Cutoff cutoff, string payrollCode, TimesheetBankChoices bankCategory, List<Timesheet[]> exportable)
+        public void ExportEFile(Cutoff cutoff, string payrollCode, TimesheetBankChoices bank, List<Timesheet[]> exportable)
         {
             try
             {
-                TimesheetEfileExporter service = new(cutoff, payrollCode, bankCategory, exportable);
+                TimesheetEfileExporter service = new(cutoff, payrollCode, bank, exportable);
 
                 string efiledir = $@"{AppDomain.CurrentDomain.BaseDirectory}\EXPORT\{cutoff.CutoffId}\{payrollCode}";
-                string efilepath = $@"{efiledir}\{payrollCode}_{bankCategory}_{cutoff.CutoffId}.XLS";
+                string efilepath = $@"{efiledir}\{payrollCode}_{bank}_{cutoff.CutoffId}.XLS";
                 System.IO.Directory.CreateDirectory(efiledir);
                 service.ExportEFile(efilepath);
             }
@@ -107,13 +105,13 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
             }
         }
 
-        public void ExportDBF(Cutoff cutoff, string payrollCode, TimesheetBankChoices bankCategory, List<Timesheet> exportable)
+        public void ExportDBF(Cutoff cutoff, string payrollCode, TimesheetBankChoices bank, List<Timesheet> exportable)
         {
             try
             {
                 ExportTimesheetsDbfService service = new();
                 string dbfdir = $@"{AppDomain.CurrentDomain.BaseDirectory}\EXPORT\{cutoff.CutoffId}\{payrollCode}";
-                string dbfpath = $@"{dbfdir}\{payrollCode}_{bankCategory}_{cutoff.CutoffId}.DBF";
+                string dbfpath = $@"{dbfdir}\{payrollCode}_{bank}_{cutoff.CutoffId}.DBF";
                 System.IO.Directory.CreateDirectory(dbfdir);
 
                 service.ExportDBF(dbfpath, cutoff.CutoffDate, exportable);
