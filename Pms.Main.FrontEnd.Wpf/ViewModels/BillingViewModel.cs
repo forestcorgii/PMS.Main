@@ -1,7 +1,7 @@
 ﻿using Pms.Adjustments.Domain;
 using Pms.Main.FrontEnd.Common;
+using Pms.Main.FrontEnd.Common.Messages;
 using Pms.Main.FrontEnd.Wpf.Commands;
-using Pms.Main.FrontEnd.Wpf.Messages;
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Masterlists.Domain;
 using Pms.Masterlists.Domain.Enums;

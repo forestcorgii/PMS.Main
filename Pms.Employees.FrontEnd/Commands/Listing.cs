@@ -1,28 +1,30 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
-using Pms.Main.FrontEnd.Common.Utils;
-using Pms.Main.FrontEnd.Wpf.Models;
-using Pms.Main.FrontEnd.Wpf.ViewModels;
+using Pms.Masterlists.FrontEnd.Models;
+using Pms.Masterlists.FrontEnd.ViewModels;
 using Pms.Masterlists.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Pms.Main.FrontEnd.Common;
+using Pms.Main.FrontEnd.Common.Utils;
 
-namespace Pms.Main.FrontEnd.Wpf.Commands.Masterlists
+namespace Pms.Masterlists.FrontEnd.Commands.Masterlists
 {
     public class Listing : IRelayCommand
     {
         public event EventHandler? CanExecuteChanged;
+        private bool executable = true;
 
-        MasterlistViewModel _viewModel;
-        MasterlistModel _model; 
-        private bool executable;
+        private readonly Employees _model;
+        private readonly EmployeeListingVm _viewModel;
 
-        public Listing(MasterlistViewModel viewModel, MasterlistModel model)
+
+        public Listing(EmployeeListingVm viewModel, Employees model)
         {
-            _viewModel = viewModel;
             _model = model;
+            _viewModel = viewModel;
         }
 
 

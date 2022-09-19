@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
+using Pms.Main.FrontEnd.Common.Utils;
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
 using Pms.Timesheets.Domain;
@@ -32,9 +33,10 @@ namespace Pms.Main.FrontEnd.Wpf.Commands.Timesheets
         {
             executable = false;
 
-            Cutoff cutoff = _viewModel.Cutoff;
-            string payrollCode = _viewModel.PayrollCode.Name;
             string site = _viewModel.Site.ToString();
+            string payrollCode = _viewModel.PayrollCode.Name;
+            Cutoff cutoff = _viewModel.Cutoff;
+            cutoff.SetSite(site);
 
             if (parameter is null)
             {

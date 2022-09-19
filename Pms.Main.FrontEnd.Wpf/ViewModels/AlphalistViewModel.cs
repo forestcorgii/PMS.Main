@@ -1,7 +1,7 @@
 ﻿using Pms.Main.FrontEnd.Common;
+using Pms.Main.FrontEnd.Common.Messages;
 using Pms.Main.FrontEnd.Wpf.Commands;
 using Pms.Main.FrontEnd.Wpf.Commands.Payrolls;
-using Pms.Main.FrontEnd.Wpf.Messages;
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Masterlists.Domain;
 using Pms.Masterlists.Domain.Enums;
@@ -30,7 +30,6 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         {
             SaveToBirProgram = new ImportAlphalist(this, model);
         }
-
 
 
 

@@ -7,119 +7,94 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Pms.Main.FrontEnd.Common;
-using Pms.Masterlists.FrontEnd.Stores;
 using Pms.Masterlists.FrontEnd;
 using Pms.Masterlists.FrontEnd.Commands;
+using Pms.Masterlists.FrontEnd.Models;
+using Pms.Masterlists.Domain.Enums;
+using Pms.Main.FrontEnd.Common.Messages;
+using Pms.Masterlists.FrontEnd.Commands.Masterlists;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace Pms.Masterlists.FrontEnd.ViewModels
 {
     public class EmployeeListingVm : ViewModelBase
     {
-        private MasterlistStore _store { get; set; }
-
-        private string _filter;
-        public string Filter
+        private string searchInput = string.Empty;
+        public string SearchInput
         {
-            get => _filter;
-            set => SetProperty(ref _filter, value);
+            get => searchInput;
+            set => SetProperty(ref searchInput, value);
         }
 
-        private bool _includeArchived;
+        private bool includeArchived;
         public bool IncludeArchived
         {
-            get => _includeArchived;
-            set => SetProperty(ref _includeArchived, value);
+            get => includeArchived;
+            set => SetProperty(ref includeArchived, value);
         }
 
-        private Models.Employees _employeeModel;
+        private Employee _selectedEmployee;
+        public Employee SelectedEmployee
+        {
+            get => _selectedEmployee;
+            set => SetProperty(ref _selectedEmployee, value);
+        }
 
         private IEnumerable<Employee> _employees;
-        private ObservableCollection<EmployeeDetailVm> _employeeDetailVms;
-        public ObservableCollection<EmployeeDetailVm> EmployeeDetailVms
+        public IEnumerable<Employee> Employees
         {
-            get => _employeeDetailVms;
-            set => SetProperty(ref _employeeDetailVms, value);
+            get => _employees;
+            set => SetProperty(ref _employees, value);
         }
 
-        public ICommand GotoDetail { get; }
+        public ObservableCollection<BankChoices> BankTypes => new ObservableCollection<BankChoices>(Enum.GetValues(typeof(BankChoices)).Cast<BankChoices>());
 
-        public EmployeeListingVm(MasterlistStore masterlistStore, Models.Employees employeeModel,
-            NavigationStore navigationStore,
-            NavigationService<EmployeeDetailVm> employeeDetailNavigation
-        )
+        public ICommand LoadEmployeesCommand { get; }
+        public ICommand DownloadCommand { get; }
+        public ICommand BankImportCommand { get; }
+        public ICommand EEDataImportCommand { get; }
+        public ICommand SaveCommand { get; }
+
+        public EmployeeListingVm(Employees model)
         {
-            _employeeModel = employeeModel;
+            DownloadCommand = new Download(this, model);
+            BankImportCommand = new BankImport(this, model);
+            EEDataImportCommand = new EEDataImport(this, model);
+            SaveCommand = new Save(this, model);
 
-            GotoDetail = new NavigateCommand<EmployeeDetailVm>(employeeDetailNavigation);
+            LoadEmployeesCommand = new Listing(this, model);
+            LoadEmployeesCommand.Execute(null);
 
-            _store = masterlistStore;
-            _store.Reloaded += _cutoffStore_EmployeesReloaded;
+            _selectedEmployee = new();
 
-        }
-
-        public override void Dispose()
-        {
-            _store.Reloaded -= _cutoffStore_EmployeesReloaded;
-            base.Dispose();
-        }
-
-        private void _cutoffStore_EmployeesReloaded()
-        {
-            _employees = _store.Employees;
-            EmployeeDetailVms = new ObservableCollection<EmployeeDetailVm>(_employees
-                .Select(ee =>
-                    new EmployeeDetailVm(ee, _employeeModel)
-                )
-                .ToList());
+            IsActive = true;
         }
 
 
-
-        //public void ReloadFilter()
-        //{
-        //    EmployeeDetailVms = _employees
-        //        .FilterPayrollCode(PayrollCode.PayrollCodeId)
-        //        .IncludeArchived(IncludeArchived);
-        //}
-
-        //public void SetPayrollCode(PayrollCode payrollCode)
-        //{
-        //    PayrollCode = payrollCode;
-        //    ReloadFilter();
-        //}
-    }
-
-
-    static class EmployeeFilterExtension
-    {
-
-        public static IEnumerable<Employee> FilterPayrollCode(this IEnumerable<Employee> employees, string payrollCode)
+        protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (payrollCode != string.Empty)
-                return employees.Where(p => p.PayrollCode == payrollCode);
-            return employees;
+            if ((new string[] { nameof(Site), nameof(CompanyId), nameof(PayrollCodeId), nameof(IncludeArchived), nameof(SearchInput) }).Any(p => p == e.PropertyName))
+                LoadEmployeesCommand.Execute(null);
+
+            base.OnPropertyChanged(e);
         }
 
-        public static IEnumerable<Employee> FilterSearchInput(this IEnumerable<Employee> employees, string filter)
-        {
-            if (filter != string.Empty)
-                employees = employees
-                   .Where(ts =>
-                       ts.EEId.Contains(filter) ||
-                       ts.Fullname.Contains(filter) ||
-                       ts.CardNumber.Contains(filter) ||
-                       ts.AccountNumber.Contains(filter)
-                   );
 
-            return employees;
-        }
+        private SiteChoices site = SiteChoices.MANILA;
+        public SiteChoices Site { get => site; set => SetProperty(ref site, value); }
 
-        public static IEnumerable<Employee> IncludeArchived(this IEnumerable<Employee> employees, bool includeArchived)
+        private string companyId = string.Empty;
+        public string CompanyId { get => companyId; set => SetProperty(ref companyId, value); }
+
+        private string payrollCodeId = string.Empty;
+        public string PayrollCodeId { get => payrollCodeId; set => SetProperty(ref payrollCodeId, value); }
+
+        protected override void OnActivated()
         {
-            if (includeArchived)
-                return employees;
-            else
-                return employees.Where(ee => ee.Active == true);
+            Messenger.Register<EmployeeListingVm, SelectedSiteChangedMessage>(this, (r, m) => r.Site = m.Value);
+            Messenger.Register<EmployeeListingVm, SelectedCompanyChangedMessage>(this, (r, m) => r.CompanyId = m.Value.CompanyId);
+            Messenger.Register<EmployeeListingVm, SelectedPayrollCodeChangedMessage>(this, (r, m) => r.PayrollCodeId = m.Value.PayrollCodeId);
         }
     }
+
 }

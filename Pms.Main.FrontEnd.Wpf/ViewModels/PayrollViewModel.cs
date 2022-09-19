@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Pms.Main.FrontEnd.Common;
 using Pms.Main.FrontEnd.Wpf.Commands;
 using Pms.Main.FrontEnd.Wpf.Commands.Payrolls;
-using Pms.Main.FrontEnd.Wpf.Messages;
+using Pms.Main.FrontEnd.Common.Messages;
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Masterlists.Domain;
 using Pms.Payrolls.Domain;
@@ -54,13 +54,14 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
         public PayrollViewModel(PayrollModel model)
         {
-
             PayrollListing = new Commands.Payrolls.Listing(this, model);
             PayrollListing.Execute(null);
 
             PayrollImport = new ImportPayrollRegister(this, model);
             PayrollBankReportExport = new ExportBankReport(this, model);
             PayrollAlphalistExport = new ExportAlphalist(this, model);
+
+            IsActive = true;
         }
 
 

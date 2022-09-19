@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using static Pms.Main.FrontEnd.Wpf.MessageBoxes;
+using Pms.Main.FrontEnd.Common.Utils;
 
 namespace Pms.Main.FrontEnd.Wpf.Commands
 {
@@ -45,17 +45,17 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                         try
                         {
                             IEnumerable<IBankInformation> extractedEmployee = _model.ImportBankInformation(filename);
-                            
+
                             _viewModel.SetProgress($"Saving Extracted employees bank information from {Path.GetFileName(filename)}.", extractedEmployee.Count());
                             foreach (IBankInformation employee in extractedEmployee)
                             {
                                 try { _model.Save(employee); }
-                                catch (InvalidFieldValueException ex) { Error(ex.Message, Path.GetFileName(filename)); }
-                                catch (DuplicateBankInformationException ex) { Error(ex.Message, Path.GetFileName(filename)); }
+                                catch (InvalidFieldValueException ex) { MessageBoxes.Error(ex.Message, Path.GetFileName(filename)); }
+                                catch (DuplicateBankInformationException ex) { MessageBoxes.Error(ex.Message, Path.GetFileName(filename)); }
                                 _viewModel.ProgressValue++;
                             }
                         }
-                        catch (Exception ex) { Error(ex.Message, Path.GetFileName(filename)); }
+                        catch (Exception ex) { MessageBoxes.Error(ex.Message, Path.GetFileName(filename)); }
                     }
                     _viewModel.SetAsFinishProgress();
                 }

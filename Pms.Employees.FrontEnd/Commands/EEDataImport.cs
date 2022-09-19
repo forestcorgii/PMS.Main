@@ -1,34 +1,36 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Win32;
+using Pms.Main.FrontEnd.Common;
+using Pms.Main.FrontEnd.Common.Utils;
 using Pms.Masterlists.Domain;
+using Pms.Masterlists.FrontEnd.Models;
+using Pms.Masterlists.FrontEnd.ViewModels;
+using Pms.Payrolls.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using Pms.Masterlists.FrontEnd.Models;
-using Pms.Masterlists.FrontEnd.ViewModels;
-using Pms.Main.FrontEnd.Common;
 
-namespace Pms.Masterlists.FrontEnd.Commands
+namespace Pms.Masterlists.FrontEnd.Commands.Masterlists
 {
     public class EEDataImport : IRelayCommand
     {
-        private readonly Models.Employees _model;
+        private readonly Employees _model;
         private readonly EmployeeListingVm _viewModel;
 
 
-        public EEDataImport(EmployeeListingVm viewModel, Models.Employees model)
+        public EEDataImport(EmployeeListingVm viewModel, Employees model)
         {
             _model = model;
             _viewModel = viewModel;
-
-            _canExecute = true;
         }
 
         public async void Execute(object? parameter)
         {
+            executable = false;
+
             await Task.Run(() =>
             {
                 _viewModel.SetProgress("Select EE Import file.", 0);
@@ -42,7 +44,7 @@ namespace Pms.Masterlists.FrontEnd.Commands
                         try
                         {
                             IEnumerable<IEEDataInformation> extractedEmployee = _model.ImportEEData(filename);
-                            _viewModel.SetProgress("Saving Employees EE Data information.", extractedEmployee.Count());
+                        _viewModel.SetProgress("Saving Employees EE Data information.", extractedEmployee.Count());
                             foreach (IEEDataInformation employee in extractedEmployee)
                             {
                                 _model.Save(employee);
@@ -51,21 +53,21 @@ namespace Pms.Masterlists.FrontEnd.Commands
                         }
                         catch (Exception ex)
                         {
-                            MessageBoxes.ShowError(ex.Message,
-                                  "EE Data Import Error"
-                              );
+                            MessageBoxes.Error(ex.Message,    "EE Data Import Error");
                         }
                     }
                     _viewModel.SetAsFinishProgress();
                 }
             });
+
+            executable = true;
         }
 
-        protected bool _canExecute;
+        protected bool executable;
 
         public event EventHandler? CanExecuteChanged;
 
-        public bool CanExecute(object? parameter) => _canExecute;
+        public bool CanExecute(object? parameter) => executable;
 
         public void NotifyCanExecuteChanged() =>
             CanExecuteChanged?.Invoke(this, new EventArgs());

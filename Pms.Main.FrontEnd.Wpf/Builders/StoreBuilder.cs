@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pms.Main.FrontEnd.Government.Builders
+namespace Pms.Main.FrontEnd.Wpf.Builders
 {
-    static class StoreBuilders
+static     class StoreBuilder
     {
         public static ServiceCollection AddStores(this ServiceCollection services)
         {
-            services.AddSingleton<NavigationStore>(); 
+            services.AddSingleton<NavigationStore>();
 
             return services;
         }

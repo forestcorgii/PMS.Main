@@ -10,7 +10,6 @@ using System.Windows.Input;
 using Pms.Adjustments.Domain.Models;
 using Pms.Masterlists.Domain; 
 using Pms.Main.FrontEnd.Government.Commands;
-using Pms.Main.FrontEnd.Government.Stores;
 using Pms.Main.FrontEnd.Common;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -18,7 +17,6 @@ namespace Pms.Main.FrontEnd.Government.ViewModels
 {
     public class MainViewModel : ObservableValidator
     {
-        private readonly MainStore _mainStore;
         //private readonly NavigationStore _navigationStore;
         //public ObservableObject CurrentViewModel => _navigationStore.CurrentViewModel;
 
@@ -49,7 +47,6 @@ namespace Pms.Main.FrontEnd.Government.ViewModels
                 if (cutoffId.Length >= 6)
                 {
                     Cutoff cutoff = new Cutoff(cutoffId);
-                    _mainStore.SetCutoff(cutoff);
                     ClearErrors(nameof(CutoffId));
                 }
             }

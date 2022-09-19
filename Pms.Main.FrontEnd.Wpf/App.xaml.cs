@@ -25,6 +25,7 @@ namespace Pms.Main.FrontEnd.Wpf
                 .AddContextAndAdapter()
                 .AddServices()
                 .AddModels()
+                .AddStores()
                 .AddViewModels();
 
             return services.BuildServiceProvider();

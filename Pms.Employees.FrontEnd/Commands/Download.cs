@@ -1,11 +1,8 @@
-﻿using Microsoft.Toolkit.Mvvm.Input;
-using Pms.Main.FrontEnd.Common;
-using Pms.Masterlists.Domain;
+﻿using Pms.Masterlists.Domain;
 using Pms.Masterlists.Domain.Exceptions;
-using Pms.Masterlists.FrontEnd.Models;
-using Pms.Masterlists.FrontEnd.Stores;
-using Pms.Masterlists.FrontEnd.ViewModels;
 using Pms.Masterlists.ServiceLayer.HRMS.Exceptions;
+using Pms.Masterlists.FrontEnd.Models;
+using Pms.Masterlists.FrontEnd.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,14 +11,24 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using CommunityToolkit.Mvvm.Input;
+using Pms.Main.FrontEnd.Common;
+using Pms.Main.FrontEnd.Common.Utils;
 
-namespace Pms.Masterlists.FrontEnd.Commands
+namespace Pms.Masterlists.FrontEnd.Commands.Masterlists
 {
     public class Download : IAsyncRelayCommand
     {
-        private EmployeeListingVm _viewModel;
-        private Models.Employees _model;
-        private MasterlistStore _store;
+        private readonly Employees _model;
+        private readonly EmployeeListingVm _viewModel;
+
+
+        public Download(EmployeeListingVm viewModel, Employees model)
+        {
+            _model = model;
+            _viewModel = viewModel;
+
+        }
 
         public Task? ExecutionTask { get; }
 
@@ -34,18 +41,10 @@ namespace Pms.Masterlists.FrontEnd.Commands
         public event EventHandler? CanExecuteChanged;
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public Download(EmployeeListingVm viewModel, MasterlistStore store, Models.Employees model)
-        {
-            _viewModel = viewModel;
-            _store = store;
-            _model = model;
+        private bool executable = true;
+        public bool CanExecute(object? parameter) =>
+        executable;
 
-        }
-
-        public bool CanExecute(object? parameter)
-        {
-            return true;
-        }
 
         public async void Execute(object? parameter) =>
             await ExecuteAsync(parameter);
@@ -53,11 +52,12 @@ namespace Pms.Masterlists.FrontEnd.Commands
 
         public async Task ExecuteAsync(object? parameter)
         {
+            executable = false;
             string[] eeIds;
             if (parameter is not null && parameter is string[])
                 eeIds = (string[])parameter;
             else
-                eeIds = _store.Employees.Select(ee => ee.EEId).ToArray();
+                eeIds = _viewModel.Employees.Select(ee => ee.EEId).ToArray();
 
             _viewModel.SetProgress("Syncing Unknown Employees", eeIds.Length);
 
@@ -68,7 +68,7 @@ namespace Pms.Masterlists.FrontEnd.Commands
                     try
                     {
                         IPersonalInformation employee;
-                        IPersonalInformation employeeFoundOnServer = await _model.FindEmployeeAsync(eeId, _store.Site.ToString());
+                        IPersonalInformation employeeFoundOnServer = await _model.FindEmployeeAsync(eeId, _viewModel.Site.ToString());
                         IPersonalInformation employeeFoundLocally = _model.FindEmployee(eeId);
 
                         if (employeeFoundOnServer is null && employeeFoundLocally is null)
@@ -87,17 +87,15 @@ namespace Pms.Masterlists.FrontEnd.Commands
                             _model.Save(employeeFoundOnServer);
                         }
                     }
-                    catch (Exception ex) { MessageBoxes.ShowError(ex.Message, "Employee Sync Error"); }
+                    catch (Exception ex) { MessageBoxes.Error(ex.Message, "Employee Sync Error"); }
 
                     _viewModel.ProgressValue++;
                 }
             }
-            catch (HttpRequestException)
-            {
-                _viewModel.StatusMessage = "HTTP Request failed, please check Your HRMS Configuration.";
-            }
+            catch (HttpRequestException) { MessageBoxes.Error("HTTP Request failed, please check Your HRMS Configuration."); }
             _viewModel.SetAsFinishProgress();
-            await _store.Reload();
+
+            executable = true;
         }
 
 

@@ -9,6 +9,10 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="7.1.2" />
     <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
+    <PackageReference Include="Pms.Adjustments" Version="1.0.0-preview003" />
+    <PackageReference Include="Pms.Masterlists" Version="1.0.0-preview001" />
+    <PackageReference Include="Pms.Payrolls" Version="1.0.0-preview003" />
+    <PackageReference Include="Pms.Timesheets" Version="1.0.0-preview003" />
   </ItemGroup>
 
 </Project>

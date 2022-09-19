@@ -12,13 +12,11 @@ namespace Pms.Main.FrontEnd.Government.Commands
     {
         public event EventHandler? CanExecuteChanged;
 
-        private readonly IStore _store;
 
         private bool _canExecute;
 
-        public ListingCommand(IStore store)
+        public ListingCommand()
         {
-            _store = store;
         }
 
 
@@ -31,10 +29,10 @@ namespace Pms.Main.FrontEnd.Government.Commands
             bool? doReload = (bool?)parameter;
             try
             {
-                if (doReload.HasValue && doReload.Value == true)
-                    await _store.Reload();
-                else
-                    await _store.Load();
+                //if (doReload.HasValue && doReload.Value == true)
+                //    await _store.Reload();
+                //else
+                //    await _store.Load();
             }
             catch
             {

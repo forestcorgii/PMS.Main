@@ -12,7 +12,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using static Pms.Main.FrontEnd.Wpf.MessageBoxes;
+using Pms.Main.FrontEnd.Common;
+using Pms.Main.FrontEnd.Common.Utils;
 
 namespace Pms.Main.FrontEnd.Wpf.Commands
 {
@@ -45,8 +46,8 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
 
                     _viewModel.SetProgress("Changes has been saved.", 0);
                 }
-                catch (InvalidFieldValueException ex) { Error(ex.Message, ""); }
-                catch (DuplicateBankInformationException ex) { Error(ex.Message, ""); }
+                catch (InvalidFieldValueException ex) { MessageBoxes.Error(ex.Message, ""); }
+                catch (DuplicateBankInformationException ex) { MessageBoxes.Error(ex.Message, ""); }
             }
             else
                 _viewModel.SetProgress("No Changes has been saved.", 0);

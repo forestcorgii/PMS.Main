@@ -1,18 +1,12 @@
 ﻿using Pms.Main.FrontEnd.Wpf.Commands;
 using Pms.Timesheets.Domain.SupportTypes;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Pms.Masterlists.Domain;
 using Pms.Main.FrontEnd.Common;
-using CommunityToolkit.Mvvm.Messaging.Messages;
-using Pms.Main.FrontEnd.Wpf.Messages;
+using Pms.Main.FrontEnd.Common.Messages;
 using Microsoft.Toolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
@@ -24,8 +18,16 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        public SiteChoices Site { get => site; set => SetProperty(ref site, value); } 
         private SiteChoices site = SiteChoices.MANILA;
+        public SiteChoices Site
+        {
+            get => site;
+            set
+            {
+                SetProperty(ref site, value);
+                Messenger.Send(new SelectedSiteChangedMessage(Site));
+            }
+        }
         public ObservableCollection<SiteChoices> Sites =>
             new ObservableCollection<SiteChoices>(Enum.GetValues(typeof(SiteChoices)).Cast<SiteChoices>());
 

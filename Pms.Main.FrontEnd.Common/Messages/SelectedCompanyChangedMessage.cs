@@ -1,12 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Messaging.Messages;
 using Pms.Masterlists.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Pms.Main.FrontEnd.Wpf.Messages
+namespace Pms.Main.FrontEnd.Common.Messages
 {
     public sealed class SelectedCompanyChangedMessage : ValueChangedMessage<Company>
     {

@@ -9,10 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Pms.Masterlists.Domain.Enums;
-using Pms.Main.FrontEnd.Wpf.Messages;
 using CommunityToolkit.Mvvm.Messaging;
 using Pms.Main.FrontEnd.Wpf.Commands.Masterlists;
 using Pms.Main.FrontEnd.Common;
+using Pms.Main.FrontEnd.Common.Messages;
 
 namespace Pms.Main.FrontEnd.Wpf.ViewModels
 {

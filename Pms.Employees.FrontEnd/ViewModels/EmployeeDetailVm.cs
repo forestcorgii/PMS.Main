@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Pms.Masterlists.Domain;
 using Pms.Masterlists.FrontEnd;
-using Pms.Masterlists.FrontEnd.Stores;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +19,6 @@ namespace Pms.Masterlists.FrontEnd.ViewModels
         public EmployeeDetailVm(Employee employee, Models.Employees masterlistModel)
         {
             Employee = employee;
-            Save = new Commands.Save(this, masterlistModel);
         }
     }
 }
