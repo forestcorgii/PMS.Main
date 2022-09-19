@@ -6,13 +6,6 @@
             xmlns:vms="clr-namespace:Pms.Main.FrontEnd.Government.ViewModels"
 >
     <Application.Resources>
-        <ResourceDictionary>
-            <DataTemplate DataType="{x:Type vms:PayrollListingViewModel}">
-                <views:PayrollListingView/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type vms:PayrollDetailViewModel}">
-                <views:PayrollDetailView/>
-            </DataTemplate>
-        </ResourceDictionary>
+      
     </Application.Resources>
 </Application>

@@ -22,12 +22,7 @@ namespace Pms.Main.FrontEnd.Government
         private static IServiceProvider ConfigureServices()
         {
             ServiceCollection services = new();
-            services
-                .AddContextAndAdapter()
-                .AddServices()
-                .AddModels()
-                .AddStores()
-                .AddViewModels();
+            
 
             return services.BuildServiceProvider();
         }
