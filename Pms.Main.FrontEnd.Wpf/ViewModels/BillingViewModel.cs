@@ -60,6 +60,8 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             GenerateBillings = new Generate(this, _model, employeeModel);
             ListBillings = new Commands.Billings.Listing(this, _model);
             ListBillings.Execute(null);
+
+            IsActive = true;
         }
 
 

@@ -57,7 +57,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
             DownloadCommand = new Download(this, model);
             EvaluateCommand = new Evaluation(this, model);
-            ExportCommand = new Commands.Timesheets.Export(this, model);
+            ExportCommand = new Export(this, model);
 
             _timesheets = new ObservableCollection<Timesheet>();
             Timesheets = new ObservableCollection<Timesheet>();

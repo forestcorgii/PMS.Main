@@ -61,6 +61,8 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             {
                 SetProperty(ref payrollCodeId, value);
                 PayrollCode = PayrollCodes.Where(c => c.PayrollCodeId == payrollCodeId).First();
+                CompanyId = PayrollCode.CompanyId;
+                Site = Sites.Where(s => s.ToString() == PayrollCode.Site).FirstOrDefault();
                 Messenger.Send(new SelectedPayrollCodeChangedMessage(PayrollCode));
             }
         }
@@ -127,6 +129,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
             _navigationStore = navigationStore;
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
+
             IsActive = true;
         }
 

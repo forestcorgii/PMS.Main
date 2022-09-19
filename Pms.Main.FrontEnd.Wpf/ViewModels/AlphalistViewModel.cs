@@ -29,6 +29,8 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         public AlphalistViewModel(PayrollModel model)
         {
             SaveToBirProgram = new ImportAlphalist(this, model);
+
+            IsActive = true;
         }
 
 
