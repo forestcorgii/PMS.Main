@@ -19,13 +19,20 @@ namespace Pms.PayrollModule.FrontEnd.ViewModels
 
         public ICommand SaveToBirProgram { get; set; }
 
-        public AlphalistViewModel(PayrollModel model)
+        public AlphalistViewModel(Models.Payrolls model)
         {
             SaveToBirProgram = new ImportAlphalist(this, model);
 
+
+            Company = WeakReferenceMessenger.Default.Send<CurrentCompanyRequestMessage>();
+            PayrollCodeId = WeakReferenceMessenger.Default.Send<CurrentPayrollCodeRequestMessage>().Response.PayrollCodeId;
+
+            string cutoffId = WeakReferenceMessenger.Default.Send<CurrentCutoffIdRequestMessage>();
+            Cutoff = new Cutoff(cutoffId);
+
+
             IsActive = true;
         }
-
 
 
 

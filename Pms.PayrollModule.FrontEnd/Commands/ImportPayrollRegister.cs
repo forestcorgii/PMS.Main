@@ -18,11 +18,11 @@ namespace Pms.PayrollModule.FrontEnd.Commands
 {
     public class ImportPayrollRegister : IRelayCommand
     {
-        private readonly PayrollModel _model;
+        private readonly Models.Payrolls _model;
         private readonly PayrollViewModel _viewModel;
 
 
-        public ImportPayrollRegister(PayrollViewModel viewModel, PayrollModel model)
+        public ImportPayrollRegister(PayrollViewModel viewModel, Models.Payrolls model)
         {
             _model = model;
             _viewModel = viewModel;

@@ -18,11 +18,11 @@ namespace Pms.PayrollModule.FrontEnd.Commands
         public event EventHandler? CanExecuteChanged;
 
         private readonly PayrollViewModel _viewModel;
-        private readonly PayrollModel _model;
+        private readonly Models.Payrolls _model;
 
         private bool _canExecute { get; set; } = true;
 
-        public ExportBankReport(PayrollViewModel viewModel, PayrollModel model)
+        public ExportBankReport(PayrollViewModel viewModel, Models.Payrolls model)
         {
             _viewModel = viewModel;
             _model = model;

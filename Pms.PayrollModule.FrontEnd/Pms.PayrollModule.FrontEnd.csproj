@@ -21,6 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Views\AlphalistView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
     <Page Update="Views\PayrollView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>

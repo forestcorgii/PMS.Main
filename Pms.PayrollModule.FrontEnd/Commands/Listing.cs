@@ -17,10 +17,10 @@ namespace Pms.PayrollModule.FrontEnd.Commands
         public event EventHandler? CanExecuteChanged;
 
         PayrollViewModel _viewModel;
-        PayrollModel _model;
+        Models.Payrolls _model;
         private bool executable;
 
-        public Listing(PayrollViewModel viewModel, PayrollModel model)
+        public Listing(PayrollViewModel viewModel, Models.Payrolls model)
         {
             _viewModel = viewModel;
             _model = model;

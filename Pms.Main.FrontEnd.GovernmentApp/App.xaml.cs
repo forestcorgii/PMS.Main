@@ -30,7 +30,6 @@ namespace Pms.Main.FrontEnd.Government
         public App()
         {
             Services = ConfigureServices();
-            InitializeComponent();
         }
 
         protected override void OnStartup(StartupEventArgs e)

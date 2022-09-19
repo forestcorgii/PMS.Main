@@ -30,11 +30,11 @@ namespace Pms.Main.FrontEnd.Government.Builders
             services.AddSingleton<Func<PayrollDetailViewModel>>((s) => () => s.GetRequiredService<PayrollDetailViewModel>());
             services.AddSingleton<NavigationService<PayrollDetailViewModel>>();
 
-            services.AddSingleton<MainViewModel>();
-            services.AddSingleton(s => new MainWindow()
-            {
-                DataContext = s.GetRequiredService<MainViewModel>()
-            });
+            //services.AddSingleton<MainViewModel>();
+            //services.AddSingleton(s => new MainWindow()
+            //{
+            //    DataContext = s.GetRequiredService<MainViewModel>()
+            //});
 
             return services;
         }

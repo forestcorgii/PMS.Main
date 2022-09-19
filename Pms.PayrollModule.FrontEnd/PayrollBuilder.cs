@@ -26,7 +26,7 @@ namespace Pms.PayrollModule.FrontEnd
             using (PayrollDbContext dbContext = payrollDbContextFactory.CreateDbContext())
                 dbContext.Database.Migrate();
 
-            services.AddTransient<PayrollModel>();
+            services.AddTransient<Models.Payrolls>();
 
 
             services.AddSingleton<IManagePayrollService, PayrollManager>();

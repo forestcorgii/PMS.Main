@@ -23,11 +23,11 @@ namespace Pms.PayrollModule.FrontEnd.Commands
         public event EventHandler? CanExecuteChanged;
 
         private readonly AlphalistViewModel _viewModel;
-        private readonly PayrollModel _model;
+        private readonly Models.Payrolls _model;
 
         private bool _canExecute { get; set; } = true;
 
-        public ImportAlphalist(AlphalistViewModel viewModel, PayrollModel model)
+        public ImportAlphalist(AlphalistViewModel viewModel, Models.Payrolls model)
         {
             _viewModel = viewModel;
             _model = model;

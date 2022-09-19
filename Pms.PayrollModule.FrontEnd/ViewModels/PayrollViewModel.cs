@@ -51,7 +51,7 @@ namespace Pms.PayrollModule.FrontEnd.ViewModels
         #endregion
 
 
-        public PayrollViewModel(PayrollModel model)
+        public PayrollViewModel(Models.Payrolls model)
         {
             PayrollListing = new Listing(this, model);
             PayrollListing.Execute(null);
@@ -59,6 +59,13 @@ namespace Pms.PayrollModule.FrontEnd.ViewModels
             PayrollImport = new ImportPayrollRegister(this, model);
             PayrollBankReportExport = new ExportBankReport(this, model);
             PayrollAlphalistExport = new ExportAlphalist(this, model);
+
+
+            Company = WeakReferenceMessenger.Default.Send<CurrentCompanyRequestMessage>();
+            PayrollCode = WeakReferenceMessenger.Default.Send<CurrentPayrollCodeRequestMessage>();
+
+            string cutoffId = WeakReferenceMessenger.Default.Send<CurrentCutoffIdRequestMessage>();
+            Cutoff = new Cutoff(cutoffId);
 
             IsActive = true;
         }

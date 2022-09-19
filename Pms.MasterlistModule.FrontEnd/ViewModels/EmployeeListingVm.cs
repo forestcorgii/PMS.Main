@@ -67,6 +67,11 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
 
             _selectedEmployee = new();
 
+
+            Site = WeakReferenceMessenger.Default.Send<CurrentSiteRequestMessage>();
+            CompanyId = WeakReferenceMessenger.Default.Send<CurrentCompanyRequestMessage>().Response.CompanyId;
+            PayrollCodeId = WeakReferenceMessenger.Default.Send<CurrentPayrollCodeRequestMessage>().Response.PayrollCodeId;
+
             IsActive = true;
         }
 

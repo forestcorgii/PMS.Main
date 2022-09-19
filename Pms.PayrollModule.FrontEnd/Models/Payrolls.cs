@@ -15,12 +15,12 @@ using static Pms.Payrolls.ServiceLayer.EfCore.PayrollProviderExtensions;
 
 namespace Pms.PayrollModule.FrontEnd.Models
 {
-    public class PayrollModel
+    public class Payrolls
     {
         private readonly IManagePayrollService _manager;
         private readonly IProvidePayrollService _provider;
 
-        public PayrollModel(IManagePayrollService manager, IProvidePayrollService provider)
+        public Payrolls(IManagePayrollService manager, IProvidePayrollService provider)
         {
             _manager = manager;
             _provider = provider;
@@ -69,7 +69,7 @@ namespace Pms.PayrollModule.FrontEnd.Models
         public IEnumerable<string> ListNoEEPayrolls() =>
             _provider.GetNoEEPayrolls().ExtractEEIds();
 
-        internal void Save(Payroll payroll, string payrollCode, string companyId)
+        public void Save(Payroll payroll, string payrollCode, string companyId)
         {
             payroll.PayrollCode = payrollCode;
             payroll.CompanyId = companyId;
