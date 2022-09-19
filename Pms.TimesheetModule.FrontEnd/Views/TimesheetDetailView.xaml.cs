@@ -18,7 +18,7 @@ namespace Pms.TimesheetModule.FrontEnd.Views
     /// <summary>
     /// Interaction logic for TimesheetDetailView.xaml
     /// </summary>
-    public partial class TimesheetDetailView : UserControl
+    public partial class TimesheetDetailView : Window
     {
         public TimesheetDetailView()
         {

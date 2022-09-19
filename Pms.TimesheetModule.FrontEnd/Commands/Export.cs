@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Pms.Payrolls.Domain.TimesheetEnums;
 
-namespace Pms.TimesheetModule.FrontEnd.Commands.Timesheets
+namespace Pms.TimesheetModule.FrontEnd.Commands
 {
     public class Export : IRelayCommand
     {
