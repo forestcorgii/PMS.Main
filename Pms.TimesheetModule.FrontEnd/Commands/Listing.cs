@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pms.TimesheetModule.FrontEnd.Commands.Timesheets
+namespace Pms.TimesheetModule.FrontEnd.Commands
 {
     public class Listing : IRelayCommand
     {

@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Pms.TimesheetModule.FrontEnd.Commands.Timesheets
+namespace Pms.TimesheetModule.FrontEnd.Commands
 {
     public class Download : IRelayCommand
     {

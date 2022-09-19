@@ -4,9 +4,10 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Pms.TimesheetModule.FrontEnd"
-      xmlns:vms="clr-namespace:Pms.TimesheetModule.FrontEnd.ViewModels"
-      mc:Ignorable="d" 
+      xmlns:vms="clr-namespace:Pms.TimesheetModule.FrontEnd.ViewModels" d:DataContext="{d:DesignInstance Type=vms:TimesheetListingVm}"
+             mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
+             x:Name="sean"
              >
     <Grid>
         <Grid.ColumnDefinitions>
@@ -34,8 +35,17 @@
         </Grid>
 
 
-        <DataGrid  Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Timesheets}">
+        <DataGrid x:Name="dataGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Timesheets}">
             <DataGrid.Columns>
+                
+                <DataGridTemplateColumn Header="">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Detail" CommandParameter="{Binding }" Command="{Binding DataContext.DetailTimesheet,ElementName=dataGrid}"></Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
                 <DataGridTextColumn Header="EE Id" Binding="{Binding EEId}"/>
                 <DataGridTextColumn Header="Full Name" Binding="{Binding Fullname}"/>
                 <DataGridTextColumn Header="Payroll Code" Binding="{Binding PayrollCode}"/>

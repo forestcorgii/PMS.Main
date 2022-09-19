@@ -20,7 +20,6 @@ using Pms.Main.FrontEnd.Common.Messages;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Pms.Masterlists.Domain.Enums;
-using Pms.TimesheetModule.FrontEnd.Commands.Timesheets;
 using Pms.Main.FrontEnd.Common;
 
 namespace Pms.TimesheetModule.FrontEnd.ViewModels
@@ -42,6 +41,7 @@ namespace Pms.TimesheetModule.FrontEnd.ViewModels
             get => _timesheets;
             set => SetProperty(ref _timesheets, value);
         }
+
         #endregion
 
         public ICommand DownloadCommand { get; }
@@ -51,17 +51,27 @@ namespace Pms.TimesheetModule.FrontEnd.ViewModels
 
         public ICommand LoadTimesheets { get; }
 
-        public TimesheetListingVm(Models.Timesheets model)
-        {
-            LoadTimesheets = new Listing(this, model);
+        public ICommand DetailTimesheet { get; }
 
-            DownloadCommand = new Download(this, model);
-            EvaluateCommand = new Evaluation(this, model);
-            ExportCommand = new Export(this, model);
+        public TimesheetListingVm(Models.Timesheets timesheets)
+        {
+            LoadTimesheets = new Listing(this, timesheets);
+
+            DownloadCommand = new Download(this, timesheets);
+            EvaluateCommand = new EvaluateAll(this, timesheets);
+            ExportCommand = new Export(this, timesheets);
+            DetailTimesheet = new Detail(timesheets);
 
             _timesheets = new ObservableCollection<Timesheet>();
             Timesheets = new ObservableCollection<Timesheet>();
 
+
+            Site = WeakReferenceMessenger.Default.Send<CurrentSiteRequestMessage>();
+            PayrollCode = WeakReferenceMessenger.Default.Send<CurrentPayrollCodeRequestMessage>();
+
+            string cutoffId = WeakReferenceMessenger.Default.Send<CurrentCutoffIdRequestMessage>();
+            if (!string.IsNullOrEmpty(cutoffId))
+                Cutoff = new Cutoff(cutoffId);
 
             IsActive = true;
         }
