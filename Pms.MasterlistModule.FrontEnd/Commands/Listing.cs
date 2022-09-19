@@ -1,14 +1,12 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
 using Pms.MasterlistModule.FrontEnd.Models;
 using Pms.MasterlistModule.FrontEnd.ViewModels;
-using Pms.Masterlists.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Pms.Main.FrontEnd.Common;
 using Pms.Main.FrontEnd.Common.Utils;
+using Pms.Masterlists.Domain.Entities.Employees;
 
 namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
 {

@@ -14,6 +14,7 @@ using Pms.Masterlists.Domain.Enums;
 using Pms.Main.FrontEnd.Common.Messages;
 using Pms.MasterlistModule.FrontEnd.Commands.Masterlists;
 using CommunityToolkit.Mvvm.Messaging;
+using Pms.Masterlists.Domain.Entities.Employees;
 
 namespace Pms.MasterlistModule.FrontEnd.ViewModels
 {
@@ -33,13 +34,6 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
             set => SetProperty(ref includeArchived, value);
         }
 
-        private Employee _selectedEmployee;
-        public Employee SelectedEmployee
-        {
-            get => _selectedEmployee;
-            set => SetProperty(ref _selectedEmployee, value);
-        }
-
         private IEnumerable<Employee> _employees;
         public IEnumerable<Employee> Employees
         {
@@ -47,25 +41,24 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
             set => SetProperty(ref _employees, value);
         }
 
-        public ObservableCollection<BankChoices> BankTypes => new ObservableCollection<BankChoices>(Enum.GetValues(typeof(BankChoices)).Cast<BankChoices>());
 
-        public ICommand LoadEmployeesCommand { get; }
-        public ICommand DownloadCommand { get; }
-        public ICommand BankImportCommand { get; }
-        public ICommand EEDataImportCommand { get; }
-        public ICommand SaveCommand { get; }
+        public ICommand LoadEmployees { get; }
+        public ICommand Download { get; }
+        public ICommand BankImport { get; }
+        public ICommand EEDataImport { get; }
+        public ICommand CheckDetail { get; }
+        //public ICommand SaveCommand { get; }
 
         public EmployeeListingVm(Employees model)
         {
-            DownloadCommand = new Download(this, model);
-            BankImportCommand = new BankImport(this, model);
-            EEDataImportCommand = new EEDataImport(this, model);
-            SaveCommand = new Save(this, model);
+            Download = new Download(this, model);
+            BankImport = new BankImport(this, model);
+            EEDataImport = new EEDataImport(this, model);
+            CheckDetail = new ViewEmployeeDetail(model);
+            //SaveCommand = new Save(this, model);
 
-            LoadEmployeesCommand = new Listing(this, model);
-            LoadEmployeesCommand.Execute(null);
-
-            _selectedEmployee = new();
+            LoadEmployees = new Listing(this, model);
+            LoadEmployees.Execute(null);
 
 
             Site = WeakReferenceMessenger.Default.Send<CurrentSiteRequestMessage>();
@@ -79,7 +72,7 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
         protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
         {
             if ((new string[] { nameof(Site), nameof(CompanyId), nameof(PayrollCodeId), nameof(IncludeArchived), nameof(SearchInput) }).Any(p => p == e.PropertyName))
-                LoadEmployeesCommand.Execute(null);
+                LoadEmployees.Execute(null);
 
             base.OnPropertyChanged(e);
         }

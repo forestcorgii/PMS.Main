@@ -14,16 +14,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Pms.Masterlists.Domain.Entities.Employees;
 
 namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
 {
     public class Save : IRelayCommand
     {
         private readonly Employees _model;
-        private readonly EmployeeListingVm _viewModel;
+        private readonly EmployeeDetailVm _viewModel;
 
 
-        public Save(EmployeeListingVm viewModel, Employees model)
+        public Save(EmployeeDetailVm viewModel, Employees model)
         {
             _model = model;
             _viewModel = viewModel;
@@ -31,33 +32,27 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
 
         public void Execute(object? parameter)
         {
-            _canExecute = false;
+            executable = false;
             if (parameter is not null)
             {
                 try
-                {
-                    if ((string)parameter == "PERSONAL")
-                        _model.Save((IPersonalInformation)_viewModel.SelectedEmployee);
-                    else if ((string)parameter == "BANK")
-                        _model.Save((IBankInformation)_viewModel.SelectedEmployee);
-                    else if ((string)parameter == "GOVERNMENT")
-                        _model.Save((IGovernmentInformation)_viewModel.SelectedEmployee);
+                { 
+                    _model.Save(_viewModel.Employee);
 
-                    _viewModel.SetProgress("Changes has been saved.", 0);
+                    _viewModel.Close();
                 }
                 catch (InvalidFieldValueException ex) { MessageBoxes.Error(ex.Message, ""); }
                 catch (DuplicateBankInformationException ex) { MessageBoxes.Error(ex.Message, ""); }
             }
-            else
-                _viewModel.SetProgress("No Changes has been saved.", 0);
-            _canExecute = true;
+
+            executable = true;
         }
 
-        protected bool _canExecute = true;
+        protected bool executable = true;
 
         public event EventHandler? CanExecuteChanged;
 
-        public bool CanExecute(object? parameter) => _canExecute;
+        public bool CanExecute(object? parameter) => executable;
 
         public void NotifyCanExecuteChanged() =>
             CanExecuteChanged?.Invoke(this, new EventArgs());

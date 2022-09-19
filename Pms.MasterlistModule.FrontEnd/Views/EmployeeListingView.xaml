@@ -26,24 +26,17 @@
         </Grid.ColumnDefinitions>
         <!--MENU-->
         <Menu>
-            <MenuItem Header="Sync" Command="{Binding DownloadCommand}"/>
+            <MenuItem Header="Sync" Command="{Binding Download}"/>
             <MenuItem Header="Import">
-                <MenuItem Header="Bank Info" Command="{Binding BankImportCommand}"/>
-                <MenuItem Header="Government Info" IsEnabled="False" Command="{Binding BankImportCommand}"/>
+                <MenuItem Header="Bank Info" Command="{Binding BankImport}"/>
+                <MenuItem Header="EE Data" Command="{Binding EEDataImport}"/>
+                <MenuItem Header="Government Info" IsEnabled="False" Command="{Binding BankImport}"/> 
             </MenuItem>
         </Menu>
-        <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <ComboBox x:Name="cbSyncType" Width="125" VerticalAlignment="Center">
-                <ComboBoxItem IsSelected="True">Sync Listed</ComboBoxItem>
-                <ComboBoxItem>Sync All</ComboBoxItem>
-            </ComboBox>
-
-            <Button Style="{StaticResource SecondaryButton}" Command="{Binding DownloadCommand}" VerticalAlignment="Center">Sync</Button>
-            <Button Style="{StaticResource SecondaryButton}" Command="{Binding ImportCommand}" VerticalAlignment="Center">Import</Button>
-        </StackPanel>-->
+ 
 
         <!--FILTER-->
-        <Grid Grid.Column="1" >
+        <Grid Grid.Column="1" HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="45"/>
                 <ColumnDefinition Width="145"/>
@@ -55,84 +48,37 @@
             <CheckBox Grid.Column="2" IsChecked="{Binding IncludeArchived}" Content="Include Archived"/>
         </Grid>
 
-        <!--DETAILS-->
-        <Grid Grid.Row="1" x:Name="grbEmployeeDetail">
-            <!--<Grid.DataContext>
-                <Binding Path="SelectedEmployee"/>
-            </Grid.DataContext>-->
-            <StackPanel>
-                <GroupBox Header="Personal" Grid.Column="1" Grid.RowSpan="3" Margin="4">
-                    <StackPanel>
-                        <WrapPanel> 
-                            <TextBox Width="45" Margin="4" IsReadOnly="True" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"  Text="{Binding SelectedEmployee.EEId}" />
-                            <TextBox Width="125" Grid.Row="2" Grid.Column="1" Margin="4" Text="{Binding SelectedEmployee.LastName}" />
-                            <TextBox Width="125"  Grid.Row="3" Grid.Column="1" Margin="4" Text="{Binding SelectedEmployee.FirstName}"/>
-                            <TextBox Width="125"  Grid.Row="4" Grid.Column="1" Margin="4" Text="{Binding SelectedEmployee.MiddleName}" />
-                        </WrapPanel>
-                        <Button
-                            Command="{Binding SaveCommand}"
-                            CommandParameter="PERSONAL"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Bottom"
-                        >Save</Button>
-                    </StackPanel>
-                </GroupBox>
-                <GroupBox Header="Payroll" Grid.Column="1" Grid.RowSpan="3" Margin="4">
-                    <StackPanel>
-                        <WrapPanel>
-                            <TextBox Width="56"  Grid.Row="6" Grid.Column="1" Margin="4" Text="{Binding SelectedEmployee.PayrollCode}" />
-                            <ComboBox Width="86"  Grid.Row="7" Grid.Column="1" Margin="4" Text="{Binding SelectedEmployee.Bank, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding BankTypes}"/>
-                            <TextBox Width="126"  Grid.Row="9" Grid.Column="1" Margin="4" Text="{Binding SelectedEmployee.AccountNumber}" />
-                            <TextBox Width="126"  Grid.Row="10" Grid.Column="1" Margin="4" Text="{Binding SelectedEmployee.CardNumber}" />
-                        </WrapPanel>
-                        <Button
-                            Command="{Binding SaveCommand}"
-                            CommandParameter="BANK"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Bottom"
-                        >Save</Button>
-                    </StackPanel>
-                </GroupBox>
-                <GroupBox Header="Government" Grid.Column="1" Grid.RowSpan="3" Margin="4">
-                    <StackPanel>
-                        <WrapPanel>
-                            <TextBox Width="126"  Grid.Row="5" Grid.Column="1" Margin="4" Text="{Binding SelectedEmployee.TIN}" />
-                            <TextBox Width="126"  Grid.Row="5" Grid.Column="1" Margin="4" Text="{Binding SelectedEmployee.Pagibig}" />
-                            <TextBox Width="126"  Grid.Row="5" Grid.Column="1" Margin="4" Text="{Binding SelectedEmployee.SSS}" />
-                            <TextBox Width="126"  Grid.Row="5" Grid.Column="1" Margin="4" Text="{Binding SelectedEmployee.PhilHealth}" />
-                        </WrapPanel>
-                        <Button
-                            Command="{Binding SaveCommand}"
-                            CommandParameter="GOVERNMENT"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Bottom"
-                        >Save</Button>
-                    </StackPanel>
-                </GroupBox>
-            </StackPanel>
-        </Grid>
-
+      
 
         <!--LIST VIEW-->
-        <Border Grid.Row="1" Grid.Column="1">
+        <Border Grid.Row="1" Grid.ColumnSpan="2">
 
-            <DataGrid x:Name="lstEmployees" Margin="3"
+            <DataGrid x:Name="dataGrid" Margin="3"
                     RowDetailsVisibilityMode="VisibleWhenSelected"
                     AutoGenerateColumns="False"
                     EnableRowVirtualization="True" 
                     HorizontalAlignment="Left"
                     IsReadOnly="True"
                     ItemsSource="{Binding Employees}"
-                    SelectedItem="{Binding SelectedEmployee}"
                     SelectionMode="Single"
                   >
                 <DataGrid.Columns>
+                    
+                    <DataGridTemplateColumn Header="">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Detail" CommandParameter="{Binding }" Command="{Binding DataContext.CheckDetail,ElementName=dataGrid}"></Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
                     <DataGridCheckBoxColumn Header="Active" Binding="{Binding Active}"/>
                     <DataGridTextColumn Header="Site" Binding="{Binding Site}"/>
                     <DataGridTextColumn Header="EE Id" Binding="{Binding EEId}"/>
                     <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"/>
                     <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"/>
                     <DataGridTextColumn Header="Middle Name" Binding="{Binding MiddleName}"/>
+                    <DataGridTextColumn Header="Ext" Binding="{Binding NameExtension}"/>
                     
                     <DataGridTextColumn Header="Payroll Code" Binding="{Binding PayrollCode}"/>
                     <DataGridTextColumn Header="Bank Name" Binding="{Binding Bank}"/>
@@ -155,7 +101,7 @@
             Grid.Row="2" Grid.Column="1"
             Maximum="{Binding ProgressMaximum}"
             Value="{Binding ProgressValue}"
-            />
+        />
 
     </Grid>
 </UserControl>
