@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Pms.Masterlists.Domain;
-using Pms.Masterlists.FrontEnd;
+using Pms.MasterlistModule.FrontEnd;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Pms.Masterlists.FrontEnd.ViewModels
+namespace Pms.MasterlistModule.FrontEnd.ViewModels
 {
     public class EmployeeDetailVm : ObservableObject
     {

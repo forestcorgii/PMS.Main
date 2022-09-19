@@ -1,8 +1,8 @@
 ﻿using Pms.Masterlists.Domain;
 using Pms.Masterlists.Domain.Exceptions;
 using Pms.Masterlists.ServiceLayer.HRMS.Exceptions;
-using Pms.Masterlists.FrontEnd.Models;
-using Pms.Masterlists.FrontEnd.ViewModels;
+using Pms.MasterlistModule.FrontEnd.Models;
+using Pms.MasterlistModule.FrontEnd.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,7 +15,7 @@ using CommunityToolkit.Mvvm.Input;
 using Pms.Main.FrontEnd.Common;
 using Pms.Main.FrontEnd.Common.Utils;
 
-namespace Pms.Masterlists.FrontEnd.Commands.Masterlists
+namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
 {
     public class Download : IAsyncRelayCommand
     {

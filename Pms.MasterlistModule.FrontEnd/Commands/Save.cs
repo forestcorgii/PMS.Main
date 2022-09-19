@@ -4,8 +4,8 @@ using Pms.Main.FrontEnd.Common;
 using Pms.Main.FrontEnd.Common.Utils;
 using Pms.Masterlists.Domain;
 using Pms.Masterlists.Domain.Exceptions;
-using Pms.Masterlists.FrontEnd.Models;
-using Pms.Masterlists.FrontEnd.ViewModels;
+using Pms.MasterlistModule.FrontEnd.Models;
+using Pms.MasterlistModule.FrontEnd.ViewModels;
 using Pms.Payrolls.Domain;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Pms.Masterlists.FrontEnd.Commands.Masterlists
+namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
 {
     public class Save : IRelayCommand
     {

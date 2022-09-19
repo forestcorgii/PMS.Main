@@ -1,6 +1,6 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
-using Pms.Masterlists.FrontEnd.Models;
-using Pms.Masterlists.FrontEnd.ViewModels;
+using Pms.MasterlistModule.FrontEnd.Models;
+using Pms.MasterlistModule.FrontEnd.ViewModels;
 using Pms.Masterlists.Domain;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Pms.Main.FrontEnd.Common;
 using Pms.Main.FrontEnd.Common.Utils;
 
-namespace Pms.Masterlists.FrontEnd.Commands.Masterlists
+namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
 {
     public class Listing : IRelayCommand
     {

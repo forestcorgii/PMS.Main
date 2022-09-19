@@ -7,15 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Pms.Main.FrontEnd.Common;
-using Pms.Masterlists.FrontEnd;
-using Pms.Masterlists.FrontEnd.Commands;
-using Pms.Masterlists.FrontEnd.Models;
+using Pms.MasterlistModule.FrontEnd;
+using Pms.MasterlistModule.FrontEnd.Commands;
+using Pms.MasterlistModule.FrontEnd.Models;
 using Pms.Masterlists.Domain.Enums;
 using Pms.Main.FrontEnd.Common.Messages;
-using Pms.Masterlists.FrontEnd.Commands.Masterlists;
+using Pms.MasterlistModule.FrontEnd.Commands.Masterlists;
 using CommunityToolkit.Mvvm.Messaging;
 
-namespace Pms.Masterlists.FrontEnd.ViewModels
+namespace Pms.MasterlistModule.FrontEnd.ViewModels
 {
     public class EmployeeListingVm : ViewModelBase
     {

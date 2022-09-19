@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pms.Masterlists.FrontEnd.Models
+namespace Pms.MasterlistModule.FrontEnd.Models
 {
     public class Employees
     {

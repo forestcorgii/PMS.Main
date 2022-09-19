@@ -10,13 +10,13 @@ using System.ComponentModel;
 using Pms.Masterlists.ServiceLayer.HRMS.Adapter;
 using Pms.Masterlists.Domain;
 
-namespace Pms.Masterlists.FrontEnd.Views
+namespace Pms.MasterlistModule.FrontEnd.Views
 {
     /// <summary>
     /// Interaction logic for Employee.xaml
     /// </summary>
-    public partial class EmployeeView : UserControl {
-        public EmployeeView()
+    public partial class EmployeeListingView : UserControl {
+        public EmployeeListingView()
         {
             InitializeComponent();
         }

@@ -16,13 +16,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\EmployeeView.xaml.cs">
+    <Compile Update="Views\EmployeeListingView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="Views\EmployeeView.xaml">
+    <Page Update="Views\EmployeeListingView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
