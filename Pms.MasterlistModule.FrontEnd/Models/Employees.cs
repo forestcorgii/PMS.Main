@@ -1,4 +1,5 @@
 ﻿using Pms.Masterlists.Domain;
+using Pms.Masterlists.Domain.Entities.Employees;
 using Pms.Masterlists.ServiceLayer;
 using Pms.Masterlists.ServiceLayer.EfCore;
 using Pms.Masterlists.ServiceLayer.Files;
@@ -29,8 +30,14 @@ namespace Pms.MasterlistModule.FrontEnd.Models
            _provider.EmployeeExists(eeId);
 
 
+        public void Save(Employee employee) =>
+            _manager.Save(employee);
+        
+        public void Save(IActive employee) =>
+            _manager.Save(employee);
+
         public void Save(IPersonalInformation employee) =>
-           _manager.Save(employee);
+            _manager.Save(employee);
 
         public void Save(IBankInformation employee) =>
             _manager.Save(employee);
@@ -47,10 +54,10 @@ namespace Pms.MasterlistModule.FrontEnd.Models
 
         public Employee FindEmployee(string eeId) =>
             _provider.FindEmployee(eeId);
-         
+
         public IEnumerable<Employee> GetEmployees() =>
             _provider.GetEmployees();
-         
+
 
         public IEnumerable<IBankInformation> ImportBankInformation(string payRegisterPath)
         {

@@ -58,7 +58,7 @@ namespace Pms.Main.FrontEnd.PayrollApp.ViewModels
 
 
 
-        public PayrollCode PayrollCode { get; set; }
+        public PayrollCode PayrollCode { get; set; } = new();
         private string payrollCodeId;
         public string PayrollCodeId
         {
