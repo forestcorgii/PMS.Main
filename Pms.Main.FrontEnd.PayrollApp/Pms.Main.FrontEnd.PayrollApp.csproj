@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <UserSecretsId>113b92cd-662c-4cc3-8450-8b2ecdfd3bef</UserSecretsId>
+    <StartupObject></StartupObject>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -41,6 +42,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+    <PackageReference Include="ModernWpfUI" Version="0.9.6" />
     <PackageReference Include="Pms.Adjustments" Version="1.0.0-preview003" />
     <PackageReference Include="Pms.Payrolls" Version="1.0.0-preview003" />
     <PackageReference Include="System.Data.OleDb" Version="6.0.0" />
@@ -48,57 +50,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Pms.AdjustmentModule.FrontEnd\Pms.AdjustmentModule.FrontEnd.csproj" />
     <ProjectReference Include="..\Pms.Main.FrontEnd.Common\Pms.Main.FrontEnd.Common.csproj" />
     <ProjectReference Include="..\Pms.MasterlistModule.FrontEnd\Pms.MasterlistModule.FrontEnd.csproj" />
     <ProjectReference Include="..\Pms.PayrollModule.FrontEnd\Pms.PayrollModule.FrontEnd.csproj" />
     <ProjectReference Include="..\Pms.TimesheetModule.FrontEnd\Pms.TimesheetModule.FrontEnd.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Views\BillingView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\Adjustment\AdjustmentRecord.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\PayrollView.xaml.cs">
-      <DependentUpon>PayrollView.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="Views\BillingView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Adjustment\AdjustmentRecord.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\PayrollView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Theme\MenuButton.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Theme\MenuButtonStyle.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Theme\PrimaryButton.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Theme\ProfileButtonStyle.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Theme\SecondaryButton.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
 
   <ItemGroup>

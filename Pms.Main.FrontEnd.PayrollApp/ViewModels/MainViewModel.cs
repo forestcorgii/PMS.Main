@@ -1,4 +1,4 @@
-﻿using Pms.Main.FrontEnd.Wpf.Commands;
+﻿using Pms.Main.FrontEnd.PayrollApp.Commands;
 using Pms.Timesheets.Domain.SupportTypes;
 using System;
 using System.Collections.Generic;
@@ -11,15 +11,16 @@ using Microsoft.Toolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using System.Collections.ObjectModel;
-using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Masterlists.Domain.Enums;
 using Pms.MasterlistModule.FrontEnd.ViewModels;
 using Pms.MasterlistModule.FrontEnd;
 using Pms.MasterlistModule.FrontEnd.Models;
 using Pms.TimesheetModule.FrontEnd.Models;
 using Pms.TimesheetModule.FrontEnd.ViewModels;
+using Pms.PayrollModule.FrontEnd.ViewModels;
+using Pms.AdjustmentModule.FrontEnd.ViewModels;
 
-namespace Pms.Main.FrontEnd.Wpf.ViewModels
+namespace Pms.Main.FrontEnd.PayrollApp.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
@@ -107,32 +108,33 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
         public ICommand LoadFilterCommand { get; }
 
-        public MainViewModel(PayrollCodes payrollCodes, Companies companies, TimesheetModule.FrontEnd.Models.Timesheets timesheetModel, PayrollModel payrollModel,
+        public MainViewModel(PayrollCodes payrollCodes, Companies companies, TimesheetModule.FrontEnd.Models.Timesheets timesheetModel, PayrollModule.FrontEnd.Models.Payrolls payrollModel,
             NavigationStore navigationStore,
             NavigationService<TimesheetListingVm> timesheetNavigation,
             NavigationService<EmployeeListingVm> employeeNavigation,
             NavigationService<PayrollViewModel> payrollNavigation,
             NavigationService<AlphalistViewModel> alphalistNavigation,
-            NavigationService<BillingViewModel> billingNavigation
+            NavigationService<BillingListingVm> billingNavigation
         )
         {
+            cutoffIds = new string[] { };
+           
             TimesheetCommand = new NavigateCommand<TimesheetListingVm>(timesheetNavigation);
             EmployeeCommand = new NavigateCommand<EmployeeListingVm>(employeeNavigation);
-            BillingCommand = new NavigateCommand<BillingViewModel>(billingNavigation);
+            BillingCommand = new NavigateCommand<BillingListingVm>(billingNavigation);
             PayrollCommand = new NavigateCommand<PayrollViewModel>(payrollNavigation);
             AlphalistCommand = new NavigateCommand<AlphalistViewModel>(alphalistNavigation);
 
-            cutoffIds = new string[] { };
 
             LoadFilterCommand = new Listing(this, payrollModel, timesheetModel, payrollCodes, companies);
             LoadFilterCommand.Execute(null);
+
+            IsActive = true;
 
             TimesheetCommand.Execute(null);
 
             _navigationStore = navigationStore;
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
-
-            IsActive = true;
         }
 
         private void OnCurrentViewModelChanged() =>

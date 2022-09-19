@@ -1,7 +1,6 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
 using Pms.Main.FrontEnd.Common.Utils;
-using Pms.Main.FrontEnd.Wpf.Models;
-using Pms.Main.FrontEnd.Wpf.ViewModels;
+using Pms.Main.FrontEnd.PayrollApp.ViewModels;
 using Pms.Masterlists.Domain;
 using Pms.MasterlistModule.FrontEnd.Models;
 using System;
@@ -9,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Pms.Main.FrontEnd.Wpf.Commands
+namespace Pms.Main.FrontEnd.PayrollApp.Commands
 {
     public class Listing : IRelayCommand
     {
@@ -17,19 +16,19 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
 
         private MainViewModel _viewModel;
         private TimesheetModule.FrontEnd.Models.Timesheets _timesheetModel;
-        private PayrollModel _payrollModel;
+        private PayrollModule.FrontEnd.Models.Payrolls _payrollModel;
         private Companies _companies;
         private PayrollCodes _payrollCodes;
 
-        public Listing(MainViewModel viewModel, PayrollModel payrollModel, TimesheetModule.FrontEnd.Models.Timesheets timesheetModel, PayrollCodes payrollCodes, Companies companies)
+        public Listing(MainViewModel viewModel, PayrollModule.FrontEnd.Models.Payrolls payrollModel, TimesheetModule.FrontEnd.Models.Timesheets timesheetModel, PayrollCodes payrollCodes, Companies companies)
         {
             _viewModel = viewModel;
-            
+
             _payrollModel = payrollModel;
             _timesheetModel = timesheetModel;
 
             _companies = companies;
-            _payrollCodes= payrollCodes;
+            _payrollCodes = payrollCodes;
         }
 
         private bool executable;
@@ -56,12 +55,13 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                 });
 
                 _viewModel.Companies = companies;
+                _viewModel.PayrollCodes = payrollCodes;
 
                 _viewModel.CutoffIds = cutoffIds;
-                _viewModel.PayrollCodes = payrollCodes;
+                _viewModel.CutoffId = cutoffIds.First();
             }
             catch (Exception ex) { MessageBoxes.Error(ex.Message); }
-            
+
             executable = true;
         }
 

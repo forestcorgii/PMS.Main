@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Pms.Main.FrontEnd.Wpf
+namespace Pms.Main.FrontEnd.PayrollApp
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml   

@@ -1,27 +1,25 @@
-﻿<Application x:Class="Pms.Main.FrontEnd.Wpf.App"
+﻿<Application x:Class="Pms.Main.FrontEnd.PayrollApp.App"
             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-            xmlns:local="clr-namespace:Pms.Main.FrontEnd.Wpf" 
-            xmlns:views="clr-namespace:Pms.Main.FrontEnd.Wpf.Views"
+            xmlns:ui="http://schemas.modernwpf.com/2019"
              
-            xmlns:masterlistViews="clr-namespace:Pms.MasterlistModule.FrontEnd.Views;assembly=Pms.MasterlistModule.FrontEnd"
-            xmlns:masterlistVms="clr-namespace:Pms.MasterlistModule.FrontEnd.ViewModels;assembly=Pms.MasterlistModule.FrontEnd"
-            
-            xmlns:timesheetViews="clr-namespace:Pms.TimesheetModule.FrontEnd.Views;assembly=Pms.TimesheetModule.FrontEnd"
-            xmlns:timesheetVms="clr-namespace:Pms.TimesheetModule.FrontEnd.ViewModels;assembly=Pms.TimesheetModule.FrontEnd"
-            
-             xmlns:vms="clr-namespace:Pms.Main.FrontEnd.Wpf.ViewModels"
+             xmlns:timesheetViews="clr-namespace:Pms.TimesheetModule.FrontEnd.Views;assembly=Pms.TimesheetModule.FrontEnd"
+             xmlns:timesheetVms="clr-namespace:Pms.TimesheetModule.FrontEnd.ViewModels;assembly=Pms.TimesheetModule.FrontEnd"
+             
+             xmlns:masterlistViews="clr-namespace:Pms.MasterlistModule.FrontEnd.Views;assembly=Pms.MasterlistModule.FrontEnd"
+             xmlns:masterlistVms="clr-namespace:Pms.MasterlistModule.FrontEnd.ViewModels;assembly=Pms.MasterlistModule.FrontEnd"
+             
+             xmlns:payrollViews="clr-namespace:Pms.PayrollModule.FrontEnd.Views;assembly=Pms.PayrollModule.FrontEnd"
+             xmlns:payrollVms="clr-namespace:Pms.PayrollModule.FrontEnd.ViewModels;assembly=Pms.PayrollModule.FrontEnd"
+             
+             xmlns:adjustmentViews="clr-namespace:Pms.AdjustmentModule.FrontEnd.Views;assembly=Pms.AdjustmentModule.FrontEnd"
+             xmlns:adjustmentVms="clr-namespace:Pms.AdjustmentModule.FrontEnd.ViewModels;assembly=Pms.AdjustmentModule.FrontEnd"
 >
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Theme/MenuButton.xaml"/>
-                <ResourceDictionary Source="Theme/MenuButtonStyle.xaml"/>
-                <ResourceDictionary Source="Theme/ProfileButtonStyle.xaml"/>
-                <ResourceDictionary Source="Theme/PrimaryButton.xaml"/>
-                <ResourceDictionary Source="Theme/SecondaryButton.xaml"/>
-
- 
+                <ui:ThemeResources />
+                <ui:XamlControlsResources />
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type timesheetVms:TimesheetListingVm}">
@@ -30,14 +28,14 @@
             <DataTemplate DataType="{x:Type masterlistVms:EmployeeListingVm}">
                 <masterlistViews:EmployeeListingView/>
             </DataTemplate> 
-            <DataTemplate DataType="{x:Type vms:BillingViewModel}">
-                <views:BillingView/>
+            <DataTemplate DataType="{x:Type adjustmentVms:BillingListingVm}">
+                <adjustmentViews:BillingView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vms:PayrollViewModel}">
-                <views:PayrollView/>
+            <DataTemplate DataType="{x:Type payrollVms:PayrollViewModel}">
+                <payrollViews:PayrollView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vms:AlphalistViewModel}">
-                <views:AlphalistView/>
+            <DataTemplate DataType="{x:Type payrollVms:AlphalistViewModel}">
+                <payrollViews:AlphalistView/>
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>

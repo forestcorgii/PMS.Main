@@ -1,48 +1,55 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Pms.Adjustments.Persistence;
-using Pms.Masterlists.Persistence;
-using Pms.Main.FrontEnd.Wpf.Builders;
-using Pms.Timesheets.Persistence;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
+using Microsoft.Extensions.Configuration;
+using Pms.MasterlistModule.FrontEnd;
+using Pms.TimesheetModule.FrontEnd;
+using Pms.PayrollModule.FrontEnd;
+using Pms.Main.FrontEnd.PayrollApp.ViewModels;
+using Pms.Main.FrontEnd.Common;
+using Pms.AdjustmentModule.FrontEnd;
 
-namespace Pms.Main.FrontEnd.Wpf
+namespace Pms.Main.FrontEnd.PayrollApp
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application
     {
-        public new static App Current => (App)Application.Current;
-
         public IServiceProvider Services { get; }
+
+        public App() =>
+            Services = ConfigureServices();
+
 
         private static IServiceProvider ConfigureServices()
         {
+            IConfigurationRoot conf = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).Build();
+
             ServiceCollection services = new();
+
             services
-                .AddContextAndAdapter()
-                .AddServices()
-                .AddModels()
-                .AddStores()
-                .AddViewModels();
+                .AddMasterlist(conf)
+                .AddTimesheet(conf)
+                .AddAdjustment(conf)
+                .AddPayroll(conf);
+
+            services.AddSingleton<NavigationStore>();
+
+
+            services.AddSingleton<MainViewModel>();
+            services.AddSingleton(s => new MainWindow()
+            {
+                DataContext = s.GetRequiredService<MainViewModel>()
+            });
+
 
             return services.BuildServiceProvider();
         }
 
-        public App()
-        {
-            Services = ConfigureServices();
-            InitializeComponent();
-        }
-
         protected override void OnStartup(StartupEventArgs e)
         {
-
-
             MainWindow = Services.GetRequiredService<MainWindow>();
-
             MainWindow.Show();
 
             base.OnStartup(e);
