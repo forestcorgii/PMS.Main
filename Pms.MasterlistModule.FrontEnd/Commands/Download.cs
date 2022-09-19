@@ -14,6 +14,7 @@ using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using Pms.Main.FrontEnd.Common;
 using Pms.Main.FrontEnd.Common.Utils;
+using Pms.Masterlists.Domain.Entities.Employees;
 
 namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
 {
@@ -67,9 +68,9 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
                 {
                     try
                     {
-                        IPersonalInformation employee;
-                        IPersonalInformation employeeFoundOnServer = await _model.FindEmployeeAsync(eeId, _viewModel.Site.ToString());
-                        IPersonalInformation employeeFoundLocally = _model.FindEmployee(eeId);
+                        IActive employee;
+                        IActive employeeFoundOnServer = await _model.FindEmployeeAsync(eeId, _viewModel.Site.ToString());
+                        IActive employeeFoundLocally = _model.FindEmployee(eeId);
 
                         if (employeeFoundOnServer is null && employeeFoundLocally is null)
                         {
