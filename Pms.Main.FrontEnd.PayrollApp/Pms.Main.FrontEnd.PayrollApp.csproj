@@ -42,15 +42,16 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
     <PackageReference Include="Pms.Adjustments" Version="1.0.0-preview003" />
-    <PackageReference Include="Pms.Masterlists" Version="1.0.0-preview001" />
     <PackageReference Include="Pms.Payrolls" Version="1.0.0-preview003" />
-    <PackageReference Include="Pms.Timesheets" Version="1.0.0-preview003" />
     <PackageReference Include="System.Data.OleDb" Version="6.0.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Pms.Main.FrontEnd.Common\Pms.Main.FrontEnd.Common.csproj" />
+    <ProjectReference Include="..\Pms.MasterlistModule.FrontEnd\Pms.MasterlistModule.FrontEnd.csproj" />
+    <ProjectReference Include="..\Pms.PayrollModule.FrontEnd\Pms.PayrollModule.FrontEnd.csproj" />
+    <ProjectReference Include="..\Pms.TimesheetModule.FrontEnd\Pms.TimesheetModule.FrontEnd.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -58,9 +59,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Adjustment\AdjustmentRecord.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\MasterlistView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\PayrollView.xaml.cs">
@@ -74,10 +72,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Adjustment\AdjustmentRecord.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\MasterlistView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
@@ -102,10 +96,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Theme\SecondaryButton.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Timesheets\TimesheetView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

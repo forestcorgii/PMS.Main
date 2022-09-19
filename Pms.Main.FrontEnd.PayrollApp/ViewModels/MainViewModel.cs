@@ -13,6 +13,11 @@ using CommunityToolkit.Mvvm.Messaging;
 using System.Collections.ObjectModel;
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Masterlists.Domain.Enums;
+using Pms.MasterlistModule.FrontEnd.ViewModels;
+using Pms.MasterlistModule.FrontEnd;
+using Pms.MasterlistModule.FrontEnd.Models;
+using Pms.TimesheetModule.FrontEnd.Models;
+using Pms.TimesheetModule.FrontEnd.ViewModels;
 
 namespace Pms.Main.FrontEnd.Wpf.ViewModels
 {
@@ -82,10 +87,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             {
                 SetProperty(ref cutoffId, value, true);
                 if (cutoffId.Length >= 6)
-                {
-                    Cutoff = new Cutoff(cutoffId);
-                    Messenger.Send(new SelectedCutoffChangedMessage(Cutoff));
-                }
+                    Messenger.Send(new SelectedCutoffIdChangedMessage(cutoffId));
             }
         }
         public string[] cutoffIds;
@@ -105,24 +107,24 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
         public ICommand LoadFilterCommand { get; }
 
-        public MainViewModel(MasterlistModel masterlistModel, TimesheetModel timesheetModel, PayrollModel payrollModel,
+        public MainViewModel(PayrollCodes payrollCodes, Companies companies, TimesheetModule.FrontEnd.Models.Timesheets timesheetModel, PayrollModel payrollModel,
             NavigationStore navigationStore,
-            NavigationService<TimesheetViewModel> timesheetNavigation,
-            NavigationService<MasterlistViewModel> employeeNavigation,
+            NavigationService<TimesheetListingVm> timesheetNavigation,
+            NavigationService<EmployeeListingVm> employeeNavigation,
             NavigationService<PayrollViewModel> payrollNavigation,
             NavigationService<AlphalistViewModel> alphalistNavigation,
             NavigationService<BillingViewModel> billingNavigation
         )
         {
-            TimesheetCommand = new NavigateCommand<TimesheetViewModel>(timesheetNavigation);
-            EmployeeCommand = new NavigateCommand<MasterlistViewModel>(employeeNavigation);
+            TimesheetCommand = new NavigateCommand<TimesheetListingVm>(timesheetNavigation);
+            EmployeeCommand = new NavigateCommand<EmployeeListingVm>(employeeNavigation);
             BillingCommand = new NavigateCommand<BillingViewModel>(billingNavigation);
             PayrollCommand = new NavigateCommand<PayrollViewModel>(payrollNavigation);
             AlphalistCommand = new NavigateCommand<AlphalistViewModel>(alphalistNavigation);
 
             cutoffIds = new string[] { };
 
-            LoadFilterCommand = new Listing(this, payrollModel, timesheetModel, masterlistModel);
+            LoadFilterCommand = new Listing(this, payrollModel, timesheetModel, payrollCodes, companies);
             LoadFilterCommand.Execute(null);
 
             TimesheetCommand.Execute(null);
@@ -142,7 +144,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             Messenger.Register<MainViewModel, CurrentSiteRequestMessage>(this, (r, m) => m.Reply(r.Site));
             Messenger.Register<MainViewModel, CurrentCompanyRequestMessage>(this, (r, m) => m.Reply(r.Company));
             Messenger.Register<MainViewModel, CurrentPayrollCodeRequestMessage>(this, (r, m) => m.Reply(r.PayrollCode));
-            Messenger.Register<MainViewModel, CurrentCutoffRequestMessage>(this, (r, m) => m.Reply(r.Cutoff));
+            Messenger.Register<MainViewModel, CurrentCutoffIdRequestMessage>(this, (r, m) => m.Reply(r.CutoffId));
         }
 
 

@@ -27,25 +27,12 @@ namespace Pms.Main.FrontEnd.Wpf.Builders
     {
         public static ServiceCollection AddServices(this ServiceCollection services)
         {
-            services.AddSingleton<CompanyManager>();
-            services.AddSingleton<PayrollCodeManager>();
-            
-            services.AddSingleton<EmployeeProvider>();
-            services.AddSingleton<EmployeeManager>();
-            services.AddSingleton<FindEmployeeService>();
-            services.AddSingleton<EmployeeBankInformationImporter>();
-
-            services.AddSingleton<IProvideTimesheetService, TimesheetProvider>();
-            services.AddSingleton<IDownloadContentProvider, DownloadContentProvider>();
-            services.AddSingleton<TimesheetManager>();
 
             services.AddSingleton<IManageBillingService, BillingManager>();
             services.AddSingleton<IProvideBillingService, BillingProvider>();
             services.AddSingleton<IGenerateBillingService, BillingGenerator>();
             services.AddSingleton<BillingExporter>();
 
-            services.AddSingleton<IManagePayrollService, PayrollManager>();
-            services.AddSingleton<IProvidePayrollService, PayrollProvider>();
             //services.AddSingleton<IImportPayrollService, PayRegisterImportBase>();
 
 

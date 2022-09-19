@@ -3,8 +3,14 @@
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             xmlns:local="clr-namespace:Pms.Main.FrontEnd.Wpf" 
             xmlns:views="clr-namespace:Pms.Main.FrontEnd.Wpf.Views"
-            xmlns:timesheetViews="clr-namespace:Pms.Main.FrontEnd.Wpf.Views.Timesheets"
-            xmlns:vms="clr-namespace:Pms.Main.FrontEnd.Wpf.ViewModels"
+             
+            xmlns:masterlistViews="clr-namespace:Pms.MasterlistModule.FrontEnd.Views;assembly=Pms.MasterlistModule.FrontEnd"
+            xmlns:masterlistVms="clr-namespace:Pms.MasterlistModule.FrontEnd.ViewModels;assembly=Pms.MasterlistModule.FrontEnd"
+            
+            xmlns:timesheetViews="clr-namespace:Pms.TimesheetModule.FrontEnd.Views;assembly=Pms.TimesheetModule.FrontEnd"
+            xmlns:timesheetVms="clr-namespace:Pms.TimesheetModule.FrontEnd.ViewModels;assembly=Pms.TimesheetModule.FrontEnd"
+            
+             xmlns:vms="clr-namespace:Pms.Main.FrontEnd.Wpf.ViewModels"
 >
     <Application.Resources>
         <ResourceDictionary>
@@ -18,11 +24,11 @@
  
             </ResourceDictionary.MergedDictionaries>
 
-            <DataTemplate DataType="{x:Type vms:TimesheetViewModel}">
-                <timesheetViews:TimesheetView/>
+            <DataTemplate DataType="{x:Type timesheetVms:TimesheetListingVm}">
+                <timesheetViews:TimesheetListingView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vms:MasterlistViewModel}">
-                <views:EmployeeView/>
+            <DataTemplate DataType="{x:Type masterlistVms:EmployeeListingVm}">
+                <masterlistViews:EmployeeListingView/>
             </DataTemplate> 
             <DataTemplate DataType="{x:Type vms:BillingViewModel}">
                 <views:BillingView/>

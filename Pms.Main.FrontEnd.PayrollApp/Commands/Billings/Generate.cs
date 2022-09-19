@@ -2,6 +2,7 @@
 using Pms.Adjustments.Domain;
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
+using Pms.MasterlistModule.FrontEnd.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,14 +17,14 @@ namespace Pms.Main.FrontEnd.Wpf.Commands.Billings
 
         private BillingViewModel _viewModel;
         private BillingModel _model;
-        private MasterlistModel _employeeModel;
+        private Employees _employees;
 
 
-        public Generate(BillingViewModel viewModel, BillingModel model, MasterlistModel employeeModel)
+        public Generate(BillingViewModel viewModel, BillingModel model, Employees employees)
         {
             _model = model;
             _viewModel = viewModel;
-            _employeeModel = employeeModel;
+            _employees = employees;
         }
 
         public bool CanExecute(object? parameter)
@@ -35,7 +36,7 @@ namespace Pms.Main.FrontEnd.Wpf.Commands.Billings
         {
             await Task.Run(() =>
             {
-                string[] eeIds = _employeeModel.GetEmployees().Where(ee => ee.PayrollCode == _viewModel.PayrollCodeId).Select(ee => ee.EEId).ToArray();
+                string[] eeIds = _employees.GetEmployees().Where(ee => ee.PayrollCode == _viewModel.PayrollCodeId).Select(ee => ee.EEId).ToArray();
                 List<Billing> billings = new();
 
                 _viewModel.SetProgress("Billings Generation on going.", eeIds.Length);

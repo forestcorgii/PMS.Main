@@ -16,6 +16,7 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Pms.Main.FrontEnd.Wpf.Commands.Billings;
 using System.ComponentModel;
+using Pms.MasterlistModule.FrontEnd.Models;
 
 namespace Pms.Main.FrontEnd.Wpf.ViewModels
 {
@@ -49,7 +50,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
 
 
 
-        public BillingViewModel(BillingModel model, MasterlistModel employeeModel)
+        public BillingViewModel(BillingModel model, Employees employees)
         {
             _billings = new ObservableCollection<Billing>();
             Billings = new ObservableCollection<Billing>();
@@ -57,7 +58,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
             _model = model;
 
             ExportBillings = new Export(this, _model);
-            GenerateBillings = new Generate(this, _model, employeeModel);
+            GenerateBillings = new Generate(this, _model, employees);
             ListBillings = new Commands.Billings.Listing(this, _model);
             ListBillings.Execute(null);
 
@@ -87,7 +88,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         protected override void OnActivated()
         {
             Messenger.Register<BillingViewModel, SelectedPayrollCodeChangedMessage>(this, (r, m) => r.PayrollCodeId = m.Value.PayrollCodeId);
-            Messenger.Register<BillingViewModel, SelectedCutoffChangedMessage>(this, (r, m) => r.CutoffId = m.Value.CutoffId);
+            Messenger.Register<BillingViewModel, SelectedCutoffIdChangedMessage>(this, (r, m) => r.CutoffId = m.Value);
         }
     }
 }

@@ -49,7 +49,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         {
             Messenger.Register<AlphalistViewModel, SelectedCompanyChangedMessage>(this, (r, m) => r.Company = m.Value);
             Messenger.Register<AlphalistViewModel, SelectedPayrollCodeChangedMessage>(this, (r, m) => r.PayrollCodeId = m.Value.PayrollCodeId);
-            Messenger.Register<AlphalistViewModel, SelectedCutoffChangedMessage>(this, (r, m) => r.Cutoff = new Cutoff(m.Value.CutoffId));
+            Messenger.Register<AlphalistViewModel, SelectedCutoffIdChangedMessage>(this, (r, m) => r.Cutoff = new Cutoff(m.Value));
         }
 
     }

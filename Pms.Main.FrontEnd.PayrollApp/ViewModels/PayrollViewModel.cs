@@ -90,7 +90,7 @@ namespace Pms.Main.FrontEnd.Wpf.ViewModels
         {
             Messenger.Register<PayrollViewModel, SelectedCompanyChangedMessage>(this, (r, m) => r.Company = m.Value);
             Messenger.Register<PayrollViewModel, SelectedPayrollCodeChangedMessage>(this, (r, m) => r.PayrollCode = m.Value);
-            Messenger.Register<PayrollViewModel, SelectedCutoffChangedMessage>(this, (r, m) => r.Cutoff = new Cutoff(m.Value.CutoffId));
+            Messenger.Register<PayrollViewModel, SelectedCutoffIdChangedMessage>(this, (r, m) => r.Cutoff = new Cutoff(m.Value));
         }
     }
 }

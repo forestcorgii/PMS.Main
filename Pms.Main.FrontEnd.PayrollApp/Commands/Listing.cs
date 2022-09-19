@@ -1,13 +1,12 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
-using Pms.Main.FrontEnd.Common;
 using Pms.Main.FrontEnd.Common.Utils;
 using Pms.Main.FrontEnd.Wpf.Models;
 using Pms.Main.FrontEnd.Wpf.ViewModels;
 using Pms.Masterlists.Domain;
+using Pms.MasterlistModule.FrontEnd.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Pms.Main.FrontEnd.Wpf.Commands
@@ -17,16 +16,20 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
         public event EventHandler? CanExecuteChanged;
 
         private MainViewModel _viewModel;
-        private TimesheetModel _timesheetModel;
+        private TimesheetModule.FrontEnd.Models.Timesheets _timesheetModel;
         private PayrollModel _payrollModel;
-        private MasterlistModel _masterlistModel;
+        private Companies _companies;
+        private PayrollCodes _payrollCodes;
 
-        public Listing(MainViewModel viewModel, PayrollModel payrollModel, TimesheetModel timesheetModel,  MasterlistModel masterlistModel)
+        public Listing(MainViewModel viewModel, PayrollModel payrollModel, TimesheetModule.FrontEnd.Models.Timesheets timesheetModel, PayrollCodes payrollCodes, Companies companies)
         {
+            _viewModel = viewModel;
+            
             _payrollModel = payrollModel;
             _timesheetModel = timesheetModel;
-            _viewModel = viewModel;
-            _masterlistModel = masterlistModel;
+
+            _companies = companies;
+            _payrollCodes= payrollCodes;
         }
 
         private bool executable;
@@ -48,8 +51,8 @@ namespace Pms.Main.FrontEnd.Wpf.Commands
                         .OrderByDescending(c => c)
                         .ToArray();
 
-                    payrollCodes = _masterlistModel.ListPayrollCodes();
-                    companies = _masterlistModel.ListCompanies();
+                    payrollCodes = _payrollCodes.ListPayrollCodes();
+                    companies = _companies.ListCompanies();
                 });
 
                 _viewModel.Companies = companies;
