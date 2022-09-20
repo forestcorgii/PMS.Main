@@ -38,7 +38,7 @@ namespace Pms.AdjustmentModule.FrontEnd.ViewModels
                 SetProperty(ref _adjustmentName, value);
             }
         }
-        private IEnumerable<string> _adjustmentNames=new List<string>();
+        private IEnumerable<string> _adjustmentNames = new List<string>();
         public IEnumerable<string> AdjustmentNames { get => _adjustmentNames; set => SetProperty(ref _adjustmentNames, value); }
 
 
@@ -54,8 +54,8 @@ namespace Pms.AdjustmentModule.FrontEnd.ViewModels
 
             IsActive = true;
 
-            CutoffId = WeakReferenceMessenger.Default.Send<CurrentCutoffIdRequestMessage>();
-            PayrollCodeId = WeakReferenceMessenger.Default.Send<CurrentPayrollCodeRequestMessage>().Response.PayrollCodeId;
+            cutoffId = WeakReferenceMessenger.Default.Send<CurrentCutoffIdRequestMessage>();
+            payrollCodeId = WeakReferenceMessenger.Default.Send<CurrentPayrollCodeRequestMessage>().Response.PayrollCodeId;
 
             ListBillings.Execute(null);
         }
@@ -64,7 +64,7 @@ namespace Pms.AdjustmentModule.FrontEnd.ViewModels
 
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            if ((new string[] { nameof(PayrollCodeId), nameof(CutoffId) }).Any(p => p == e.PropertyName))
+            if ((new string[] { nameof(AdjustmentName), nameof(PayrollCodeId), nameof(CutoffId) }).Any(p => p == e.PropertyName))
                 ListBillings.Execute(null);
 
             base.OnPropertyChanged(e);

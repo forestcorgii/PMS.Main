@@ -46,7 +46,7 @@ namespace Pms.AdjustmentModule.FrontEnd.Commands
                 _viewModel.AdjustmentNames = billingItems.ExtractAdjustmentNames();
                 billingItems = billingItems
                     .FilterPayrollCode(_viewModel.PayrollCodeId)
-                    .FilterAdjustmentName(_viewModel.PayrollCodeId);
+                    .FilterAdjustmentName(_viewModel.AdjustmentName);
 
                 _viewModel.Billings = billingItems;
             }
