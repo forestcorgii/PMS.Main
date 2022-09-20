@@ -45,7 +45,7 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
                         try
                         {
                             IEnumerable<IEEDataInformation> extractedEmployee = _model.ImportEEData(filename);
-                        _viewModel.SetProgress("Saving Employees EE Data information.", extractedEmployee.Count());
+                            _viewModel.SetProgress("Saving Employees EE Data information.", extractedEmployee.Count());
                             foreach (IEEDataInformation employee in extractedEmployee)
                             {
                                 _model.Save(employee);
@@ -54,7 +54,7 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
                         }
                         catch (Exception ex)
                         {
-                            MessageBoxes.Error(ex.Message,    "EE Data Import Error");
+                            MessageBoxes.Error(ex.Message, "EE Data Import Error");
                         }
                     }
                     _viewModel.SetAsFinishProgress();
@@ -64,7 +64,7 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
             executable = true;
         }
 
-        protected bool executable;
+        protected bool executable = true;
 
         public event EventHandler? CanExecuteChanged;
 

@@ -44,18 +44,20 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
 
         public ICommand LoadEmployees { get; }
         public ICommand Download { get; }
+
         public ICommand BankImport { get; }
         public ICommand EEDataImport { get; }
+        public ICommand MasterFileImport { get; }
+        
         public ICommand CheckDetail { get; }
-        //public ICommand SaveCommand { get; }
 
         public EmployeeListingVm(Employees model)
         {
             Download = new Download(this, model);
             BankImport = new BankImport(this, model);
             EEDataImport = new EEDataImport(this, model);
+            MasterFileImport = new MasterFileImport(this, model);
             CheckDetail = new ViewEmployeeDetail(model);
-            //SaveCommand = new Save(this, model);
 
             LoadEmployees = new Listing(this, model);
             LoadEmployees.Execute(null);
