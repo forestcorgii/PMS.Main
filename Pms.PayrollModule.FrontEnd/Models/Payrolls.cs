@@ -30,10 +30,19 @@ namespace Pms.PayrollModule.FrontEnd.Models
             _provider.GetPayrolls(cutoffId);
 
         public IEnumerable<Payroll> Get(string cutoffId, string payrollCode) =>
-                    _provider.GetPayrolls(cutoffId, payrollCode);
+            _provider.GetPayrolls(cutoffId, payrollCode);
 
         public IEnumerable<Payroll> Get(int yearCovered, string companyId) =>
             _provider.GetPayrolls(yearCovered, companyId);
+
+        public IEnumerable<IEnumerable<Payroll>> GetYearlyPayrollsByEmployee(int yearCovered, string companyId) =>
+            _provider
+                .GetPayrolls(yearCovered, companyId)
+                .GroupBy(py => py.EEId)
+                .Select(py =>
+                    py.ToList()
+                )
+                .ToList();
 
 
         public string[] ListCutoffIds() =>
