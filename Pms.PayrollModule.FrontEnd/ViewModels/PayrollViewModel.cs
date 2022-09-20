@@ -54,20 +54,21 @@ namespace Pms.PayrollModule.FrontEnd.ViewModels
         public PayrollViewModel(Models.Payrolls model)
         {
             PayrollListing = new Listing(this, model);
-            PayrollListing.Execute(null);
 
             PayrollImport = new ImportPayrollRegister(this, model);
             PayrollBankReportExport = new ExportBankReport(this, model);
             PayrollAlphalistExport = new ExportAlphalist(this, model);
 
 
-            Company = WeakReferenceMessenger.Default.Send<CurrentCompanyRequestMessage>();
-            PayrollCode = WeakReferenceMessenger.Default.Send<CurrentPayrollCodeRequestMessage>();
+            company = WeakReferenceMessenger.Default.Send<CurrentCompanyRequestMessage>();
+            payrollCode = WeakReferenceMessenger.Default.Send<CurrentPayrollCodeRequestMessage>();
 
             string cutoffId = WeakReferenceMessenger.Default.Send<CurrentCutoffIdRequestMessage>();
-            Cutoff = new Cutoff(cutoffId);
+            cutoff = new Cutoff(cutoffId);
 
             IsActive = true;
+            
+            PayrollListing.Execute(null);
         }
 
 

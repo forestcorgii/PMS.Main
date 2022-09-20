@@ -65,15 +65,15 @@ namespace Pms.TimesheetModule.FrontEnd.ViewModels
             _timesheets = new ObservableCollection<Timesheet>();
             Timesheets = new ObservableCollection<Timesheet>();
 
-
-            Site = WeakReferenceMessenger.Default.Send<CurrentSiteRequestMessage>();
-            PayrollCode = WeakReferenceMessenger.Default.Send<CurrentPayrollCodeRequestMessage>();
+            site = WeakReferenceMessenger.Default.Send<CurrentSiteRequestMessage>();
+            payrollCode = WeakReferenceMessenger.Default.Send<CurrentPayrollCodeRequestMessage>();
 
             string cutoffId = WeakReferenceMessenger.Default.Send<CurrentCutoffIdRequestMessage>();
             if (!string.IsNullOrEmpty(cutoffId))
-                Cutoff = new Cutoff(cutoffId);
+                cutoff = new Cutoff(cutoffId);
 
             IsActive = true;
+            LoadTimesheets.Execute(null);
         }
 
         protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)

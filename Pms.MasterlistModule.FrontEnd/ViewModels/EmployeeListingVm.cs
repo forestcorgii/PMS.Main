@@ -60,14 +60,14 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
             CheckDetail = new ViewEmployeeDetail(model);
 
             LoadEmployees = new Listing(this, model);
-            LoadEmployees.Execute(null);
 
 
-            Site = WeakReferenceMessenger.Default.Send<CurrentSiteRequestMessage>();
-            CompanyId = WeakReferenceMessenger.Default.Send<CurrentCompanyRequestMessage>().Response.CompanyId;
-            PayrollCodeId = WeakReferenceMessenger.Default.Send<CurrentPayrollCodeRequestMessage>().Response.PayrollCodeId;
+            site = WeakReferenceMessenger.Default.Send<CurrentSiteRequestMessage>();
+            companyId = WeakReferenceMessenger.Default.Send<CurrentCompanyRequestMessage>().Response.CompanyId;
+            payrollCodeId = WeakReferenceMessenger.Default.Send<CurrentPayrollCodeRequestMessage>().Response.PayrollCodeId;
 
             IsActive = true;
+            LoadEmployees.Execute(null);
         }
 
 
