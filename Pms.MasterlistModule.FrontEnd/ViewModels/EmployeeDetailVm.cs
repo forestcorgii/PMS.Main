@@ -11,6 +11,7 @@ using Pms.Masterlists.Domain.Entities.Employees;
 using System.Collections.ObjectModel;
 using Pms.Masterlists.Domain.Enums;
 using Pms.MasterlistModule.FrontEnd.Commands;
+using Pms.MasterlistModule.FrontEnd.Commands.Masterlists;
 
 namespace Pms.MasterlistModule.FrontEnd.ViewModels
 {
@@ -23,15 +24,14 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
         public ObservableCollection<BankChoices> BankTypes =>
             new ObservableCollection<BankChoices>(Enum.GetValues(typeof(BankChoices)).Cast<BankChoices>());
 
-        public ICommand ViewDetail { get; set; }
+        public ICommand Save { get; set; }
 
         public event EventHandler OnRequestClose;
 
         public EmployeeDetailVm(Employee employee, Models.Employees employees)
         {
             Employee = employee;
-
-            ViewDetail = new ViewEmployeeDetail(employees);
+            Save = new Save(this, employees);
         }
 
         public void Close() => OnRequestClose?.Invoke(this, new EventArgs());
