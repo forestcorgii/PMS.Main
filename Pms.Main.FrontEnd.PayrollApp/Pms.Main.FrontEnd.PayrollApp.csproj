@@ -1,0 +1,133 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <UserSecretsId>113b92cd-662c-4cc3-8450-8b2ecdfd3bef</UserSecretsId>
+    <StartupObject></StartupObject>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PlatformTarget>x86</PlatformTarget>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\add.png" />
+    <None Remove="Assets\back.png" />
+    <None Remove="Assets\building.png" />
+    <None Remove="Assets\cancel.png" />
+    <None Remove="Assets\DDC.PNG" />
+    <None Remove="Assets\dropdown.png" />
+    <None Remove="Assets\dropdown_outlined.png" />
+    <None Remove="Assets\edit.png" />
+    <None Remove="Assets\import.png" />
+    <None Remove="Assets\male.png" />
+    <None Remove="Assets\print-white.png" />
+    <None Remove="Assets\print.png" />
+    <None Remove="Assets\save.png" />
+    <None Remove="Assets\template.png" />
+    <None Remove="Assets\timer.png" />
+    <None Remove="Loading.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="7.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+    <PackageReference Include="ModernWpfUI" Version="0.9.6" />
+    <PackageReference Include="Pms.Adjustments" Version="1.0.0-preview003" />
+    <PackageReference Include="Pms.Payrolls" Version="1.0.0-preview003" />
+    <PackageReference Include="System.Data.OleDb" Version="6.0.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Pms.AdjustmentModule.FrontEnd\Pms.AdjustmentModule.FrontEnd.csproj" />
+    <ProjectReference Include="..\Pms.Main.FrontEnd.Common\Pms.Main.FrontEnd.Common.csproj" />
+    <ProjectReference Include="..\Pms.MasterlistModule.FrontEnd\Pms.MasterlistModule.FrontEnd.csproj" />
+    <ProjectReference Include="..\Pms.PayrollModule.FrontEnd\Pms.PayrollModule.FrontEnd.csproj" />
+    <ProjectReference Include="..\Pms.TimesheetModule.FrontEnd\Pms.TimesheetModule.FrontEnd.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\add.png" />
+    <Resource Include="Assets\back.png" />
+    <Resource Include="Assets\building.png" />
+    <Resource Include="Assets\cancel.png" />
+    <Resource Include="Assets\DDC.PNG" />
+    <Resource Include="Assets\dropdown.png" />
+    <Resource Include="Assets\dropdown_outlined.png" />
+    <Resource Include="Assets\edit.png" />
+    <Resource Include="Assets\import.png" />
+    <Resource Include="Assets\male.png" />
+    <Resource Include="Assets\print-white.png" />
+    <Resource Include="Assets\print.png" />
+    <Resource Include="Assets\save.png" />
+    <Resource Include="Assets\template.png" />
+    <Resource Include="Assets\timer.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SplashScreen Include="Loading.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\template-13TH-PAY.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\CBC.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\CHK.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\template-COMPARE.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\template-IMPORT-ADJUSTMENTS.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\template-IMPORT.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\LBP.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\MB.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\Template-METROPALO_20211001.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\Template-METROTAC.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\Template-METROTAC_20211001.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\template-SEG-CHG-SUMMARY.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\template-SEG-SUMMARY.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\template-UCPB.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TEMPLATES\template-ZEROS.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
