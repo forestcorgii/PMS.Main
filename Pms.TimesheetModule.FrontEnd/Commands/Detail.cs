@@ -37,7 +37,7 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
         
                 detailVm.OnRequestClose += (s, e) => detailView.Close();
                 
-                detailView.Show();
+                detailView.ShowDialog();
             }
 
             executable = true;

@@ -27,6 +27,31 @@ namespace Pms.TimesheetModule.FrontEnd.ViewModels
     public class TimesheetListingVm : ViewModelBase
     {
         #region Properties
+        private string searchInput = string.Empty;
+        public string SearchInput
+        {
+            get => searchInput;
+            set => SetProperty(ref searchInput, value);
+        }
+
+        private int confirmed;
+        public int Confirmed { get => confirmed; set => SetProperty(ref confirmed, value); }
+
+        private int cWithoutAttendance;
+        public int CWithoutAttendance { get => cWithoutAttendance; set => SetProperty(ref cWithoutAttendance, value); }
+
+        private int notConfirmed;
+        public int NotConfirmed { get => notConfirmed; set => SetProperty(ref notConfirmed, value); }
+
+        private int _NCWithAttendance;
+        public int NCWithAttendance { get => _NCWithAttendance; set => SetProperty(ref _NCWithAttendance, value); }
+
+        private int totalTimesheets;
+        public int TotalTimesheets { get => totalTimesheets; set => SetProperty(ref totalTimesheets, value); }
+
+
+
+
         private DownloadOptions options = DownloadOptions.All;
         public DownloadOptions Options
         {
@@ -78,7 +103,7 @@ namespace Pms.TimesheetModule.FrontEnd.ViewModels
 
         protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if ((new string[] { nameof(Site), nameof(PayrollCode), nameof(Cutoff) }).Any(p => p == e.PropertyName))
+            if ((new string[] { nameof(Site), nameof(PayrollCode), nameof(SearchInput), nameof(Cutoff) }).Any(p => p == e.PropertyName))
                 LoadTimesheets.Execute(null);
 
             base.OnPropertyChanged(e);
@@ -93,6 +118,7 @@ namespace Pms.TimesheetModule.FrontEnd.ViewModels
         public PayrollCode PayrollCode { get => payrollCode; set => SetProperty(ref payrollCode, value); }
 
         private Cutoff cutoff = new Cutoff();
+
         public Cutoff Cutoff { get => cutoff; set => SetProperty(ref cutoff, value); }
 
         protected override void OnActivated()

@@ -39,11 +39,15 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
                     IEnumerable<Timesheet> timesheets = new List<Timesheet>();
                     await Task.Run(() =>
                     {
-                        timesheets = _model.GetTimesheets(_viewModel.Cutoff.CutoffId).Where(ts => ts.PayrollCode == _viewModel.PayrollCode.PayrollCodeId);
+                        timesheets = _model.GetTimesheets(_viewModel.Cutoff.CutoffId).FilterPayrollCode(_viewModel.PayrollCode.PayrollCodeId).FilterSearchInput(_viewModel.SearchInput);
                     });
 
                     _viewModel.Timesheets = timesheets;
-
+                    _viewModel.Confirmed = timesheets.Count(p => p.TotalHours > 0 && p.IsConfirmed);
+                    _viewModel.CWithoutAttendance = timesheets.Count(p => p.TotalHours == 0 && p.IsConfirmed);
+                    _viewModel.NotConfirmed = timesheets.Count(p => p.TotalHours == 0 && !p.IsConfirmed);
+                    _viewModel.NCWithAttendance = timesheets.Count(p => p.TotalHours > 0 && !p.IsConfirmed);
+                    _viewModel.TotalTimesheets = timesheets.Count();
                 }
             }
             catch (Exception ex) { MessageBoxes.Error(ex.Message); }
@@ -54,5 +58,32 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
 
         public void NotifyCanExecuteChanged() =>
             CanExecuteChanged?.Invoke(this, new EventArgs());
+
+
+    }
+
+
+
+    static class EmployeeFilterExtension
+    {
+
+        public static IEnumerable<Timesheet> FilterPayrollCode(this IEnumerable<Timesheet> timesheets, string payrollCode)
+        {
+            if (!string.IsNullOrEmpty(payrollCode))
+                return timesheets.Where(p => p.PayrollCode == payrollCode);
+            return timesheets;
+        }
+
+        public static IEnumerable<Timesheet> FilterSearchInput(this IEnumerable<Timesheet> timesheets, string filter)
+        {
+            if (filter != string.Empty)
+                timesheets = timesheets
+                   .Where(ts =>
+                       ts.EEId.Contains(filter) ||
+                       ts.Fullname.Contains(filter)
+                   );
+
+            return timesheets;
+        }
     }
 }
