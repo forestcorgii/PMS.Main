@@ -62,14 +62,14 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
 
         public static IEnumerable<Employee> FilterPayrollCode(this IEnumerable<Employee> employees, string payrollCode)
         {
-            if (!string.IsNullOrEmpty( payrollCode ))
+            if (!string.IsNullOrEmpty(payrollCode))
                 return employees.Where(p => p.PayrollCode == payrollCode);
             return employees;
         }
 
         public static IEnumerable<Employee> FilterSearchInput(this IEnumerable<Employee> employees, string filter)
         {
-            if (filter != string.Empty)
+            if (!string.IsNullOrEmpty(filter))
                 employees = employees
                    .Where(ts =>
                        ts.EEId.Contains(filter) ||

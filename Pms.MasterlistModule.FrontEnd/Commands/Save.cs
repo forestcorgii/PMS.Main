@@ -36,9 +36,11 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
             if (parameter is not null)
             {
                 try
-                { 
+                {
                     _model.Save(_viewModel.Employee);
 
+                    MessageBoxes.Prompt("Changes has been successfully saved.", "");
+                    
                     _viewModel.Close();
                 }
                 catch (InvalidFieldValueException ex) { MessageBoxes.Error(ex.Message, ""); }
