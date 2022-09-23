@@ -38,46 +38,58 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
             Cutoff cutoff = _viewModel.Cutoff;
             cutoff.SetSite(site);
 
-            if (parameter is null)
+            if (parameter is int page)
+            {
+                _viewModel.SetProgress($"Downloading Timesheet Page {page}..", 1);
+                await DownloadPage(page, cutoff, payrollCode, site);
+            }
+            else if (parameter is int[] pages)
+            {
+                await StartDownload(pages, cutoff, payrollCode, site);
+            }
+            else
             {
                 _viewModel.SetProgress("Retrieving Download content summary", 1);
-                int[] pages;
                 pages = await _cutoffTimesheet.DownloadContentSummary(cutoff, payrollCode, site);
 
                 await StartDownload(pages, cutoff, payrollCode, site);
             }
-            else
-                await StartDownload((int[])parameter, cutoff, payrollCode, site);
-         
+
+            _viewModel.SetAsFinishProgress();
+
             executable = true;
         }
 
+        
         public async Task StartDownload(int[] pages, Cutoff cutoff, string payrollCode, string site)
         {
             _viewModel.SetProgress("Downloading Timesheets", pages.Length);
 
             foreach (int page in pages)
-            {
-                while (true)
-                {
-                    try
-                    {
-                        IEnumerable<Timesheet> timesheets = await _cutoffTimesheet.DownloadContent(cutoff, payrollCode, site, page);
-                        break;
-                    }
-                    catch (Exception ex)
-                    {
-                        if (!MessageBoxes.Inquire(
-                            $"{ex.Message}... Do You want to Retry?",
-                            "Timesheet Download Error..."
-                        ))
-                            break;
-                    }
-                }
-                _viewModel.ProgressValue++;
-            }
+                await DownloadPage(page, cutoff, payrollCode, site);
+
+            _viewModel.ProgressValue++;
+
             _viewModel.SetAsFinishProgress();
         }
+
+        public async Task DownloadPage(int page, Cutoff cutoff, string payrollCode, string site)
+        {
+            while (true)
+            {
+                try
+                {
+                    IEnumerable<Timesheet> timesheets = await _cutoffTimesheet.DownloadContent(cutoff, payrollCode, site, page);
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    if (!MessageBoxes.Inquire($"{ex.Message}... Do You want to Retry?"))
+                        break;
+                }
+            }
+        }
+
 
         public void NotifyCanExecuteChanged() { }
     }
