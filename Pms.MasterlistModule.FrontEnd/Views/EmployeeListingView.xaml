@@ -72,7 +72,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     
-                    <DataGridCheckBoxColumn Header="Active" Binding="{Binding Active}"/>
+                    <DataGridCheckBoxColumn Header="Active" Binding="{Binding Active}" />
                     <DataGridTextColumn Header="Site" Binding="{Binding Site}"/>
                     <DataGridTextColumn Header="EE Id" Binding="{Binding EEId}"/>
                     
