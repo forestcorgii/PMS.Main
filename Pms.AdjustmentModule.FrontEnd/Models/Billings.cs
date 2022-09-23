@@ -3,6 +3,7 @@ using Pms.Adjustments.Domain.Services;
 using Pms.Adjustments.ServiceLayer.Files;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Pms.AdjustmentModule.FrontEnd.Models
 {
@@ -24,6 +25,9 @@ namespace Pms.AdjustmentModule.FrontEnd.Models
 
 
         public IEnumerable<Billing> GetBillings(string cutoffId) => _billingProvider.GetBillings(cutoffId);
+
+        public IEnumerable<Billing> GetBillings(string cutoffId, string payrollCodeId) =>
+            _billingProvider.GetBillings(cutoffId).Where(p => p.PayrollCode == payrollCodeId);
 
 
         public IEnumerable<string> GetEmployeesWithPcv(string cutoffId) =>

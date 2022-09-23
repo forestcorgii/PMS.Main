@@ -24,22 +24,39 @@ namespace Pms.PayrollModule.FrontEnd.ViewModels
 
         private int chkCount;
         public int ChkCount { get => chkCount; set => SetProperty(ref chkCount, value); }
+        private double chkTotal;
+        public double ChkTotal { get => chkTotal; set => SetProperty(ref chkTotal, value); }
 
         private int lbpCount;
         public int LbpCount { get => lbpCount; set => SetProperty(ref lbpCount, value); }
+        private double lbpTotal;
+        public double LbpTotal { get => lbpTotal; set => SetProperty(ref lbpTotal, value); }
 
         private int cbcCount;
         public int CbcCount { get => cbcCount; set => SetProperty(ref cbcCount, value); }
+        private double cbcTotal;
+        public double CbcTotal { get => cbcTotal; set => SetProperty(ref cbcTotal, value); }
 
         private int mtacCount;
         public int MtacCount { get => mtacCount; set => SetProperty(ref mtacCount, value); }
+        private double mtacTotal;
+        public double MtacTotal { get => mtacTotal; set => SetProperty(ref mtacTotal, value); }
 
         private int mpaloCount;
         public int MpaloCount { get => mpaloCount; set => SetProperty(ref mpaloCount, value); }
+        private double mpaloTotal;
+        public double MpaloTotal { get => mpaloTotal; set => SetProperty(ref mpaloTotal, value); }
+
 
         private int unknownEECount;
         public int UnknownEECount { get => unknownEECount; set => SetProperty(ref unknownEECount, value); }
+        private double unknownEETotal;
+        public double UnknownEETotal { get => unknownEETotal; set => SetProperty(ref unknownEETotal, value); }
 
+        private int grandCount;
+        public int GrandCount { get => grandCount; set => SetProperty(ref grandCount, value); }
+        private double grandTotal;
+        public double GrandTotal { get => grandTotal; set => SetProperty(ref grandTotal, value); }
 
 
         #region Commands
@@ -47,6 +64,7 @@ namespace Pms.PayrollModule.FrontEnd.ViewModels
         public ICommand PayrollImport { get; }
         public ICommand PayrollBankReportExport { get; }
         public ICommand PayrollAlphalistExport { get; }
+        public ICommand PayrollMacroExport { get; }
         public IAsyncRelayCommand EmployeeDownloadCommand { get; }
         #endregion
 
@@ -58,6 +76,7 @@ namespace Pms.PayrollModule.FrontEnd.ViewModels
             PayrollImport = new ImportPayrollRegister(this, model);
             PayrollBankReportExport = new ExportBankReport(this, model);
             PayrollAlphalistExport = new ExportAlphalist(this, model);
+            PayrollMacroExport = new ExportMacro(this, model);
 
 
             company = WeakReferenceMessenger.Default.Send<CurrentCompanyRequestMessage>();
