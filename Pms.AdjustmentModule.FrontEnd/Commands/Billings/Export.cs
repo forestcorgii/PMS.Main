@@ -38,7 +38,7 @@ namespace Pms.AdjustmentModule.FrontEnd.Commands
                     string cutoffId = _viewModel.CutoffId;
                     string payrollCode = _viewModel.PayrollCodeId;
                     string adjustmentName = _viewModel.AdjustmentName;
-                    IEnumerable<Billing> billingItems = Billings.GetBillings(cutoffId, payrollCode);
+                    IEnumerable<Billing> billingItems = _viewModel.Billings;
 
                     Billings.Export(billingItems, cutoffId, $"{cutoffId}_{payrollCode}_{adjustmentName}.xls");
                     _viewModel.SetAsFinishProgress();

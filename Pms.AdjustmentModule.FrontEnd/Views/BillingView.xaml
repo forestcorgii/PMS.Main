@@ -33,6 +33,8 @@
                   CanUserAddRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="EE ID" Binding="{Binding EEId}"/>
+                <DataGridTextColumn Header="Adjustment Name" Binding="{Binding EE.Fullname}"/>
+                <DataGridTextColumn Header="Cutoff Id" Binding="{Binding EE.PayrollCode}"/>
                 <DataGridTextColumn Header="Cutoff Id" Binding="{Binding CutoffId}"/>
                 <DataGridTextColumn Header="Adjustment Name" Binding="{Binding AdjustmentName}"/>
                 <DataGridTextColumn Header="Deduction Amount" Binding="{Binding Amount}"/>

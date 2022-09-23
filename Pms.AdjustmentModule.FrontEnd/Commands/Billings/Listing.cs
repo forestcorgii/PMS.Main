@@ -40,7 +40,7 @@ namespace Pms.AdjustmentModule.FrontEnd.Commands
                 IEnumerable<Billing> billingItems = new List<Billing>();
                 await Task.Run(() =>
                 {
-                    billingItems = Billings.GetBillings(_viewModel.CutoffId.Substring(0, 4));
+                    billingItems = Billings.GetBillings(_viewModel.CutoffId);
                 });
 
                 _viewModel.AdjustmentNames = billingItems.ExtractAdjustmentNames();
@@ -66,7 +66,7 @@ namespace Pms.AdjustmentModule.FrontEnd.Commands
         public static IEnumerable<Billing> FilterPayrollCode(this IEnumerable<Billing> payrolls, string payrollCode)
         {
             if (payrollCode != string.Empty)
-                return payrolls.Where(p => p.PayrollCode == payrollCode);
+                return payrolls.Where(p => p.EE.PayrollCode == payrollCode);
             return payrolls;
         }
         public static IEnumerable<Billing> FilterAdjustmentName(this IEnumerable<Billing> payrolls, string adjustmentName)
