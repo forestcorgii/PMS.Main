@@ -50,8 +50,22 @@ namespace Pms.PayrollModule.FrontEnd.Commands
                 _viewModel.CbcCount = payrolls.Count(p => p.EE.Bank == BankChoices.CBC);
                 _viewModel.MtacCount = payrolls.Count(p => p.EE.Bank == BankChoices.MTAC);
                 _viewModel.MpaloCount = payrolls.Count(p => p.EE.Bank == BankChoices.MPALO);
+
+                _viewModel.ChkTotal = payrolls.Where(p => p.EE.Bank == BankChoices.CHK).Sum(p => p.NetPay);
+                _viewModel.LbpTotal = payrolls.Where(p => p.EE.Bank == BankChoices.LBP).Sum(p => p.NetPay);
+                _viewModel.CbcTotal = payrolls.Where(p => p.EE.Bank == BankChoices.CBC).Sum(p => p.NetPay);
+                _viewModel.MtacTotal = payrolls.Where(p => p.EE.Bank == BankChoices.MTAC).Sum(p => p.NetPay);
+                _viewModel.MpaloTotal = payrolls.Where(p => p.EE.Bank == BankChoices.MPALO).Sum(p => p.NetPay);
+
+
                 _viewModel.UnknownEECount = payrolls.Count(p => p.EE is null || p.EE.FirstName == string.Empty);
-            
+                _viewModel.UnknownEETotal = payrolls.Where(p => p.EE is null || p.EE.FirstName == string.Empty).Sum(p => p.NetPay);
+
+
+                _viewModel.GrandCount = payrolls.Count();
+                _viewModel.GrandTotal = payrolls.Sum(p => p.NetPay);
+
+
             }
             catch (Exception ex) { MessageBoxes.Error(ex.Message); }
 

@@ -56,12 +56,16 @@ namespace Pms.PayrollModule.FrontEnd.Commands
                             try
                             {
                                 string payrollCode = _viewModel.PayrollCodeId;
-                                Company? company = _viewModel.Company;
+                                Company company = _viewModel.Company;
                                 if (company is not null)
                                 {
+                                    CompanyView _companyView = new(company.RegisteredName, company.TIN, company.BranchCode, company.Region);
+                                    
                                     AlphalistImport importer = new();
-                                    importer.ImportToBIRProgram(payRegister, _viewModel.BirDbfDirectory, 
-                                        new CompanyView(company.RegisteredName, company.TIN, company.BranchCode, company.Region),
+                                    importer.ImportToBIRProgram(
+                                        payRegister,
+                                        _viewModel.BirDbfDirectory,
+                                        _companyView,
                                         _viewModel.Cutoff.YearCovered
                                     );
                                 }

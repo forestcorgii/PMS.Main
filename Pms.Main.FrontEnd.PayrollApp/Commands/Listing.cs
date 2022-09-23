@@ -40,7 +40,7 @@ namespace Pms.Main.FrontEnd.PayrollApp.Commands
             try
             {
                 string[] cutoffIds = new string[] { };
-                IEnumerable<PayrollCode> payrollCodes = new List<PayrollCode>();
+                List<PayrollCode> payrollCodes = new();
                 IEnumerable<Company> companies = new List<Company>();
                 await Task.Run(() =>
                 {
@@ -50,13 +50,15 @@ namespace Pms.Main.FrontEnd.PayrollApp.Commands
                         .OrderByDescending(c => c)
                         .ToArray();
 
-                    payrollCodes = _payrollCodes.ListPayrollCodes();
+                    payrollCodes = _payrollCodes.ListPayrollCodes().ToList();
                     companies = _companies.ListCompanies();
                 });
 
                 _viewModel.Companies = companies;
-                _viewModel.PayrollCodes = payrollCodes;
 
+                payrollCodes.Add(new PayrollCode());
+                _viewModel.PayrollCodes = payrollCodes;
+                
                 _viewModel.CutoffIds = cutoffIds;
                 _viewModel.CutoffId = cutoffIds.First();
             }

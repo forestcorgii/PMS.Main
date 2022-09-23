@@ -44,28 +44,30 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
 
         public ICommand LoadEmployees { get; }
         public ICommand Download { get; }
+
         public ICommand BankImport { get; }
         public ICommand EEDataImport { get; }
+        public ICommand MasterFileImport { get; }
+        
         public ICommand CheckDetail { get; }
-        //public ICommand SaveCommand { get; }
 
         public EmployeeListingVm(Employees model)
         {
             Download = new Download(this, model);
             BankImport = new BankImport(this, model);
             EEDataImport = new EEDataImport(this, model);
+            MasterFileImport = new MasterFileImport(this, model);
             CheckDetail = new ViewEmployeeDetail(model);
-            //SaveCommand = new Save(this, model);
 
             LoadEmployees = new Listing(this, model);
-            LoadEmployees.Execute(null);
 
 
-            Site = WeakReferenceMessenger.Default.Send<CurrentSiteRequestMessage>();
-            CompanyId = WeakReferenceMessenger.Default.Send<CurrentCompanyRequestMessage>().Response.CompanyId;
-            PayrollCodeId = WeakReferenceMessenger.Default.Send<CurrentPayrollCodeRequestMessage>().Response.PayrollCodeId;
+            site = WeakReferenceMessenger.Default.Send<CurrentSiteRequestMessage>();
+            companyId = WeakReferenceMessenger.Default.Send<CurrentCompanyRequestMessage>().Response.CompanyId;
+            payrollCodeId = WeakReferenceMessenger.Default.Send<CurrentPayrollCodeRequestMessage>().Response.PayrollCodeId;
 
             IsActive = true;
+            LoadEmployees.Execute(null);
         }
 
 

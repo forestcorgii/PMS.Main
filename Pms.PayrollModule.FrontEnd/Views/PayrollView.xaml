@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:Pms.PayrollModule.FrontEnd.Views"
-        mc:Ignorable="d"
+        xmlns:local="clr-namespace:Pms.PayrollModule.FrontEnd.Views" xmlns:viewmodels="clr-namespace:Pms.PayrollModule.FrontEnd.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:PayrollViewModel}"
+             mc:Ignorable="d"
         d:DesignHeight="450" d:DesignWidth="800"
              
             
@@ -14,38 +14,16 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="96"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition/>
             <RowDefinition Height="45"/>
             <!--<RowDefinition Height="25"/>-->
         </Grid.RowDefinitions>
 
-        <Menu>
-            <MenuItem Header="Import">
-                <MenuItem Header="Pay Register" Command="{Binding PayrollImport}"></MenuItem>
-            </MenuItem>
-            <MenuItem Header="Export">
-                <MenuItem Header="Alphalist" Command="{Binding PayrollAlphalistExport}"></MenuItem>
-            </MenuItem>
-        </Menu>
+        <Grid HorizontalAlignment="Right">
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="8">
-            <!--<TextBlock  VerticalAlignment="Center" Margin="6">Process:</TextBlock>
-            <ComboBox Text="{Binding Process, UpdateSourceTrigger=PropertyChanged}" 
-                              ItemsSource="{Binding ProcessTypes}" 
-                              Width="65" VerticalAlignment="Center" IsEditable="True"/>-->
-            <!--<TextBlock  VerticalAlignment="Center" Margin="6">Company:</TextBlock>
-            <ComboBox Text="{Binding CompanyId, UpdateSourceTrigger=PropertyChanged}" 
-                              ItemsSource="{Binding CompanyIds}" 
-                              Width="175" VerticalAlignment="Center" IsEditable="True"/>-->
-            <!--<TextBlock  VerticalAlignment="Center" Margin="6">Bank:</TextBlock>
-            <ComboBox Text="{Binding Bank, UpdateSourceTrigger=PropertyChanged}" 
-                              ItemsSource="{Binding BankTypes}" 
-                              Width="75" VerticalAlignment="Center" IsEditable="True"/>-->
-        </StackPanel>
-
-
-        <Grid Grid.Row="1">
+        </Grid>
+        <Grid>
             <Grid.Resources>
                 <Style x:Key="textBlock" TargetType="TextBlock">
                     <Setter Property="VerticalAlignment" Value="Center"/>
@@ -55,42 +33,73 @@
                 <Style x:Key="textBox" TargetType="TextBox">
                     <Setter Property="VerticalAlignment" Value="Center"/>
                     <Setter Property="TextAlignment" Value="Center"/>
-                    <Setter Property="Margin" Value="8,0"/>
+                    <Setter Property="Margin" Value="8 2"/>
                     <Setter Property="IsReadOnly" Value="True"/>
                 </Style>
             </Grid.Resources>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="75"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
+           
+            <Menu Grid.Row="1" Grid.Column="4" HorizontalAlignment="Right">
+                <MenuItem Header="Import">
+                    <MenuItem Header="Pay Register" Command="{Binding PayrollImport}"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Export">
+                    <MenuItem Header="Bank Report" Command="{Binding PayrollBankReportExport}"/>
+                    <MenuItem Header="Alphalist" Command="{Binding PayrollAlphalistExport}"/>
+                    <MenuItem Header="Macro" Command="{Binding PayrollMacroExport}"/>
+                </MenuItem>
+            </Menu>
+
 
             <TextBlock Grid.Row="1" Style="{StaticResource textBlock}">CHK</TextBlock>
             <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource textBox}" Text="{Binding ChkCount}"/>
+            <TextBox Grid.Row="1" Grid.Column="2" Style="{StaticResource textBox}" Text="{Binding ChkTotal, StringFormat='###,###.##'}"/>
             <TextBlock Grid.Row="2" Style="{StaticResource textBlock}">LBP</TextBlock>
             <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource textBox}" Text="{Binding LbpCount}"/>
+            <TextBox Grid.Row="2" Grid.Column="2" Style="{StaticResource textBox}" Text="{Binding LbpTotal, StringFormat='###,###.##'}"/>
             <TextBlock Grid.Row="3" Style="{StaticResource textBlock}">CBC</TextBlock>
             <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource textBox}" Text="{Binding CbcCount}"/>
+            <TextBox Grid.Row="3" Grid.Column="2" Style="{StaticResource textBox}" Text="{Binding CbcTotal, StringFormat='###,###.##'}"/>
             <TextBlock Grid.Row="4" Style="{StaticResource textBlock}">MTAC</TextBlock>
             <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource textBox}" Text="{Binding MtacCount}"/>
+            <TextBox Grid.Row="4" Grid.Column="2" Style="{StaticResource textBox}" Text="{Binding MtacTotal, StringFormat='###,###.##'}"/>
             <TextBlock Grid.Row="5" Style="{StaticResource textBlock}">MPALO</TextBlock>
             <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource textBox}" Text="{Binding MpaloCount}"/>
+            <TextBox Grid.Row="5" Grid.Column="2" Style="{StaticResource textBox}" Text="{Binding MpaloTotal, StringFormat='###,###.##'}"/>
             <TextBlock Grid.Row="6" Style="{StaticResource textBlock}">Unknown EE</TextBlock>
             <TextBox Grid.Row="6" Grid.Column="1" Style="{StaticResource textBox}" Text="{Binding UnknownEECount}"/>
+            <TextBox Grid.Row="6" Grid.Column="2" Style="{StaticResource textBox}" Text="{Binding UnknownEETotal, StringFormat='###,###.##'}"/>
 
-            <Button Grid.Row="7" Grid.Column="1" VerticalAlignment="Top" Margin="0,8" Command="{Binding PayrollBankReportExport}">Export</Button>
+            <TextBlock Grid.Row="7" Style="{StaticResource textBlock}">Grand Total</TextBlock>
+            <TextBox Grid.Row="7" Grid.Column="1" Style="{StaticResource textBox}" Text="{Binding GrandCount}"/>
+            <TextBox Grid.Row="7" Grid.Column="2" Style="{StaticResource textBox}" Text="{Binding GrandTotal, StringFormat='###,###.##'}"/>
+        </Grid>
+ 
 
-            <DataGrid ItemsSource="{Binding Payrolls}" Grid.Column="2" Grid.RowSpan="8" Margin="8" AutoGenerateColumns="False" SelectionMode="Single" IsReadOnly="True">
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            
+            <DataGrid ItemsSource="{Binding Payrolls}" Grid.Column="0" Grid.RowSpan="9" Margin="8" AutoGenerateColumns="False" SelectionMode="Single" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="EE Id" Binding="{Binding EEId}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Fullname" Binding="{Binding EE.Fullname}" Width="175" IsReadOnly="True"/>
@@ -100,6 +109,10 @@
                     <DataGridTextColumn Header="Net Pay" Binding="{Binding NetPay, StringFormat={}{0:N2}}" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
+
+
+            <ListBox Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2" Grid.RowSpan="5"/>
+
         </Grid>
 
 

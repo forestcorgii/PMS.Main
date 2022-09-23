@@ -1,16 +1,11 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
 using Pms.Masterlists.Domain;
-using Pms.PayrollModule.FrontEnd.Models;
 using Pms.PayrollModule.FrontEnd.ViewModels;
 using Pms.Payrolls.Domain;
 using Pms.Payrolls.Domain.SupportTypes;
-using Pms.Payrolls.ServiceLayer.Files.Exports;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using Pms.Main.FrontEnd.Common.Utils;
 
 namespace Pms.PayrollModule.FrontEnd.Commands
@@ -44,18 +39,22 @@ namespace Pms.PayrollModule.FrontEnd.Commands
                     _viewModel.SetProgress("Exporting Alphalist.", 1);
 
                     Cutoff cutoff = new(_viewModel.Cutoff.CutoffId);
-                    Company? company = _viewModel.Company;
+                    Company company = _viewModel.Company;
                     if (company is not null)
                     {
-                        IEnumerable<Payroll> payrolls = _model.Get(cutoff.YearCovered, _viewModel.PayrollCode.CompanyId);
-                        var employeePayrolls = payrolls.GroupBy(py => py.EEId).Select(py => py.ToList()).ToList();
+                        IEnumerable<IEnumerable<Payroll>> employeePayrolls =
+                            _model.GetYearlyPayrollsByEmployee(cutoff.YearCovered, _viewModel.Company.CompanyId);
 
                         List<AlphalistDetail> alphalists = new();
                         foreach (var employeePayroll in employeePayrolls)
-                            alphalists.Add(new AutomatedAlphalistDetail(employeePayroll, company.MinimumRate, cutoff.YearCovered).CreateAlphalistDetail());
+                        {
+                            AutomatedAlphalistDetail alphaDetailFactory = new(employeePayroll, company.MinimumRate, cutoff.YearCovered);
+                            alphalists.Add(alphaDetailFactory.CreateAlphalistDetail());
+                        }
 
                         _model.ExportAlphalist(alphalists, cutoff.YearCovered, company);
                         _model.ExportAlphalistVerifier(employeePayrolls, cutoff.YearCovered, company);
+
                         _viewModel.SetAsFinishProgress();
                     }
                 });

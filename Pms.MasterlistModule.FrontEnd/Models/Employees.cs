@@ -36,7 +36,7 @@ namespace Pms.MasterlistModule.FrontEnd.Models
         public void Save(IActive employee) =>
             _manager.Save(employee);
 
-        public void Save(IPersonalInformation employee) =>
+        public void Save(IMasterFileInformation employee) =>
             _manager.Save(employee);
 
         public void Save(IBankInformation employee) =>
@@ -62,6 +62,12 @@ namespace Pms.MasterlistModule.FrontEnd.Models
         public IEnumerable<IBankInformation> ImportBankInformation(string payRegisterPath)
         {
             EmployeeBankInformationImporter importer = new();
+            return importer.StartImport(payRegisterPath);
+        }
+
+        public IEnumerable<IMasterFileInformation> ImportMasterFile(string payRegisterPath)
+        {
+            MasterFileImporter importer = new();
             return importer.StartImport(payRegisterPath);
         }
 

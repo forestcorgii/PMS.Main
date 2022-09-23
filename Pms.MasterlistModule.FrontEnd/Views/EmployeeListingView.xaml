@@ -28,9 +28,9 @@
         <Menu>
             <MenuItem Header="Sync" Command="{Binding Download}"/>
             <MenuItem Header="Import">
-                <MenuItem Header="Bank Info" Command="{Binding BankImport}"/>
+                <MenuItem Header="Account Numbers" Command="{Binding BankImport}"/>
                 <MenuItem Header="EE Data" Command="{Binding EEDataImport}"/>
-                <MenuItem Header="Government Info" IsEnabled="False" Command="{Binding BankImport}"/> 
+                <MenuItem Header="Master File" Command="{Binding MasterFileImport}"/> 
             </MenuItem>
         </Menu>
  
@@ -72,13 +72,17 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     
-                    <DataGridCheckBoxColumn Header="Active" Binding="{Binding Active}"/>
+                    <DataGridCheckBoxColumn Header="Active" Binding="{Binding Active}" />
                     <DataGridTextColumn Header="Site" Binding="{Binding Site}"/>
                     <DataGridTextColumn Header="EE Id" Binding="{Binding EEId}"/>
+                    
                     <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"/>
                     <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"/>
                     <DataGridTextColumn Header="Middle Name" Binding="{Binding MiddleName}"/>
                     <DataGridTextColumn Header="Ext" Binding="{Binding NameExtension}"/>
+                    
+                    <DataGridTextColumn Header="Company" Binding="{Binding CompanyId}"/>
+                    <DataGridTextColumn Header="Job Code" Binding="{Binding JobCode}"/>
                     
                     <DataGridTextColumn Header="Payroll Code" Binding="{Binding PayrollCode}"/>
                     <DataGridTextColumn Header="Bank Name" Binding="{Binding Bank}"/>

@@ -38,14 +38,14 @@ namespace Pms.AdjustmentModule.FrontEnd.Commands
                     string cutoffId = _viewModel.CutoffId;
                     string payrollCode = _viewModel.PayrollCodeId;
                     string adjustmentName = _viewModel.AdjustmentName;
-                    IEnumerable<Billing> billingItems = _viewModel.Billings;
+                    IEnumerable<Billing> billingItems = Billings.GetBillings(cutoffId, payrollCode);
 
                     Billings.Export(billingItems, cutoffId, $"{cutoffId}_{payrollCode}_{adjustmentName}.xls");
                     _viewModel.SetAsFinishProgress();
                 });
             }
             catch (Exception ex) { MessageBoxes.Error(ex.Message); }
-            
+
             executable = true;
             NotifyCanExecuteChanged();
         }
