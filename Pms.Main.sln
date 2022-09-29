@@ -26,7 +26,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pms.Main.FrontEnd.Alphalist
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pms.Main.FrontEnd.GovernmentApp", "Pms.Main.FrontEnd.GovernmentApp\Pms.Main.FrontEnd.GovernmentApp.csproj", "{6238410D-A281-49E1-BA54-C029BDC363DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pms.AdjustmentModule.FrontEnd", "Pms.AdjustmentModule.FrontEnd\Pms.AdjustmentModule.FrontEnd.csproj", "{D9A46FC4-E0AC-4E34-BB2A-7EFEAE75554A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pms.AdjustmentModule.FrontEnd", "Pms.AdjustmentModule.FrontEnd\Pms.AdjustmentModule.FrontEnd.csproj", "{D9A46FC4-E0AC-4E34-BB2A-7EFEAE75554A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{3457FA89-C856-487B-AE9C-4FDFA9E88073}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,7 +73,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{46E3A25F-E452-4CEA-A72B-96A626566E6F} = {CD5BE0ED-AE90-4EF4-BC32-D0B0BE4D3FA8}
+		{46E3A25F-E452-4CEA-A72B-96A626566E6F} = {3457FA89-C856-487B-AE9C-4FDFA9E88073}
 		{A7A1A419-D398-46A7-90B5-50FB950A8C5B} = {CD5BE0ED-AE90-4EF4-BC32-D0B0BE4D3FA8}
 		{286D7590-D877-4D7D-9442-D84859C5A728} = {CD5BE0ED-AE90-4EF4-BC32-D0B0BE4D3FA8}
 		{2014D02D-025E-426E-9673-F1FC647BEA83} = {CD5BE0ED-AE90-4EF4-BC32-D0B0BE4D3FA8}

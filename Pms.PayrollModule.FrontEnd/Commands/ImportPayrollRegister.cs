@@ -70,8 +70,8 @@ namespace Pms.PayrollModule.FrontEnd.Commands
             });
 
             IEnumerable<string> noEEPayrolls = _model.ListNoEEPayrolls();
-            if (noEEPayrolls.Any())
-                await _viewModel.EmployeeDownloadCommand.ExecuteAsync(noEEPayrolls.ToArray());
+            //if (noEEPayrolls.Any())
+            //    await _viewModel.EmployeeDownloadCommand.ExecuteAsync(noEEPayrolls.ToArray());
             _viewModel.SetAsFinishProgress();
             _viewModel.PayrollListing.Execute(true);
         }

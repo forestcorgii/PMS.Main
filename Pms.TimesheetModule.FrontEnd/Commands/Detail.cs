@@ -30,15 +30,21 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
         public void Execute(object? parameter)
         {
             executable = false;
-            if (parameter is Timesheet timesheet)
+            try
             {
-                TimesheetDetailVm detailVm = new(Timesheets, timesheet);
+                TimesheetDetailVm detailVm;
+                if (parameter is Timesheet timesheet)
+                    detailVm = new(Timesheets, timesheet);
+                else detailVm = new(Timesheets, new());
+
                 TimesheetDetailView detailView = new() { DataContext = detailVm };
-        
+
                 detailVm.OnRequestClose += (s, e) => detailView.Close();
-                
+
                 detailView.ShowDialog();
             }
+            catch (Exception ex) { MessageBoxes.Error(ex.Message); }
+
 
             executable = true;
         }

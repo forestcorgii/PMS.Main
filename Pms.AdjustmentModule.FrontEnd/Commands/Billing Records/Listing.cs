@@ -10,22 +10,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Pms.Adjustments.Domain.Enums;
+using Pms.Adjustments.Domain.Models;
+using Pms.AdjustmentModule.FrontEnd.ViewModels.Billing_Records;
 
-namespace Pms.AdjustmentModule.FrontEnd.Commands
+namespace Pms.AdjustmentModule.FrontEnd.Commands.Billing_Records
 {
     public class Listing : IRelayCommand
     {
         public event EventHandler? CanExecuteChanged;
 
-        BillingListingVm _viewModel;
-        Models.Billings Billings;
+        BillingRecordListingVm _viewModel;
+        BillingRecords Records;
         private bool executable;
 
-        public Listing(BillingListingVm viewModel, Models.Billings billings)
+        public Listing(BillingRecordListingVm viewModel, BillingRecords billings)
         {
             _viewModel = viewModel;
-            Billings = billings;
+            Records = billings;
         }
 
 
@@ -38,17 +39,14 @@ namespace Pms.AdjustmentModule.FrontEnd.Commands
 
             try
             {
-                IEnumerable<Billing> billingItems = new List<Billing>();
+                IEnumerable<BillingRecord> billingRecordItems = new List<BillingRecord>();
                 await Task.Run(() =>
                 {
-                    billingItems = Billings.GetBillings(_viewModel.CutoffId);
+                    billingRecordItems = Records.GetByPayrollCode(_viewModel.PayrollCodeId);
                 });
 
-                billingItems = billingItems
-                    .FilterPayrollCode(_viewModel.PayrollCodeId)
-                    .FilterAdjustmentName(_viewModel.AdjustmentName);
-
-                _viewModel.Billings = billingItems;
+                
+                _viewModel.BillingRecords = billingRecordItems;
             }
             catch (Exception ex) { MessageBoxes.Error(ex.Message); }
 
@@ -63,16 +61,12 @@ namespace Pms.AdjustmentModule.FrontEnd.Commands
 
     static class PayrollFilterExtension
     {
-        public static IEnumerable<Billing> FilterPayrollCode(this IEnumerable<Billing> payrolls, string payrollCode)
-        {
-            if (payrollCode != string.Empty)
-                return payrolls.Where(p => p.EE.PayrollCode == payrollCode);
-            return payrolls;
-        }
-        public static IEnumerable<Billing> FilterAdjustmentName(this IEnumerable<Billing> payrolls, AdjustmentTypes adjustmentType)
-        {
-            return payrolls.Where(p => p.AdjustmentType == adjustmentType);
-        }
+        //public static IEnumerable<Billing> FilterPayrollCode(this IEnumerable<BillingRecord> payrolls, string payrollCode)
+        //{
+        //    if (payrollCode != string.Empty)
+        //        return payrolls.Where(p => p.EE.PayrollCode == payrollCode);
+        //    return payrolls;
+        //}
 
     }
 }

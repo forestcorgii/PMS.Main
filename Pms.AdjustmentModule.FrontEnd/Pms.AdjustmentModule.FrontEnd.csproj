@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\Adjustment\AdjustmentRecord.xaml.cs">
+    <Compile Update="Views\Billing Records\RecordBillingView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\BillingView.xaml.cs">
@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="Views\Adjustment\AdjustmentRecord.xaml">
+    <Page Update="Views\Billing Records\RecordBillingView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

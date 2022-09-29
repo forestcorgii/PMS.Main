@@ -39,6 +39,9 @@ namespace Pms.MasterlistModule.FrontEnd.Models
         public void Save(IMasterFileInformation employee) =>
             _manager.Save(employee);
 
+        public void Save(IHRMSInformation employee) =>
+            _manager.Save(employee);
+
         public void Save(IBankInformation employee) =>
             _manager.Save(employee);
 

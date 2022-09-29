@@ -1,4 +1,5 @@
 ﻿using Pms.Adjustments.Domain;
+using Pms.Adjustments.Domain.Enums;
 using Pms.Adjustments.Domain.Services;
 using Pms.Adjustments.ServiceLayer.Files;
 using System;
@@ -27,24 +28,31 @@ namespace Pms.AdjustmentModule.FrontEnd.Models
         public IEnumerable<Billing> GetBillings(string cutoffId) => _billingProvider.GetBillings(cutoffId);
 
         public IEnumerable<Billing> GetBillings(string cutoffId, string payrollCodeId) =>
-            _billingProvider.GetBillings(cutoffId).Where(p => p.PayrollCode == payrollCodeId);
+            _billingProvider.GetBillings(cutoffId).Where(p => p.EE.PayrollCode == payrollCodeId);
 
 
-        public IEnumerable<string> GetEmployeesWithPcv(string cutoffId) =>
-            _billingGenerator.CollectEEIdWithPcv(cutoffId);
+        public IEnumerable<string> GetEmployeesWithPcv(string payrollCodeId, string cutoffId) =>
+            _billingGenerator.CollectEEIdWithPcv(payrollCodeId, cutoffId);
+
+        public IEnumerable<string> GetEmployeesWithBillingRecord(string payrollCodeId, string cutoffId) =>
+                    _billingGenerator.CollectEEIdWithBillingRecord(payrollCodeId, cutoffId);
 
         public double GetTotalAdvances(string eeId, string cutoffId) => _billingProvider.GetTotalAdvances(eeId, cutoffId);
 
 
-        public IEnumerable<Billing> GenerateBillings(string cutoffId, string eeId)
-        {
+        public void ResetBillings(string cutoffId, string eeId) =>
             _billingManager.ResetBillings(eeId, cutoffId);
-            return _billingGenerator.GenerateBillingFromTimesheetView(eeId, cutoffId);
-        }
+
+
+        public IEnumerable<Billing> GenerateBillingFromTimesheetView(string cutoffId, string eeId) =>
+            _billingGenerator.GenerateBillingFromTimesheetView(eeId, cutoffId);
+
+        public IEnumerable<Billing> GenerateBillingFromBillingRecord(string cutoffId, string eeId) =>
+                    _billingGenerator.GenerateBillingFromRecords(eeId, cutoffId);
 
         public void AddBilling(Billing billing) => _billingManager.AddBilling(billing);
 
-        public void Export(IEnumerable<Billing> billings, string adjustmentName, string filename) =>
-            _billingExporter.ExportBillings(billings, adjustmentName, filename);
+        public void Export(IEnumerable<Billing> billings, AdjustmentTypes adjustmentType, string filename) =>
+            _billingExporter.ExportBillings(billings, adjustmentType, filename);
     }
 }

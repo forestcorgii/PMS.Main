@@ -12,6 +12,8 @@ using System.Collections.ObjectModel;
 using Pms.Masterlists.Domain.Enums;
 using Pms.MasterlistModule.FrontEnd.Commands;
 using Pms.MasterlistModule.FrontEnd.Commands.Masterlists;
+using CommunityToolkit.Mvvm.Messaging;
+using Pms.Main.FrontEnd.Common.Messages;
 
 namespace Pms.MasterlistModule.FrontEnd.ViewModels
 {
@@ -24,7 +26,22 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
         public ObservableCollection<BankChoices> BankTypes =>
             new ObservableCollection<BankChoices>(Enum.GetValues(typeof(BankChoices)).Cast<BankChoices>());
 
+        public ObservableCollection<string> Sites
+        {
+            get
+            {
+                List<string> sites = new();
+                foreach (SiteChoices site in Enum.GetValues(typeof(SiteChoices)))
+                    sites.Add(site.ToString());
+
+                return new ObservableCollection<string>(sites);
+            }
+        }
+
+        public string[] PayrollCodes { get; }
+
         public ICommand Save { get; set; }
+        public ICommand Sync { get; set; }
 
         public event EventHandler OnRequestClose;
 
@@ -32,9 +49,16 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
         {
             Employee = employee;
             Save = new Save(this, employees);
+            Sync = new Sync(this, employees);
+
+            PayrollCodes = WeakReferenceMessenger.Default.Send<CurrentPayrollCodesRequestMessage>().Response;
         }
 
         public void Close() => OnRequestClose?.Invoke(this, new EventArgs());
 
+        public void RefreshProperties()
+        {
+            OnPropertyChanged(nameof(Employee));
+        }
     }
 }

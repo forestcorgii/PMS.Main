@@ -110,6 +110,12 @@
                     <DataGridTextColumn Header="Company" Binding="{Binding CompanyId}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Gross Pay" Binding="{Binding GrossPay, StringFormat={}{0:N2}}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Net Pay" Binding="{Binding NetPay, StringFormat={}{0:N2}}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="HDMF EE" Binding="{Binding EmployeePagibig, StringFormat={}{0:N2}}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="HDMF ER" Binding="{Binding EmployerPagibig, StringFormat={}{0:N2}}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="SSS EE" Binding="{Binding EmployeeSSS, StringFormat={}{0:N2}}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="SSS ER" Binding="{Binding EmployerSSS, StringFormat={}{0:N2}}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="PHIC EE" Binding="{Binding EmployeePhilHealth, StringFormat={}{0:N2}}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="PHIC ER" Binding="{Binding EmployerPhilHealth, StringFormat={}{0:N2}}" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
 

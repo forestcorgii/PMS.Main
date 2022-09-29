@@ -12,6 +12,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using System.ComponentModel;
 using Pms.AdjustmentModule.FrontEnd.Models;
 using Pms.AdjustmentModule.FrontEnd.Commands;
+using Pms.Adjustments.Domain.Enums;
 
 namespace Pms.AdjustmentModule.FrontEnd.ViewModels
 {
@@ -30,17 +31,17 @@ namespace Pms.AdjustmentModule.FrontEnd.ViewModels
         public ICommand ExportBillings { get; }
 
 
-        private string _adjustmentName = string.Empty;
-        public string AdjustmentName
+        private AdjustmentTypes _adjustmentName;
+        public AdjustmentTypes AdjustmentName
         {
             get => _adjustmentName; set
             {
                 SetProperty(ref _adjustmentName, value);
             }
         }
-        private IEnumerable<string> _adjustmentNames = new List<string>();
-        public IEnumerable<string> AdjustmentNames { get => _adjustmentNames; set => SetProperty(ref _adjustmentNames, value); }
 
+        public ObservableCollection<AdjustmentTypes> AdjustmentNames =>
+              new ObservableCollection<AdjustmentTypes>(Enum.GetValues(typeof(AdjustmentTypes)).Cast<AdjustmentTypes>());
 
 
         public BillingListingVm(Billings model)

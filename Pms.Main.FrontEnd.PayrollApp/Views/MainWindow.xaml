@@ -7,8 +7,8 @@
     mc:Ignorable="d"
     Title="MainWindow" Height="850" Width="1000"
         
-    xmlns:ui="http://schemas.modernwpf.com/2019"
-    ui:WindowHelper.UseModernWindowStyle="True"
+    xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:viewmodels="clr-namespace:Pms.Main.FrontEnd.PayrollApp.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
+        ui:WindowHelper.UseModernWindowStyle="True"
         
 >
     <Window.Resources>
@@ -80,8 +80,13 @@
                 />
 
                 <Button IsEnabled="True"
-                        Content="Adjustment"
+                        Content="Billings"
                         Command="{Binding BillingCommand}"
+                />
+
+                <Button IsEnabled="True"
+                        Content="Records"
+                        Command="{Binding BillingRecordCommand}"
                 />
 
                 <Button Content="Payroll"

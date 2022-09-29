@@ -27,6 +27,14 @@ namespace Pms.PayrollModule.FrontEnd.Models
             _provider = provider;
         }
 
+        public IEnumerable<MonthlyPayroll> GetMonthlyPayrolls(int month, string payrollCode)
+        {
+            IEnumerable<MonthlyPayroll> payrolls = _provider.GetMonthlyPayrolls(month, payrollCode);
+
+            return payrolls;
+        }
+
+
         public IEnumerable<Payroll> Get(string cutoffId) =>
             _provider.GetPayrolls(cutoffId);
 

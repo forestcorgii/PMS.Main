@@ -11,8 +11,6 @@
              d:DesignHeight="450" 
              d:DesignWidth="800"
              mc:Ignorable="d" 
-             
-             x:Name="sean"
 >
     <Grid>
         <Grid.ColumnDefinitions>
@@ -78,6 +76,8 @@
                     <ColumnDefinition Width="145"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
+
+                <Button Content="Add" Command="{Binding DetailTimesheet}" Margin="4"/>
 
                 <TextBlock Text="Search:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
                 <TextBox Grid.Column="1" Margin="8,3" Text="{Binding Path=SearchInput, UpdateSourceTrigger=PropertyChanged, Delay=150}" CharacterCasing="Upper" VerticalAlignment="Center"/>

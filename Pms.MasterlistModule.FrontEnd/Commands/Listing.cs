@@ -39,8 +39,8 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
                 {
                     employees = _model.GetEmployees()
                         .IncludeArchived(_viewModel.IncludeArchived)
-                        .FilterPayrollCode(_viewModel.PayrollCodeId)
-                        .FilterSearchInput(_viewModel.SearchInput);
+                        .FilterSearchInput(_viewModel.SearchInput)
+                        .FilterPayrollCode(_viewModel.PayrollCodeId);
                 });
 
                 _viewModel.Employees = employees.ToList();

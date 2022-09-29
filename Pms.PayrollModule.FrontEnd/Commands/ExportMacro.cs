@@ -48,7 +48,7 @@ namespace Pms.PayrollModule.FrontEnd.Commands
                     Company company = _viewModel.Company;
                     if (company is not null)
                     {
-                        IEnumerable<Payroll> payrolls = _model.GetByCompanyId(cutoff.CutoffId, _viewModel.Company.CompanyId);
+                        IEnumerable<MonthlyPayroll> payrolls = _model.GetMonthlyPayrolls(cutoff.CutoffDate.Month, _viewModel.Company.CompanyId);
 
                         _model.ExportMacro(payrolls, cutoff, company.CompanyId);
                         _model.ExportMacroB(payrolls, cutoff, company.CompanyId);

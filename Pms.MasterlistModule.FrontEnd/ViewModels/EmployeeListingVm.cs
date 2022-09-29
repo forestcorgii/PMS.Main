@@ -53,11 +53,11 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
 
         public EmployeeListingVm(Employees model)
         {
-            Download = new Download(this, model);
             BankImport = new BankImport(this, model);
             EEDataImport = new EEDataImport(this, model);
             MasterFileImport = new MasterFileImport(this, model);
             CheckDetail = new ViewEmployeeDetail(model);
+
 
             LoadEmployees = new Listing(this, model);
 

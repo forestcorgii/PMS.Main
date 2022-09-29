@@ -58,18 +58,16 @@ namespace Pms.Main.FrontEnd.PayrollApp.Commands
 
                 payrollCodes.Add(new PayrollCode());
                 _viewModel.PayrollCodes = payrollCodes;
-                
+
                 _viewModel.CutoffIds = cutoffIds;
                 _viewModel.CutoffId = cutoffIds.First();
+
             }
             catch (Exception ex) { MessageBoxes.Error(ex.Message); }
 
             executable = true;
         }
 
-        public void NotifyCanExecuteChanged()
-        {
-            throw new NotImplementedException();
-        }
+        public void NotifyCanExecuteChanged() { }
     }
 }

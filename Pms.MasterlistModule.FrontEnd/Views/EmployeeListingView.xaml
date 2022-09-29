@@ -26,7 +26,7 @@
         </Grid.ColumnDefinitions>
         <!--MENU-->
         <Menu>
-            <MenuItem Header="Sync" Command="{Binding Download}"/>
+            <MenuItem Header="Add" CommandParameter="{Binding }" Command="{Binding CheckDetail}"/>
             <MenuItem Header="Import">
                 <MenuItem Header="Account Numbers" Command="{Binding BankImport}"/>
                 <MenuItem Header="EE Data" Command="{Binding EEDataImport}"/>

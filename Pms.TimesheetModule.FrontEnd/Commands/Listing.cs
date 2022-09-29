@@ -59,24 +59,22 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
         public void NotifyCanExecuteChanged() =>
             CanExecuteChanged?.Invoke(this, new EventArgs());
 
-
     }
 
 
 
     static class EmployeeFilterExtension
     {
-
         public static IEnumerable<Timesheet> FilterPayrollCode(this IEnumerable<Timesheet> timesheets, string payrollCode)
         {
-            if (!string.IsNullOrEmpty(payrollCode))
+            if (payrollCode is not null)
                 return timesheets.Where(p => p.PayrollCode == payrollCode);
             return timesheets;
         }
 
         public static IEnumerable<Timesheet> FilterSearchInput(this IEnumerable<Timesheet> timesheets, string filter)
         {
-            if (filter != string.Empty)
+            if (!string.IsNullOrEmpty(filter))
                 timesheets = timesheets
                    .Where(ts =>
                        ts.EEId.Contains(filter) ||
