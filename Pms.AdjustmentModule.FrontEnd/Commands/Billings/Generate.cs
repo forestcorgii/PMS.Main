@@ -32,23 +32,28 @@ namespace Pms.AdjustmentModule.FrontEnd
         public async void Execute(object? parameter)
         {
             executable = false;
-            
+            NotifyCanExecuteChanged();
+
             await Task.Run(() =>
             {
-                string[] eeIds = billings.GetEmployeesWithPcv(_viewModel.CutoffId).ToArray();
+                string[] eeIds = billings.GetEmployeesWithPcv(_viewModel.PayrollCodeId, _viewModel.CutoffId)
+                    .Union(billings.GetEmployeesWithBillingRecord(_viewModel.PayrollCodeId, _viewModel.CutoffId))
+                    .ToArray();
+
                 List<Billing> billingItems = new();
 
                 _viewModel.SetProgress("Billings Generation on going.", eeIds.Length);
                 foreach (string eeId in eeIds)
                 {
-                    billingItems.AddRange(billings.GenerateBillings(_viewModel.CutoffId, eeId));
+                    billings.ResetBillings(_viewModel.CutoffId, eeId);
+                    billingItems.AddRange(billings.GenerateBillingFromBillingRecord(_viewModel.CutoffId, eeId));
+                    billingItems.AddRange(billings.GenerateBillingFromTimesheetView(_viewModel.CutoffId, eeId));
                     _viewModel.ProgressValue++;
                 }
 
-                _viewModel.SetProgress("Saving Generated billings.", billingItems.Count);
+                _viewModel.SetProgress("Saving Generated billings from PCVs and Allowances.", billingItems.Count);
                 foreach (Billing billing in billingItems)
                 {
-                    billing.PayrollCode = _viewModel.PayrollCodeId;
                     billings.AddBilling(billing);
                     _viewModel.ProgressValue++;
                 }
@@ -58,8 +63,9 @@ namespace Pms.AdjustmentModule.FrontEnd
             });
 
             executable = true;
+            NotifyCanExecuteChanged();
         }
+        public void NotifyCanExecuteChanged() => CanExecuteChanged?.Invoke(this, new EventArgs());
 
-        public void NotifyCanExecuteChanged() { }
     }
 }

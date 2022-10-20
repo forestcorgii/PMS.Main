@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Windows;
-using Microsoft.Extensions.Configuration;
 using Pms.MasterlistModule.FrontEnd;
 using Pms.TimesheetModule.FrontEnd;
 using Pms.PayrollModule.FrontEnd;
@@ -27,7 +27,6 @@ namespace Pms.Main.FrontEnd.PayrollApp
             IConfigurationRoot conf = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).Build();
 
             ServiceCollection services = new();
-
             services
                 .AddMasterlist(conf)
                 .AddTimesheet(conf)

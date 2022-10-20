@@ -78,9 +78,7 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
            });
         }
 
-        public void NotifyCanExecuteChanged()
-        {
-
-        }
+        public void NotifyCanExecuteChanged() =>
+            CanExecuteChanged?.Invoke(this, new());
     }
 }

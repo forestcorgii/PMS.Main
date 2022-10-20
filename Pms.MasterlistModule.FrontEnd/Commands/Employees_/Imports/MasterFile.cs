@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pms.MasterlistModule.FrontEnd.Commands
+namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
 {
     public class MasterFileImport : IRelayCommand
     {
@@ -29,6 +29,7 @@ namespace Pms.MasterlistModule.FrontEnd.Commands
         public async void Execute(object? parameter)
         {
             executable = false;
+            NotifyCanExecuteChanged();
             await Task.Run(() =>
             {
                 _viewModel.SetProgress("Select Master file.", 0);
@@ -53,6 +54,7 @@ namespace Pms.MasterlistModule.FrontEnd.Commands
                 }
             });
             executable = true;
+            NotifyCanExecuteChanged();
         }
 
         protected bool executable = true;

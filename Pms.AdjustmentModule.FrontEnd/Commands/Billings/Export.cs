@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Pms.Main.FrontEnd.Common.Utils;
+using Pms.Adjustments.Domain.Enums;
 
 namespace Pms.AdjustmentModule.FrontEnd.Commands
 {
@@ -14,11 +15,11 @@ namespace Pms.AdjustmentModule.FrontEnd.Commands
         public event EventHandler? CanExecuteChanged;
 
         private readonly BillingListingVm _viewModel;
-        private readonly Billings Billings;
+        private readonly Models.Billings Billings;
 
         private bool executable = true;
 
-        public Export(BillingListingVm viewModel, Billings model)
+        public Export(BillingListingVm viewModel, Models.Billings model)
         {
             _viewModel = viewModel;
             Billings = model;
@@ -30,6 +31,7 @@ namespace Pms.AdjustmentModule.FrontEnd.Commands
         public async void Execute(object? parameter)
         {
             executable = false;
+            NotifyCanExecuteChanged();
             try
             {
                 await Task.Run(() =>
@@ -37,10 +39,10 @@ namespace Pms.AdjustmentModule.FrontEnd.Commands
                     _viewModel.SetProgress("Exporting Payrolls for Land Bank.", 1);
                     string cutoffId = _viewModel.CutoffId;
                     string payrollCode = _viewModel.PayrollCodeId;
-                    string adjustmentName = _viewModel.AdjustmentName;
-                    IEnumerable<Billing> billingItems = Billings.GetBillings(cutoffId, payrollCode);
+                    AdjustmentTypes adjustmentType = _viewModel.AdjustmentName;
+                    IEnumerable<Billing> billingItems = _viewModel.Billings;
 
-                    Billings.Export(billingItems, cutoffId, $"{cutoffId}_{payrollCode}_{adjustmentName}.xls");
+                    Billings.Export(billingItems, adjustmentType, $"{cutoffId}_{payrollCode}_{adjustmentType}.xls");
                     _viewModel.SetAsFinishProgress();
                 });
             }

@@ -14,6 +14,8 @@
              
              xmlns:adjustmentViews="clr-namespace:Pms.AdjustmentModule.FrontEnd.Views;assembly=Pms.AdjustmentModule.FrontEnd"
              xmlns:adjustmentVms="clr-namespace:Pms.AdjustmentModule.FrontEnd.ViewModels;assembly=Pms.AdjustmentModule.FrontEnd"
+             xmlns:recordVms="clr-namespace:Pms.AdjustmentModule.FrontEnd.ViewModels.Billing_Records;assembly=Pms.AdjustmentModule.FrontEnd"
+             
 >
     <Application.Resources>
         <ResourceDictionary>
@@ -27,9 +29,12 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type masterlistVms:EmployeeListingVm}">
                 <masterlistViews:EmployeeListingView/>
-            </DataTemplate> 
+            </DataTemplate>
             <DataTemplate DataType="{x:Type adjustmentVms:BillingListingVm}">
                 <adjustmentViews:BillingView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type recordVms:BillingRecordListingVm}">
+                <adjustmentViews:RecordBillingView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type payrollVms:PayrollViewModel}">
                 <payrollViews:PayrollView/>

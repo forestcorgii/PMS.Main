@@ -28,8 +28,8 @@ namespace Pms.TimesheetModule.FrontEnd
                 dbContext.Database.Migrate();
 
             services.AddSingleton<Models.Timesheets>();
-            
-            services.AddSingleton<IProvideTimesheetService, TimesheetProvider>();
+
+            services.AddSingleton<TimesheetProvider>();
             services.AddSingleton<IDownloadContentProvider, DownloadContentProvider>();
             services.AddSingleton<TimesheetManager>();
 

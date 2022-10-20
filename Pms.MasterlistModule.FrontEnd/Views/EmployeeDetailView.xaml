@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Pms.MasterlistModule.FrontEnd.Views" xmlns:viewmodels="clr-namespace:Pms.MasterlistModule.FrontEnd.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:EmployeeDetailVm}"
         mc:Ignorable="d"
         Title="EmployeeDetailView" 
-        Height="500" Width="350"
+        Height="350" Width="775"
         WindowStartupLocation="CenterOwner"
         x:Name="DetailWindow"
         
@@ -26,66 +26,81 @@
             </Style>
             <Style TargetType="TextBox">
                 <Setter Property="Margin" Value="3"/>
-                <Setter Property="MinWidth" Value="75"/>
+                <Setter Property="MinWidth" Value="100"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
             <Style TargetType="ComboBox">
-                <Setter Property="Margin" Value="3"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="125"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="7" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold">EMPLOYEE DETAIL</TextBlock>
+
         <TextBlock Grid.Row="1" Grid.Column="0">EE Id:</TextBlock>
-        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
-            <TextBox IsReadOnly="True" Text="{Binding Employee.EEId}" />
-            <CheckBox IsChecked="{Binding Employee.Active}" Content="Active" />
-        </StackPanel>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Employee.EEId}" />
+        <!--<CheckBox Grid.Row="1" Grid.Column="2" IsChecked="{Binding Employee.Active}" Content="Active" />-->
+        
+        <ComboBox Grid.Row="1" Grid.Column="4" SelectedValue="{Binding Employee.Site}" ItemsSource="{Binding Sites}"/>
+        <Button Grid.Row="1" Grid.Column="5" Command="{Binding Sync}" >Sync to HRMS</Button>
 
         <TextBlock Grid.Row="2" Grid.Column="0">Last Name:</TextBlock>
         <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Employee.LastName}" />
+        <TextBlock Grid.Row="2" Grid.Column="2">First Name:</TextBlock>
+        <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding Employee.FirstName}"/>
+        <TextBlock Grid.Row="2" Grid.Column="4">Middle Name:</TextBlock>
+        <TextBox Grid.Row="2" Grid.Column="5" Text="{Binding Employee.MiddleName}" />
+        <TextBlock Grid.Row="2" Grid.Column="6">Ext:</TextBlock>
+        <TextBox Grid.Row="2" Grid.Column="7" Text="{Binding Employee.NameExtension}" />
+      
+        <TextBlock Grid.Row="5" Grid.Column="0">Payroll Code:</TextBlock>
+        <ComboBox Grid.Row="5" Grid.Column="1" SelectedValue="{Binding Employee.PayrollCode}" ItemsSource="{Binding PayrollCodes}"/>
+        <TextBlock Grid.Row="5" Grid.Column="2">Account Number:</TextBlock>
+        <TextBox Grid.Row="5" Grid.Column="3" Text="{Binding Employee.AccountNumber}" />
+        <TextBlock Grid.Row="5" Grid.Column="4">Card Number:</TextBlock>
+        <TextBox Grid.Row="5" Grid.Column="5" Text="{Binding Employee.CardNumber}" />
+        <TextBlock Grid.Row="5" Grid.Column="6">Bank:</TextBlock>
+        <ComboBox Grid.Row="5" Grid.Column="7" SelectedValue="{Binding Employee.Bank, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding BankTypes}"/>
 
-        <TextBlock Grid.Row="3" Grid.Column="0">First Name:</TextBlock>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Employee.FirstName}"/>
 
-        <TextBlock Grid.Row="4" Grid.Column="0">Middle Name:</TextBlock>
-        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Employee.MiddleName}" />
+        <TextBlock Grid.Row="8" Grid.Column="0">TIN:</TextBlock>
+        <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Employee.TIN}" />
+        <TextBlock Grid.Row="8" Grid.Column="2">HDMF:</TextBlock>
+        <TextBox Grid.Row="8" Grid.Column="3" Text="{Binding Employee.Pagibig}" />
+        <TextBlock Grid.Row="8" Grid.Column="4">PhilHealth:</TextBlock>
+        <TextBox Grid.Row="8" Grid.Column="5" Text="{Binding Employee.PhilHealth}" />
+        <TextBlock Grid.Row="8" Grid.Column="6">SSS:</TextBlock>
+        <TextBox Grid.Row="8" Grid.Column="7" Text="{Binding Employee.SSS}" />
 
-        <TextBlock Grid.Row="5" Grid.Column="0">Ext:</TextBlock>
-        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Employee.NameExtension}" />
-
-        <TextBlock Grid.Row="6" Grid.Column="0">Payroll Code:</TextBlock>
-        <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Employee.PayrollCode}" />
-
-        <TextBlock Grid.Row="7" Grid.Column="0">Bank:</TextBlock>
-        <ComboBox Grid.Row="7" Grid.Column="1" SelectedValue="{Binding Employee.Bank, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding BankTypes}"/>
-
-        <TextBlock Grid.Row="8" Grid.Column="0">Account Number:</TextBlock>
-        <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Employee.AccountNumber}" />
-
-        <TextBlock Grid.Row="9" Grid.Column="0">Card Number:</TextBlock>
-        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Employee.CardNumber}" />
 
 
         <Button
-            Grid.Row="11" Grid.Column="1" 
+            Grid.Row="11" Grid.Column="7" 
             Command="{Binding Save}"
             CommandParameter="{Binding ElementName=DetailWindow}"
             HorizontalAlignment="Right"

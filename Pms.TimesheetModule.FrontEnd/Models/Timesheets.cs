@@ -12,19 +12,39 @@ namespace Pms.TimesheetModule.FrontEnd.Models
 {
     public class Timesheets
     {
-        private IProvideTimesheetService _timesheetProvider;
+        private TimesheetProvider _timesheetProvider;
         private IDownloadContentProvider _downloadProvider;
         private TimesheetManager _timesheetManager;
 
-        public Timesheets(IProvideTimesheetService timesheetProvider, IDownloadContentProvider downloadProvider, TimesheetManager timesheetManager)
+        public Timesheets(TimesheetProvider timesheetProvider, IDownloadContentProvider downloadProvider, TimesheetManager timesheetManager)
         {
             _timesheetProvider = timesheetProvider;
             _downloadProvider = downloadProvider;
-            _timesheetManager= timesheetManager;
+            _timesheetManager = timesheetManager;
         }
+
+        public EmployeeView FindEmployeeView(string eeId) =>
+            _timesheetProvider.FindEmployeeView(eeId);
+
+        public IEnumerable<Timesheet> MapEmployeeView(Timesheet[] timesheets)
+        {
+            List<Timesheet> mappedTimesheets = new();
+
+            foreach (Timesheet timesheet in timesheets)
+            {
+                timesheet.EE = _timesheetProvider.FindEmployeeView(timesheet.EEId);
+                mappedTimesheets.Add(timesheet);
+            }
+
+            return mappedTimesheets;
+        }
+
 
         public IEnumerable<Timesheet> GetTimesheets(string cutoffId) =>
             _timesheetProvider.GetTimesheets(cutoffId);
+
+        public IEnumerable<Timesheet> GetTimesheets(string cutoffId, string payrollCodeId) =>
+                    _timesheetProvider.GetTimesheets(cutoffId, payrollCodeId);
 
         public IEnumerable<Timesheet> GetTwoPeriodTimesheets(string cutoffId) =>
             _timesheetProvider.GetTwoPeriodTimesheets(cutoffId);
@@ -50,7 +70,7 @@ namespace Pms.TimesheetModule.FrontEnd.Models
             _timesheetManager.SaveTimesheetEmployeeData(timesheet);
 
         public void SaveTimesheet(Timesheet timesheet) =>
-            _timesheetManager.SaveTimesheet(timesheet, timesheet.CutoffId, 0);
+            _timesheetManager.SaveTimesheet(timesheet, timesheet.PayrollCode, timesheet.CutoffId, 0);
 
 
 
@@ -72,19 +92,16 @@ namespace Pms.TimesheetModule.FrontEnd.Models
 
 
 
-        public async Task<int[]> DownloadContentSummary(Cutoff cutoff, string payrollCode, string site)
-        {
-            DownloadSummary<Timesheet> summary = await _downloadProvider.GetTimesheetSummary(cutoff.CutoffRange, payrollCode, site);
-            return Enumerable.Range(0, int.Parse(summary.TotalPage) + 1).ToArray();
-        }
+        public async Task<DownloadSummary<Timesheet>> DownloadContentSummary(Cutoff cutoff, string payrollCode, string site) =>
+             await _downloadProvider.GetTimesheetSummary(cutoff.CutoffRange, payrollCode, site);
 
-        public async Task<IEnumerable<Timesheet>> DownloadContent(Cutoff cutoff, string payrollCode, string site, int page)
+        public async Task<IEnumerable<Timesheet>> DownloadContent(Cutoff cutoff, string payrollCodeName, string payrollCodeId, string site, int page)
         {
-            DownloadContent<Timesheet> rawTimesheets = await _downloadProvider.DownloadTimesheets(cutoff.CutoffRange, payrollCode, page, site);
+            DownloadContent<Timesheet> rawTimesheets = await _downloadProvider.DownloadTimesheets(cutoff.CutoffRange, payrollCodeName, page, site);
             if (rawTimesheets is not null && rawTimesheets.message is not null)
             {
                 foreach (Timesheet timesheet in rawTimesheets.message)
-                    _timesheetManager.SaveTimesheet(timesheet, cutoff.CutoffId, page);
+                    _timesheetManager.SaveTimesheet(timesheet, payrollCodeId, cutoff.CutoffId, page);
 
                 return rawTimesheets.message;
             }
@@ -92,5 +109,5 @@ namespace Pms.TimesheetModule.FrontEnd.Models
         }
 
     }
- 
+
 }

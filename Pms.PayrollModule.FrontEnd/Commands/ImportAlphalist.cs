@@ -40,6 +40,7 @@ namespace Pms.PayrollModule.FrontEnd.Commands
         public async void Execute(object? parameter)
         {
             _canExecute = false;
+            NotifyCanExecuteChanged();
             try
             {
                 await Task.Run(() =>

@@ -33,6 +33,7 @@ namespace Pms.PayrollModule.FrontEnd.Commands
         public async void Execute(object? parameter)
         {
             executable = false;
+            NotifyCanExecuteChanged();
             try
             {
                 IEnumerable<Payroll> payrolls = new List<Payroll>();

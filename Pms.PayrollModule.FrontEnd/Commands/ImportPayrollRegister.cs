@@ -32,6 +32,9 @@ namespace Pms.PayrollModule.FrontEnd.Commands
 
         public async void Execute(object? parameter)
         {
+            _canExecute = false;
+            NotifyCanExecuteChanged();
+
             await Task.Run(() =>
             {
                 _viewModel.SetProgress("Select Pay Register files.", 0);
@@ -70,10 +73,13 @@ namespace Pms.PayrollModule.FrontEnd.Commands
             });
 
             IEnumerable<string> noEEPayrolls = _model.ListNoEEPayrolls();
-            if (noEEPayrolls.Any())
-                await _viewModel.EmployeeDownloadCommand.ExecuteAsync(noEEPayrolls.ToArray());
+            //if (noEEPayrolls.Any())
+            //    await _viewModel.EmployeeDownloadCommand.ExecuteAsync(noEEPayrolls.ToArray());
             _viewModel.SetAsFinishProgress();
             _viewModel.PayrollListing.Execute(true);
+
+            _canExecute = true;
+            NotifyCanExecuteChanged();
         }
 
         protected bool _canExecute;

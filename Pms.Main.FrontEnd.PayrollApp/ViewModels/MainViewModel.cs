@@ -19,6 +19,7 @@ using Pms.TimesheetModule.FrontEnd.Models;
 using Pms.TimesheetModule.FrontEnd.ViewModels;
 using Pms.PayrollModule.FrontEnd.ViewModels;
 using Pms.AdjustmentModule.FrontEnd.ViewModels;
+using Pms.AdjustmentModule.FrontEnd.ViewModels.Billing_Records;
 
 namespace Pms.Main.FrontEnd.PayrollApp.ViewModels
 {
@@ -41,13 +42,15 @@ namespace Pms.Main.FrontEnd.PayrollApp.ViewModels
         public Company Company { get; set; } = new();
         private string companyId;
         public string CompanyId
-
         {
             get => companyId;
             set
             {
                 SetProperty(ref companyId, value);
-                Company = companies.Where(c => c.CompanyId == companyId).First();
+                if (!string.IsNullOrEmpty(companyId))
+                    Company = companies.Where(c => c.CompanyId == companyId).First();
+                else Company = new();
+
                 Messenger.Send(new SelectedCompanyChangedMessage(Company));
             }
         }
@@ -58,7 +61,7 @@ namespace Pms.Main.FrontEnd.PayrollApp.ViewModels
 
 
 
-        public PayrollCode PayrollCode { get; set; } = new();
+        public PayrollCode PayrollCode { get; set; } = new() { PayrollCodeId = string.Empty };
         private string payrollCodeId;
         public string PayrollCodeId
         {
@@ -66,15 +69,26 @@ namespace Pms.Main.FrontEnd.PayrollApp.ViewModels
             set
             {
                 SetProperty(ref payrollCodeId, value);
-                PayrollCode = PayrollCodes.Where(c => c.PayrollCodeId == payrollCodeId).First();
+
+                if (!string.IsNullOrEmpty(payrollCodeId))
+                    PayrollCode = PayrollCodes.Where(c => c.PayrollCodeId == payrollCodeId).First();
+                else PayrollCode = new() { PayrollCodeId = string.Empty };
+
                 CompanyId = PayrollCode.CompanyId;
                 Site = Sites.Where(s => s.ToString() == PayrollCode.Site).FirstOrDefault();
                 Messenger.Send(new SelectedPayrollCodeChangedMessage(PayrollCode));
             }
         }
         private IEnumerable<PayrollCode> payrollCodes;
-        public IEnumerable<PayrollCode> PayrollCodes { get => payrollCodes; set => SetProperty(ref payrollCodes, value); }
-
+        public IEnumerable<PayrollCode> PayrollCodes
+        {
+            get => payrollCodes;
+            set
+            {
+                SetProperty(ref payrollCodes, value);
+                Messenger.Send(new SelectedPayrollCodesChangedMessage(PayrollCodes.Select(p => p.PayrollCodeId).ToArray()));
+            }
+        }
 
 
 
@@ -103,6 +117,7 @@ namespace Pms.Main.FrontEnd.PayrollApp.ViewModels
         public ICommand TimesheetCommand { get; }
         public ICommand EmployeeCommand { get; }
         public ICommand BillingCommand { get; }
+        public ICommand BillingRecordCommand { get; }
         public ICommand PayrollCommand { get; }
         public ICommand AlphalistCommand { get; }
 
@@ -114,22 +129,24 @@ namespace Pms.Main.FrontEnd.PayrollApp.ViewModels
             NavigationService<EmployeeListingVm> employeeNavigation,
             NavigationService<PayrollViewModel> payrollNavigation,
             NavigationService<AlphalistViewModel> alphalistNavigation,
-            NavigationService<BillingListingVm> billingNavigation
+            NavigationService<BillingListingVm> billingNavigation,
+            NavigationService<BillingRecordListingVm> billingRecordNavigation
         )
         {
             cutoffIds = new string[] { };
-           
+
             TimesheetCommand = new NavigateCommand<TimesheetListingVm>(timesheetNavigation);
             EmployeeCommand = new NavigateCommand<EmployeeListingVm>(employeeNavigation);
             BillingCommand = new NavigateCommand<BillingListingVm>(billingNavigation);
+            BillingRecordCommand = new NavigateCommand<BillingRecordListingVm>(billingRecordNavigation);
             PayrollCommand = new NavigateCommand<PayrollViewModel>(payrollNavigation);
             AlphalistCommand = new NavigateCommand<AlphalistViewModel>(alphalistNavigation);
 
+            IsActive = true;
 
             LoadFilterCommand = new Listing(this, payrollModel, timesheetModel, payrollCodes, companies);
             LoadFilterCommand.Execute(null);
 
-            IsActive = true;
 
             TimesheetCommand.Execute(null);
 
@@ -143,6 +160,11 @@ namespace Pms.Main.FrontEnd.PayrollApp.ViewModels
 
         protected override void OnActivated()
         {
+            Messenger.Register<MainViewModel, CurrentPayrollCodesRequestMessage>(this, (r, m) =>
+            {
+                m.Reply(r.PayrollCodes.Select(p => p.PayrollCodeId).ToArray());
+            });
+
             Messenger.Register<MainViewModel, CurrentSiteRequestMessage>(this, (r, m) => m.Reply(r.Site));
             Messenger.Register<MainViewModel, CurrentCompanyRequestMessage>(this, (r, m) => m.Reply(r.Company));
             Messenger.Register<MainViewModel, CurrentPayrollCodeRequestMessage>(this, (r, m) => m.Reply(r.PayrollCode));

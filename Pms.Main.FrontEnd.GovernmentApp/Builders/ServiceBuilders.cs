@@ -5,7 +5,7 @@ using Pms.Adjustments.ServiceLayer.Files;
 using Pms.Masterlists.ServiceLayer;
 using Pms.Masterlists.ServiceLayer.EfCore;
 using Pms.Masterlists.ServiceLayer.Files;
-using Pms.Masterlists.ServiceLayer.HRMS.Service;
+using Pms.Masterlists.ServiceLayer.HRMS.Services;
 using Pms.Payrolls.Domain.Services;
 using Pms.Payrolls.ServiceLayer.EfCore;
 using Pms.Payrolls.ServiceLayer.Files;
@@ -27,7 +27,7 @@ namespace Pms.Main.FrontEnd.Government.Builders
 
             services.AddSingleton<EmployeeProvider>();
             services.AddSingleton<EmployeeManager>();
-            services.AddSingleton<FindEmployeeService>();
+            services.AddSingleton<HrmsEmployeeProvider>();
             services.AddSingleton<EmployeeBankInformationImporter>();
 
             services.AddSingleton<IManageBillingService, BillingManager>();

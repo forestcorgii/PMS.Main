@@ -15,13 +15,13 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
 {
     public class Download : IRelayCommand
     {
-        private TimesheetListingVm _viewModel;
-        private Models.Timesheets _cutoffTimesheet;
+        private TimesheetListingVm ViewModel;
+        private Models.Timesheets Timesheets;
 
-        public Download(TimesheetListingVm viewModel, Models.Timesheets cutoffTimesheet)
+        public Download(TimesheetListingVm viewModel, Models.Timesheets timesheets)
         {
-            _viewModel = viewModel;
-            _cutoffTimesheet = cutoffTimesheet;
+            ViewModel = viewModel;
+            Timesheets = timesheets;
         }
 
         public event EventHandler? CanExecuteChanged;
@@ -32,45 +32,54 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
         public async void Execute(object? parameter)
         {
             executable = false;
+            NotifyCanExecuteChanged();
 
-            string site = _viewModel.Site.ToString();
-            string payrollCode = _viewModel.PayrollCode.Name;
-            Cutoff cutoff = _viewModel.Cutoff;
+            string site = ViewModel.Site.ToString();
+            string payrollCode = ViewModel.PayrollCode.Name;
+            Cutoff cutoff = ViewModel.Cutoff;
             cutoff.SetSite(site);
-
-            if (parameter is int page)
+            try
             {
-                _viewModel.SetProgress($"Downloading Timesheet Page {page}..", 1);
-                await DownloadPage(page, cutoff, payrollCode, site);
-            }
-            else if (parameter is int[] pages)
-            {
-                await StartDownload(pages, cutoff, payrollCode, site);
-            }
-            else
-            {
-                _viewModel.SetProgress("Retrieving Download content summary", 1);
-                pages = await _cutoffTimesheet.DownloadContentSummary(cutoff, payrollCode, site);
+                if (parameter is int page)
+                {
+                    ViewModel.SetProgress($"Downloading Timesheet Page {page}..", 1);
+                    await DownloadPage(page, cutoff, payrollCode, site);
+                }
+                else if (parameter is int[] pages)
+                {
+                    await StartDownload(pages, cutoff, payrollCode, site);
+                }
+                else
+                {
+                    ViewModel.SetProgress("Retrieving Download content summary", 1);
+                    DownloadSummary<Timesheet> summary = await Timesheets.DownloadContentSummary(cutoff, payrollCode, site);
+                    pages = Enumerable.Range(0, int.Parse(summary.TotalPage) + 1).ToArray();
 
-                await StartDownload(pages, cutoff, payrollCode, site);
+                    await StartDownload(pages, cutoff, payrollCode, site);
+                }
             }
+            catch (Exception ex)  { MessageBoxes.Error(ex.Message); }
 
-            _viewModel.SetAsFinishProgress();
+
+            ViewModel.SetAsFinishProgress();
 
             executable = true;
+            NotifyCanExecuteChanged();
         }
 
-        
+
         public async Task StartDownload(int[] pages, Cutoff cutoff, string payrollCode, string site)
         {
-            _viewModel.SetProgress("Downloading Timesheets", pages.Length);
+            ViewModel.SetProgress("Downloading Timesheets", pages.Length);
 
             foreach (int page in pages)
+            {
                 await DownloadPage(page, cutoff, payrollCode, site);
+                ViewModel.ProgressValue++;
+            }
 
-            _viewModel.ProgressValue++;
 
-            _viewModel.SetAsFinishProgress();
+            ViewModel.SetAsFinishProgress();
         }
 
         public async Task DownloadPage(int page, Cutoff cutoff, string payrollCode, string site)
@@ -79,7 +88,15 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
             {
                 try
                 {
-                    IEnumerable<Timesheet> timesheets = await _cutoffTimesheet.DownloadContent(cutoff, payrollCode, site, page);
+                    IEnumerable<Timesheet> timesheets = await Timesheets.DownloadContent(cutoff, payrollCode, ViewModel.PayrollCode.PayrollCodeId, site, page);
+                    foreach (Timesheet timesheet in timesheets)
+                    {
+                        EmployeeView ee = Timesheets.FindEmployeeView(timesheet.EEId);
+                        timesheet.EE = ee;
+                        timesheet.PayrollCode = ViewModel.PayrollCode.PayrollCodeId;
+                        timesheet.CutoffId = cutoff.CutoffId;
+                        ViewModel.Timesheets.Add(timesheet);
+                    }
                     break;
                 }
                 catch (Exception ex)
@@ -91,6 +108,7 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
         }
 
 
-        public void NotifyCanExecuteChanged() { }
+        public void NotifyCanExecuteChanged() =>
+    CanExecuteChanged?.Invoke(this, new());
     }
 }

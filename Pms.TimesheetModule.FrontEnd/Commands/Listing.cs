@@ -5,6 +5,7 @@ using Pms.TimesheetModule.FrontEnd.ViewModels;
 using Pms.Timesheets.Domain;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,6 +33,7 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
         public async void Execute(object? parameter)
         {
             executable = false;
+            NotifyCanExecuteChanged();
             try
             {
                 if (_viewModel.Cutoff is not null && _viewModel.PayrollCode is not null)
@@ -39,10 +41,13 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
                     IEnumerable<Timesheet> timesheets = new List<Timesheet>();
                     await Task.Run(() =>
                     {
-                        timesheets = _model.GetTimesheets(_viewModel.Cutoff.CutoffId).FilterPayrollCode(_viewModel.PayrollCode.PayrollCodeId).FilterSearchInput(_viewModel.SearchInput);
+                        timesheets = _model
+                        .GetTimesheets(_viewModel.Cutoff.CutoffId)
+                        .FilterPayrollCode(_viewModel.PayrollCode.PayrollCodeId)
+                        .FilterSearchInput(_viewModel.SearchInput);
                     });
 
-                    _viewModel.Timesheets = timesheets;
+                    _viewModel.Timesheets = new ObservableCollection<Timesheet>(timesheets);
                     _viewModel.Confirmed = timesheets.Count(p => p.TotalHours > 0 && p.IsConfirmed);
                     _viewModel.CWithoutAttendance = timesheets.Count(p => p.TotalHours == 0 && p.IsConfirmed);
                     _viewModel.NotConfirmed = timesheets.Count(p => p.TotalHours == 0 && !p.IsConfirmed);
@@ -59,28 +64,31 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
         public void NotifyCanExecuteChanged() =>
             CanExecuteChanged?.Invoke(this, new EventArgs());
 
-
     }
 
 
 
     static class EmployeeFilterExtension
     {
-
         public static IEnumerable<Timesheet> FilterPayrollCode(this IEnumerable<Timesheet> timesheets, string payrollCode)
         {
-            if (!string.IsNullOrEmpty(payrollCode))
-                return timesheets.Where(p => p.PayrollCode == payrollCode);
+            if (payrollCode is not null)
+                return timesheets
+                    .Where(p => p.EE is not null)
+                    .Where(p => p.EE.PayrollCode == payrollCode);
             return timesheets;
         }
 
         public static IEnumerable<Timesheet> FilterSearchInput(this IEnumerable<Timesheet> timesheets, string filter)
         {
-            if (filter != string.Empty)
+            if (!string.IsNullOrEmpty(filter))
                 timesheets = timesheets
                    .Where(ts =>
                        ts.EEId.Contains(filter) ||
-                       ts.Fullname.Contains(filter)
+                       (
+                            ts.EE is not null &&
+                            ts.EE.Fullname.Contains(filter)
+                       )
                    );
 
             return timesheets;

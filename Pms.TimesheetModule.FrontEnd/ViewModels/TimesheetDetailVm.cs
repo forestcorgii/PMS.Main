@@ -15,9 +15,10 @@ namespace Pms.TimesheetModule.FrontEnd.ViewModels
         public List<TimesheetBankChoices> BankChoices =>
             new List<TimesheetBankChoices>(Enum.GetValues(typeof(TimesheetBankChoices)).Cast<TimesheetBankChoices>());
 
-
         private Timesheet timesheet = new();
         public Timesheet Timesheet { get => timesheet; set => SetProperty(ref timesheet, value); }
+
+        public bool IsForEditing { get => !string.IsNullOrEmpty(timesheet.EEId); }
 
         public ICommand Save { get; }
 
