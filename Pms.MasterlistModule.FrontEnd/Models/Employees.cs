@@ -4,7 +4,7 @@ using Pms.Masterlists.ServiceLayer;
 using Pms.Masterlists.ServiceLayer.EfCore;
 using Pms.Masterlists.ServiceLayer.Files;
 using Pms.Masterlists.ServiceLayer.HRMS;
-using Pms.Masterlists.ServiceLayer.HRMS.Service;
+using Pms.Masterlists.ServiceLayer.HRMS.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +17,9 @@ namespace Pms.MasterlistModule.FrontEnd.Models
     {
         EmployeeProvider _provider;
         EmployeeManager _manager;
-        FindEmployeeService _finder;
+        HrmsEmployeeProvider _finder;
 
-        public Employees(EmployeeProvider employeeProvider, EmployeeManager employeeManager, FindEmployeeService employeeFinder)
+        public Employees(EmployeeProvider employeeProvider, EmployeeManager employeeManager, HrmsEmployeeProvider employeeFinder)
         {
             _provider = employeeProvider;
             _manager = employeeManager;
@@ -32,7 +32,7 @@ namespace Pms.MasterlistModule.FrontEnd.Models
 
         public void Save(Employee employee) =>
             _manager.Save(employee);
-        
+
         public void Save(IActive employee) =>
             _manager.Save(employee);
 
@@ -52,8 +52,27 @@ namespace Pms.MasterlistModule.FrontEnd.Models
             _manager.Save(employee);
 
 
-        public async Task<Employee> FindEmployeeAsync(string eeId, string site) =>
+        public async Task<Employee> SyncOneAsync(string eeId, string site) =>
             await _finder.GetEmployeeAsync(eeId, site);
+
+        public async Task<IEnumerable<Employee>> SyncNewlyHiredAsync(DateTime fromDate, string site)
+        {
+            IEnumerable<Employee>? result = await _finder.GetNewlyHiredEmployeesAsync(fromDate, site);
+            if (result is not null)
+                return result;
+
+            return Enumerable.Empty<Employee>();
+        }
+
+        public async Task<IEnumerable<Employee>> SyncResignedAsync(DateTime fromDate, string site)
+        {
+            IEnumerable<Employee>? result = await _finder.GetResignedEmployeesAsync(fromDate, site);
+            if (result is not null)
+                return result;
+
+            return Enumerable.Empty<Employee>();
+        }
+
 
         public Employee FindEmployee(string eeId) =>
             _provider.FindEmployee(eeId);
@@ -78,6 +97,23 @@ namespace Pms.MasterlistModule.FrontEnd.Models
         {
             EmployeeEEDataImporter importer = new();
             return importer.StartImport(eeDataPath);
+        }
+
+
+        public void ExportMasterlist(IEnumerable<Employee> employees, PayrollCode payrollCode, string remarks = "")
+        {
+            MasterlistExporter exporter = new();
+            exporter.StartExport(employees, payrollCode, remarks);
+        }
+
+        public void ReportExceptions(IEnumerable<Exception> exceptions, PayrollCode payrollCode, string suffix)
+        {
+            if (exceptions.Count() > 0)
+            {
+                InvalidValueReporter exporter = new();
+                exporter.StartReport(exceptions, payrollCode, suffix);
+
+            }
         }
     }
 }

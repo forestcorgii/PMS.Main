@@ -32,6 +32,7 @@ namespace Pms.PayrollModule.FrontEnd.Commands
         public async void Execute(object? parameter)
         {
             _canExecute = false;
+            NotifyCanExecuteChanged();
             try
             {
                 await Task.Run(() =>
@@ -49,7 +50,9 @@ namespace Pms.PayrollModule.FrontEnd.Commands
                         foreach (var employeePayroll in employeePayrolls)
                         {
                             AutomatedAlphalistDetail alphaDetailFactory = new(employeePayroll, company.MinimumRate, cutoff.YearCovered);
-                            alphalists.Add(alphaDetailFactory.CreateAlphalistDetail());
+                            AlphalistDetail alphalistDetail = alphaDetailFactory.CreateAlphalistDetail();
+                            if (!string.IsNullOrEmpty(alphalistDetail.EEId))
+                                alphalists.Add(alphalistDetail);
                         }
 
                         _model.ExportAlphalist(alphalists, cutoff.YearCovered, company);

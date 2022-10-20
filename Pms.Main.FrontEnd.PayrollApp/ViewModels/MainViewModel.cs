@@ -42,7 +42,6 @@ namespace Pms.Main.FrontEnd.PayrollApp.ViewModels
         public Company Company { get; set; } = new();
         private string companyId;
         public string CompanyId
-
         {
             get => companyId;
             set

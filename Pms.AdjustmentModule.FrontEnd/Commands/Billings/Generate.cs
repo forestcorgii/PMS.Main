@@ -32,6 +32,7 @@ namespace Pms.AdjustmentModule.FrontEnd
         public async void Execute(object? parameter)
         {
             executable = false;
+            NotifyCanExecuteChanged();
 
             await Task.Run(() =>
             {
@@ -62,8 +63,9 @@ namespace Pms.AdjustmentModule.FrontEnd
             });
 
             executable = true;
+            NotifyCanExecuteChanged();
         }
+        public void NotifyCanExecuteChanged() => CanExecuteChanged?.Invoke(this, new EventArgs());
 
-        public void NotifyCanExecuteChanged() { }
     }
 }

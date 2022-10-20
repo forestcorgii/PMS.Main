@@ -21,12 +21,12 @@
 
         <Menu/>
         <StackPanel Orientation="Vertical" Grid.Row="1">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="8">
+            <!--<StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="8">
                 <TextBlock  VerticalAlignment="Center" Margin="6">Company:</TextBlock>
                 <ComboBox Text="{Binding CompanyId, UpdateSourceTrigger=PropertyChanged}" 
                               ItemsSource="{Binding CompanyIds}" 
                               Width="125" VerticalAlignment="Center" IsEditable="True"/>
-            </StackPanel>
+            </StackPanel>-->
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="8">
                 <TextBlock  VerticalAlignment="Center" Margin="6">Bir Program DBF Directory:</TextBlock>
                 <TextBox Text="{Binding BirDbfDirectory, UpdateSourceTrigger=PropertyChanged}" 

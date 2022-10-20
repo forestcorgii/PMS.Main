@@ -97,7 +97,7 @@
                         Command="{Binding AlphalistCommand}"
                 />
 
-                <Button Content="Employee"
+                <Button Content="Masterlist"
                         Command="{Binding EmployeeCommand}"
                 />
             </StackPanel>

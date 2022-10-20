@@ -41,7 +41,7 @@ namespace Pms.Main.FrontEnd.Common
         public void SetAsFinishProgress()
         {
             StatusMessage = "DONE";
-            ProgressMaximum = 100;
+            ProgressMaximum = 1;
             ProgressValue = 0;
         }
 

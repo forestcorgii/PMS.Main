@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Pms.Main.FrontEnd.Common.Utils;
 using Pms.Masterlists.Domain.Entities.Employees;
 
-namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
+namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
 {
     public class Listing : IRelayCommand
     {
@@ -32,18 +32,22 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
         public async void Execute(object? parameter)
         {
             executable = false;
+            NotifyCanExecuteChanged();
             try
             {
                 IEnumerable<Employee> employees = new List<Employee>();
                 await Task.Run(() =>
                 {
                     employees = _model.GetEmployees()
-                        .IncludeArchived(_viewModel.IncludeArchived)
+                        .HideArchived(_viewModel.HideArchived)
                         .FilterSearchInput(_viewModel.SearchInput)
                         .FilterPayrollCode(_viewModel.PayrollCodeId);
                 });
 
                 _viewModel.Employees = employees.ToList();
+
+                _viewModel.ActiveEECount = employees.Count(e => e.Active);
+                _viewModel.NonActiveEECount = employees.Count(e => !e.Active);
             }
             catch (Exception ex) { MessageBoxes.Error(ex.Message); }
 
@@ -81,12 +85,12 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
             return employees;
         }
 
-        public static IEnumerable<Employee> IncludeArchived(this IEnumerable<Employee> employees, bool includeArchived)
+        public static IEnumerable<Employee> HideArchived(this IEnumerable<Employee> employees, bool hideArchived)
         {
-            if (includeArchived)
-                return employees;
+            if (hideArchived)
+                return employees.Where(ee => ee.Active);
             else
-                return employees.Where(ee => ee.Active == true);
+                return employees;
         }
     }
 }

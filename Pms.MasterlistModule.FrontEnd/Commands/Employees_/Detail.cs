@@ -11,13 +11,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pms.MasterlistModule.FrontEnd.Commands
+namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
 {
-    public class ViewEmployeeDetail : IRelayCommand
+    public class Detail : IRelayCommand
     {
         private readonly Employees Employees;
 
-        public ViewEmployeeDetail(Employees employees)
+        public Detail(Employees employees)
         {
             Employees = employees;
         }
@@ -25,6 +25,7 @@ namespace Pms.MasterlistModule.FrontEnd.Commands
         public void Execute(object? parameter)
         {
             executable = false;
+            NotifyCanExecuteChanged();
 
             EmployeeDetailVm detailVm;
             if (parameter is Employee employee)
@@ -37,6 +38,7 @@ namespace Pms.MasterlistModule.FrontEnd.Commands
             detailView.ShowDialog();
 
             executable = true;
+            NotifyCanExecuteChanged();
         }
 
         protected bool executable = true;

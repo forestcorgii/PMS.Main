@@ -32,16 +32,17 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
         public void Execute(object? parameter)
         {
             executable = false;
-            
+            NotifyCanExecuteChanged();
+
             Timesheets.SaveTimesheet(DetailVm.Timesheet);
 
             DetailVm.Close();
 
             executable = true;
+            NotifyCanExecuteChanged();
         }
 
 
-
-        public void NotifyCanExecuteChanged() { }
+        public void NotifyCanExecuteChanged() => CanExecuteChanged?.Invoke(this, new());
     }
 }

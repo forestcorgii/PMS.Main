@@ -12,7 +12,7 @@ using Pms.MasterlistModule.FrontEnd.Commands;
 using Pms.MasterlistModule.FrontEnd.Models;
 using Pms.Masterlists.Domain.Enums;
 using Pms.Main.FrontEnd.Common.Messages;
-using Pms.MasterlistModule.FrontEnd.Commands.Masterlists;
+using Pms.MasterlistModule.FrontEnd.Commands.Employees_;
 using CommunityToolkit.Mvvm.Messaging;
 using Pms.Masterlists.Domain.Entities.Employees;
 
@@ -20,6 +20,13 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
 {
     public class EmployeeListingVm : ViewModelBase
     {
+        private int activeEECount;
+        public int ActiveEECount { get => activeEECount; set => SetProperty(ref activeEECount, value); }
+
+        private int nonActiveEECount;
+        public int NonActiveEECount { get => nonActiveEECount; set => SetProperty(ref nonActiveEECount, value); }
+
+
         private string searchInput = string.Empty;
         public string SearchInput
         {
@@ -27,11 +34,11 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
             set => SetProperty(ref searchInput, value);
         }
 
-        private bool includeArchived;
-        public bool IncludeArchived
+        private bool hideArchived;
+        public bool HideArchived
         {
-            get => includeArchived;
-            set => SetProperty(ref includeArchived, value);
+            get => hideArchived;
+            set => SetProperty(ref hideArchived, value);
         }
 
         private IEnumerable<Employee> _employees;
@@ -43,28 +50,45 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
 
 
         public ICommand LoadEmployees { get; }
-        public ICommand Download { get; }
+
+        public ICommand SyncMany { get; }
+        public ICommand SyncNewlyHired { get; }
+        public ICommand SyncResigned { get; }
 
         public ICommand BankImport { get; }
         public ICommand EEDataImport { get; }
         public ICommand MasterFileImport { get; }
-        
+        public ICommand AllEEExport { get; }
+        public ICommand NoTinEEExport { get; }
+
+        public ICommand OpenPayrollCodeView { get; }
+
         public ICommand CheckDetail { get; }
 
-        public EmployeeListingVm(Employees model)
+        public EmployeeListingVm(Employees employees, PayrollCodes payrollCodes, Companies companies)
         {
-            BankImport = new BankImport(this, model);
-            EEDataImport = new EEDataImport(this, model);
-            MasterFileImport = new MasterFileImport(this, model);
-            CheckDetail = new ViewEmployeeDetail(model);
+            BankImport = new BankImport(this, employees);
+            EEDataImport = new EEDataImport(this, employees);
+            MasterFileImport = new MasterFileImport(this, employees);
+            AllEEExport = new MasterlistExport(this, employees);
+            NoTinEEExport = new UnknownTin(this, employees);
 
+            CheckDetail = new Detail(employees);
 
-            LoadEmployees = new Listing(this, model);
+            SyncMany = new SyncMany(this, employees);
+            SyncNewlyHired = new SyncNewlyHired(this, employees);
+            SyncResigned = new SyncResigned(this, employees);
+
+            OpenPayrollCodeView = new Commands.Payroll_Codes.OpenView(payrollCodes, companies);
+
+            LoadEmployees = new Listing(this, employees);
+
 
 
             site = WeakReferenceMessenger.Default.Send<CurrentSiteRequestMessage>();
             companyId = WeakReferenceMessenger.Default.Send<CurrentCompanyRequestMessage>().Response.CompanyId;
             payrollCodeId = WeakReferenceMessenger.Default.Send<CurrentPayrollCodeRequestMessage>().Response.PayrollCodeId;
+            payrollCode = WeakReferenceMessenger.Default.Send<CurrentPayrollCodeRequestMessage>().Response;
 
             IsActive = true;
             LoadEmployees.Execute(null);
@@ -73,7 +97,7 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
 
         protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if ((new string[] { nameof(Site), nameof(CompanyId), nameof(PayrollCodeId), nameof(IncludeArchived), nameof(SearchInput) }).Any(p => p == e.PropertyName))
+            if ((new string[] { nameof(Site), nameof(CompanyId), nameof(PayrollCodeId), nameof(HideArchived), nameof(SearchInput) }).Any(p => p == e.PropertyName))
                 LoadEmployees.Execute(null);
 
             base.OnPropertyChanged(e);
@@ -89,11 +113,18 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
         private string payrollCodeId = string.Empty;
         public string PayrollCodeId { get => payrollCodeId; set => SetProperty(ref payrollCodeId, value); }
 
+        private PayrollCode payrollCode;
+        public PayrollCode PayrollCode { get => payrollCode; set => SetProperty(ref payrollCode, value); }
+
         protected override void OnActivated()
         {
             Messenger.Register<EmployeeListingVm, SelectedSiteChangedMessage>(this, (r, m) => r.Site = m.Value);
             Messenger.Register<EmployeeListingVm, SelectedCompanyChangedMessage>(this, (r, m) => r.CompanyId = m.Value.CompanyId);
-            Messenger.Register<EmployeeListingVm, SelectedPayrollCodeChangedMessage>(this, (r, m) => r.PayrollCodeId = m.Value.PayrollCodeId);
+            Messenger.Register<EmployeeListingVm, SelectedPayrollCodeChangedMessage>(this, (r, m) =>
+            {
+                r.PayrollCode = m.Value;
+                r.PayrollCodeId = m.Value.PayrollCodeId;
+            });
         }
     }
 

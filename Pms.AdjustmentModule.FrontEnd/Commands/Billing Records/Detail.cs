@@ -28,9 +28,10 @@ namespace Pms.AdjustmentModule.FrontEnd.Commands.Billing_Records
         private bool executable = true;
         public bool CanExecute(object? parameter) => executable;
 
-        public async void Execute(object? parameter)
+        public void Execute(object? parameter)
         {
             executable = false;
+            NotifyCanExecuteChanged();
             BillingRecordDetailVm detailVm = new(new() { EffectivityDate = DateTime.Now }, Records, Employees);
             if (parameter is BillingRecord record)
                 detailVm = new(record, Records, Employees);
@@ -40,8 +41,9 @@ namespace Pms.AdjustmentModule.FrontEnd.Commands.Billing_Records
             detailView.ShowDialog();
 
             executable = true;
+            NotifyCanExecuteChanged();
         }
+        public void NotifyCanExecuteChanged() => CanExecuteChanged?.Invoke(this, new EventArgs());
 
-        public void NotifyCanExecuteChanged() { }
     }
 }

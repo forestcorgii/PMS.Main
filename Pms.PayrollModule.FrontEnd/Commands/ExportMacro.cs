@@ -37,7 +37,8 @@ namespace Pms.PayrollModule.FrontEnd.Commands
                 return; 
             }
             executable = false;
-            
+            NotifyCanExecuteChanged();
+
             try
             {
                 await Task.Run(() =>

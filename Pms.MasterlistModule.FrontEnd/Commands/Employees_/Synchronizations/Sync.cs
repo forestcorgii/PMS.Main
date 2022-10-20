@@ -16,7 +16,7 @@ using Pms.Main.FrontEnd.Common;
 using Pms.Main.FrontEnd.Common.Utils;
 using Pms.Masterlists.Domain.Entities.Employees;
 
-namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
+namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
 {
     public class Sync : IAsyncRelayCommand
     {
@@ -53,12 +53,13 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
         public async Task ExecuteAsync(object? parameter)
         {
             executable = false;
+            NotifyCanExecuteChanged();
 
             try
             {
                 try
                 {
-                    IHRMSInformation employeeFoundOnServer = await _model.FindEmployeeAsync(_viewModel.Employee.EEId, _viewModel.Employee.Site);
+                    IHRMSInformation employeeFoundOnServer = await _model.SyncOneAsync(_viewModel.Employee.EEId, _viewModel.Employee.Site);
                     if (employeeFoundOnServer is not null)
                     {
                         _viewModel.Employee.LastName = employeeFoundOnServer.LastName;
@@ -75,12 +76,13 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
             catch (HttpRequestException) { MessageBoxes.Error("HTTP Request failed, please check Your HRMS Configuration."); }
 
             executable = true;
+            NotifyCanExecuteChanged();
         }
 
 
 
+        public void NotifyCanExecuteChanged() => CanExecuteChanged?.Invoke(this, new EventArgs());
 
-        public void NotifyCanExecuteChanged() { }
         public void Cancel() { }
     }
 }

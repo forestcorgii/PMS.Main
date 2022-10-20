@@ -53,8 +53,9 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+                <Button Content="Load Summary" Command="{Binding LoadSummary}" Margin="4"/>
                 <Button Content="Download" Command="{Binding DownloadCommand}" Margin="4"/>
-                <Button Content="Evaluate" Command="{Binding EvaluateCommand}" Margin="4" />
+                <!--<Button Content="Evaluate" Command="{Binding EvaluateCommand}" Margin="4" />-->
                 <Button Content="Export" Command="{Binding ExportCommand}" Margin="4" />
             </StackPanel>
 
@@ -72,26 +73,36 @@
 
             <Grid Grid.Column="5" Grid.Row="10" Margin="4" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="55"/>
                     <ColumnDefinition Width="45"/>
-                    <ColumnDefinition Width="145"/>
+                    <ColumnDefinition Width="200"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Button Content="Add" Command="{Binding DetailTimesheet}" Margin="4"/>
+                <Button Grid.Column="0" Content="Add" Command="{Binding DetailTimesheet}" Margin="4"/>
 
-                <TextBlock Text="Search:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                <TextBox Grid.Column="1" Margin="8,3" Text="{Binding Path=SearchInput, UpdateSourceTrigger=PropertyChanged, Delay=150}" CharacterCasing="Upper" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" Text="Search:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                <TextBox Grid.Column="2" Margin="8,3" Text="{Binding Path=SearchInput, UpdateSourceTrigger=PropertyChanged, Delay=150}" CharacterCasing="Upper" VerticalAlignment="Center"/>
             </Grid>
         </Grid>
 
 
         <Grid Grid.Row="1">
+            <Grid.Resources>
+                <Style x:Key="errorRow" TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsConfirmed}" Value="False">
+                            <Setter Property="Background" Value="Salmon"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Resources>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <DataGrid x:Name="dataGrid" Grid.Row="2" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Timesheets}">
+            <DataGrid x:Name="dataGrid" Grid.Row="2" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Timesheets}" RowStyle="{StaticResource errorRow}">
                 <DataGrid.Columns>
 
                     <DataGridTemplateColumn Header="">
@@ -113,17 +124,17 @@
                     
                     <DataGridCheckBoxColumn Header="OK" Binding="{Binding IsConfirmed}"/>
                     <DataGridTextColumn Header="EE Id" Binding="{Binding EEId}"/>
-                    <DataGridTextColumn Header="Full Name" Binding="{Binding Fullname}"/>
-                    <DataGridTextColumn Header="Payroll Code" Binding="{Binding PayrollCode}"/>
-                    <DataGridTextColumn Header="Bank" Binding="{Binding Bank}"/>
-                    <DataGridTextColumn Header="Department" Binding="{Binding Location}"/>
-                    <DataGridTextColumn Header="Total Hours" Binding="{Binding TotalHours}"/>
-                    <DataGridTextColumn Header="OT" Binding="{Binding TotalOT}"/>
-                    <DataGridTextColumn Header="RD OT" Binding="{Binding TotalRDOT}"/>
-                    <DataGridTextColumn Header="H OT" Binding="{Binding TotalHOT}"/>
-                    <DataGridTextColumn Header="ND" Binding="{Binding TotalND}"/>
-                    <DataGridTextColumn Header="Tardy" Binding="{Binding TotalTardy}"/>
-                    <DataGridTextColumn Header="Allowance" Binding="{Binding Allowance}"/>
+                    <DataGridTextColumn Header="Full Name" Binding="{Binding EE.Fullname}"/>
+                    <DataGridTextColumn Header="EE Payroll Code" Binding="{Binding EE.PayrollCode}"/>
+                    <DataGridTextColumn Header="Bank" Binding="{Binding EE.Bank}"/>
+                    <DataGridTextColumn Header="Department" Binding="{Binding EE.Location}"/>
+                    <DataGridTextColumn Header="Total Hours" Binding="{Binding TotalHours, StringFormat={}{0:N2}}"/>
+                    <DataGridTextColumn Header="OT" Binding="{Binding TotalOT, StringFormat={}{0:N2}}"/>
+                    <DataGridTextColumn Header="RD OT" Binding="{Binding TotalRDOT, StringFormat={}{0:N2}}"/>
+                    <DataGridTextColumn Header="H OT" Binding="{Binding TotalHOT, StringFormat={}{0:N2}}"/>
+                    <DataGridTextColumn Header="ND" Binding="{Binding TotalND, StringFormat={}{0:N2}}"/>
+                    <DataGridTextColumn Header="Tardy" Binding="{Binding TotalTardy, StringFormat={}{0:N2}}"/>
+                    <DataGridTextColumn Header="Allowance" Binding="{Binding Allowance, StringFormat={}{0:N2}}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

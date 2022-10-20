@@ -60,8 +60,8 @@ namespace Pms.TimesheetModule.FrontEnd.ViewModels
         }
 
 
-        private IEnumerable<Timesheet> _timesheets;
-        public IEnumerable<Timesheet> Timesheets
+        private ObservableCollection<Timesheet> _timesheets;
+        public ObservableCollection<Timesheet> Timesheets
         {
             get => _timesheets;
             set => SetProperty(ref _timesheets, value);
@@ -69,6 +69,7 @@ namespace Pms.TimesheetModule.FrontEnd.ViewModels
 
         #endregion
 
+        public ICommand LoadSummary { get; }
         public ICommand DownloadCommand { get; }
         public ICommand EvaluateCommand { get; }
         public ICommand ExportCommand { get; }
@@ -82,10 +83,11 @@ namespace Pms.TimesheetModule.FrontEnd.ViewModels
         {
             LoadTimesheets = new Listing(this, timesheets);
 
+            LoadSummary = new LoadSummary(this, timesheets);
             DownloadCommand = new Download(this, timesheets);
             EvaluateCommand = new EvaluateAll(this, timesheets);
             ExportCommand = new Export(this, timesheets);
-            DetailTimesheet = new Detail(timesheets);
+            DetailTimesheet = new Detail(this, timesheets);
 
             _timesheets = new ObservableCollection<Timesheet>();
             Timesheets = new ObservableCollection<Timesheet>();

@@ -24,6 +24,6 @@ namespace Pms.Main.FrontEnd.Common.Utils
                 caption,
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question
-            ) == MessageBoxResult.OK;
+            ) == MessageBoxResult.Yes;
     }
 }

@@ -28,21 +28,24 @@ namespace Pms.AdjustmentModule.FrontEnd.Commands.Billing_Records
         private bool executable = true;
         public bool CanExecute(object? parameter) => executable;
 
-        public async void Execute(object? parameter)
+        public void Execute(object? parameter)
         {
             executable = false;
+            NotifyCanExecuteChanged();
 
             ViewModel.Record.EE = null;
             ViewModel.Record.RecordId = BillingRecord.GenerateId(ViewModel.Record);
             Records.SaveRecord(ViewModel.Record);
-            
+
             MessageBoxes.Prompt("Changes has been successfully saved.", "");
 
             ViewModel.Close();
 
             executable = true;
+            NotifyCanExecuteChanged();
         }
 
-        public void NotifyCanExecuteChanged() { }
+        public void NotifyCanExecuteChanged() => CanExecuteChanged?.Invoke(this, new EventArgs());
+
     }
 }

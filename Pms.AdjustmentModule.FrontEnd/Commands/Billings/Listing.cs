@@ -35,6 +35,7 @@ namespace Pms.AdjustmentModule.FrontEnd.Commands
         public async void Execute(object? parameter)
         {
             executable = false;
+            NotifyCanExecuteChanged();
 
             try
             {

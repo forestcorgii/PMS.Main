@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Mvvm.Input;
+using Pms.Main.FrontEnd.Common.Utils;
 using Pms.TimesheetModule.FrontEnd.Models;
 using Pms.TimesheetModule.FrontEnd.ViewModels;
 using Pms.Timesheets.Domain;
@@ -33,42 +34,55 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
         public async void Execute(object? parameter)
         {
             executable = false;
+            NotifyCanExecuteChanged();
 
             await Task.Run(() =>
             {
-                Cutoff cutoff = _viewModel.Cutoff;
-                string cutoffId = cutoff.CutoffId;
-                string payrollCode = _viewModel.PayrollCode.PayrollCodeId;
-
-                IEnumerable<Timesheet> timesheets = _model.GetTimesheets(cutoffId).FilterByPayrollCode(payrollCode);
-                IEnumerable<Timesheet> twoPeriodTimesheets = _model.GetTwoPeriodTimesheets(cutoffId).FilterByPayrollCode(payrollCode);
-                
-                List<TimesheetBankChoices> bankCategories = timesheets.ExtractBanks();
-
-                _viewModel.SetProgress("Exporting Timesheets", bankCategories.Count);
-                foreach (TimesheetBankChoices bankCategory in bankCategories)
+                try
                 {
-                    var timesheetsByBankCategory = timesheets.FilterByBank(bankCategory);
-                    var twoPeriodTimesheetsByBankCategory = twoPeriodTimesheets.FilterByBank(bankCategory);
-                    if (timesheetsByBankCategory.Any())
+                    Cutoff cutoff = _viewModel.Cutoff;
+                    string cutoffId = cutoff.CutoffId;
+                    string payrollCode = _viewModel.PayrollCode.PayrollCodeId;
+                    cutoff.SetSite(_viewModel.PayrollCode.Site);
+
+                    IEnumerable<Timesheet> timesheets = _model.GetTimesheets(cutoffId);
+                    timesheets = timesheets.FilterByPayrollCode(payrollCode);
+                    if (timesheets.Any(ts => !ts.IsValid))
+                        if (!MessageBoxes.Inquire("There are Timesheets that are invalid, do you want to proceed?"))
+                            return;
+
+                    IEnumerable<Timesheet> twoPeriodTimesheets = _model.GetTwoPeriodTimesheets(cutoffId).FilterByPayrollCode(payrollCode);
+
+                    List<TimesheetBankChoices> bankCategories = timesheets.ExtractBanks();
+
+                    _viewModel.SetProgress("Exporting Timesheets", bankCategories.Count);
+                    foreach (TimesheetBankChoices bankCategory in bankCategories)
                     {
-                        List<Timesheet> exportable = timesheetsByBankCategory.ByExportable().ToList();
-                        ExportDBF(cutoff, payrollCode, bankCategory, exportable);
-                        
-                        List<Timesheet> unconfirmedTimesheetsWithAttendance = timesheetsByBankCategory.ByUnconfirmedWithAttendance().ToList();
-                        List<Timesheet> unconfirmedTimesheetsWithoutAttendance = timesheetsByBankCategory.ByUnconfirmedWithoutAttendance().ToList();
-                        ExportFeedback(cutoff, payrollCode, bankCategory, exportable, unconfirmedTimesheetsWithAttendance, unconfirmedTimesheetsWithoutAttendance);
+                        var timesheetsByBankCategory = timesheets.FilterByBank(bankCategory);
+                        var twoPeriodTimesheetsByBankCategory = twoPeriodTimesheets.FilterByBank(bankCategory);
+                        if (timesheetsByBankCategory.Any())
+                        {
+                            List<Timesheet> exportable = timesheetsByBankCategory.ByExportable().ToList();
+                            ExportDBF(cutoff, payrollCode, bankCategory, exportable);
+
+                            List<Timesheet> unconfirmedTimesheetsWithAttendance = timesheetsByBankCategory.ByUnconfirmedWithAttendance().ToList();
+                            List<Timesheet> unconfirmedTimesheetsWithoutAttendance = timesheetsByBankCategory.ByUnconfirmedWithoutAttendance().ToList();
+                            ExportFeedback(cutoff, payrollCode, bankCategory, exportable, unconfirmedTimesheetsWithAttendance, unconfirmedTimesheetsWithoutAttendance);
 
 
-                        IEnumerable<Timesheet> monthlyExportable = twoPeriodTimesheetsByBankCategory.ByExportable();
-                        ExportEFile(cutoff, payrollCode, bankCategory, monthlyExportable.GroupTimesheetsByEEId().ToList());
+                            IEnumerable<Timesheet> monthlyExportable = twoPeriodTimesheetsByBankCategory.ByExportable();
+                            ExportEFile(cutoff, payrollCode, bankCategory, monthlyExportable.GroupTimesheetsByEEId().ToList());
+                        }
+                        _viewModel.ProgressValue++;
                     }
-                    _viewModel.ProgressValue++;
                 }
+                catch (Exception ex) { MessageBoxes.Error(ex.Message); }
+
                 _viewModel.SetAsFinishProgress();
             });
 
             executable = true;
+            NotifyCanExecuteChanged();
         }
 
         public void ExportFeedback(Cutoff cutoff, string payrollCode, TimesheetBankChoices bank, List<Timesheet> exportable, List<Timesheet> unconfirmedTimesheetsWithAttendance, List<Timesheet> unconfirmedTimesheetsWithoutAttendance)
@@ -82,10 +96,7 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
                 System.IO.Directory.CreateDirectory(efiledir);
                 service.StartExport(efilepath);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
         }
 
         public void ExportEFile(Cutoff cutoff, string payrollCode, TimesheetBankChoices bank, List<Timesheet[]> exportable)
@@ -122,9 +133,7 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
             }
         }
 
-        public void NotifyCanExecuteChanged()
-        {
-
-        }
+        public void NotifyCanExecuteChanged() =>
+            CanExecuteChanged?.Invoke(this, new());
     }
 }

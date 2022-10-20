@@ -18,6 +18,8 @@ namespace Pms.TimesheetModule.FrontEnd.ViewModels
         private Timesheet timesheet = new();
         public Timesheet Timesheet { get => timesheet; set => SetProperty(ref timesheet, value); }
 
+        public bool IsForEditing { get => !string.IsNullOrEmpty(timesheet.EEId); }
+
         public ICommand Save { get; }
 
         public event EventHandler OnRequestClose;

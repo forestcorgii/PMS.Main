@@ -8,7 +8,7 @@ using Pms.Masterlists.Persistence;
 using Pms.Masterlists.ServiceLayer.EfCore;
 using Pms.Masterlists.ServiceLayer.Files;
 using Pms.Masterlists.ServiceLayer.HRMS.Adapter;
-using Pms.Masterlists.ServiceLayer.HRMS.Service;
+using Pms.Masterlists.ServiceLayer.HRMS.Services;
 using System;
 
 namespace Pms.MasterlistModule.FrontEnd
@@ -36,7 +36,7 @@ namespace Pms.MasterlistModule.FrontEnd
 
             services.AddSingleton<EmployeeProvider>();
             services.AddSingleton<EmployeeManager>();
-            services.AddSingleton<FindEmployeeService>();
+            services.AddSingleton<HrmsEmployeeProvider>();
             services.AddSingleton<EmployeeBankInformationImporter>();
 
             services.AddSingleton<EmployeeListingVm>();

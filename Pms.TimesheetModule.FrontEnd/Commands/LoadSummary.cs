@@ -6,6 +6,7 @@ using Pms.Timesheets.Domain;
 using Pms.Timesheets.Domain.SupportTypes;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,12 +14,12 @@ using System.Windows;
 
 namespace Pms.TimesheetModule.FrontEnd.Commands
 {
-    public class Download : IRelayCommand
+    public class LoadSummary : IRelayCommand
     {
         private TimesheetListingVm ViewModel;
         private Models.Timesheets Timesheets;
 
-        public Download(TimesheetListingVm viewModel, Models.Timesheets timesheets)
+        public LoadSummary(TimesheetListingVm viewModel, Models.Timesheets timesheets)
         {
             ViewModel = viewModel;
             Timesheets = timesheets;
@@ -38,28 +39,15 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
             string payrollCode = ViewModel.PayrollCode.Name;
             Cutoff cutoff = ViewModel.Cutoff;
             cutoff.SetSite(site);
-            try
-            {
-                if (parameter is int page)
-                {
-                    ViewModel.SetProgress($"Downloading Timesheet Page {page}..", 1);
-                    await DownloadPage(page, cutoff, payrollCode, site);
-                }
-                else if (parameter is int[] pages)
-                {
-                    await StartDownload(pages, cutoff, payrollCode, site);
-                }
-                else
-                {
-                    ViewModel.SetProgress("Retrieving Download content summary", 1);
-                    DownloadSummary<Timesheet> summary = await Timesheets.DownloadContentSummary(cutoff, payrollCode, site);
-                    pages = Enumerable.Range(0, int.Parse(summary.TotalPage) + 1).ToArray();
 
-                    await StartDownload(pages, cutoff, payrollCode, site);
-                }
-            }
-            catch (Exception ex)  { MessageBoxes.Error(ex.Message); }
+            var summary = await Timesheets.DownloadContentSummary(cutoff, payrollCode, site);
+            IEnumerable<Timesheet> timesheets = Timesheets.MapEmployeeView(summary.UnconfirmedTimesheet);
 
+            ViewModel.Timesheets = new ObservableCollection<Timesheet>(timesheets);
+            ViewModel.NotConfirmed = ViewModel.Timesheets.Count;
+
+            ViewModel.Confirmed = int.Parse(summary.TotalConfirmed);
+            ViewModel.TotalTimesheets = int.Parse(summary.TotalCount);
 
             ViewModel.SetAsFinishProgress();
 
@@ -109,6 +97,6 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
 
 
         public void NotifyCanExecuteChanged() =>
-    CanExecuteChanged?.Invoke(this, new());
+         CanExecuteChanged?.Invoke(this, new());
     }
 }

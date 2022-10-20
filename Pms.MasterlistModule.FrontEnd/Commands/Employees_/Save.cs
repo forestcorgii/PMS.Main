@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Pms.Masterlists.Domain.Entities.Employees;
 
-namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
+namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
 {
     public class Save : IRelayCommand
     {
@@ -33,6 +33,7 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
         public void Execute(object? parameter)
         {
             executable = false;
+            NotifyCanExecuteChanged();
             if (parameter is not null)
             {
                 try
@@ -40,14 +41,16 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Masterlists
                     _model.Save(_viewModel.Employee);
 
                     MessageBoxes.Prompt("Changes has been successfully saved.", "");
-                    
+
                     _viewModel.Close();
                 }
+                catch (InvalidFieldValuesException ex) { MessageBoxes.Error(ex.Detail, ex.Message); }
                 catch (InvalidFieldValueException ex) { MessageBoxes.Error(ex.Message, ""); }
                 catch (DuplicateBankInformationException ex) { MessageBoxes.Error(ex.Message, ""); }
             }
 
             executable = true;
+            NotifyCanExecuteChanged();
         }
 
         protected bool executable = true;

@@ -36,6 +36,7 @@ namespace Pms.AdjustmentModule.FrontEnd.Commands.Billing_Records
         public async void Execute(object? parameter)
         {
             executable = false;
+            NotifyCanExecuteChanged();
 
             try
             {
