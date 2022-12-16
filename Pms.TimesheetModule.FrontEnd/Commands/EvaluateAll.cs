@@ -67,7 +67,7 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
 
                        foreach (Timesheet timesheet in timesheetItems)
                        {
-                           Timesheets.SaveEmployeeData(timesheet);
+                           //Timesheets.SaveEmployeeData(timesheet);
                            ListingVm.ProgressValue++;
                        }
                    }

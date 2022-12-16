@@ -17,33 +17,24 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
     public class Detail : IRelayCommand
     {
         private Models.Timesheets Timesheets;
-        private TimesheetListingVm ViewModel;
+        private TimesheetListingVm ListingVm;
         public Detail(TimesheetListingVm viewModel, Models.Timesheets timesheets)
         {
             Timesheets = timesheets;
-            ViewModel = viewModel;
-
+            ListingVm = viewModel;
+            ListingVm.CanExecuteChanged += ListingVm_CanExecuteChanged;
         }
 
         public event EventHandler? CanExecuteChanged;
 
-        private bool executable = true;
-        public bool CanExecute(object? parameter) => executable;
-
         public void Execute(object? parameter)
         {
-            executable = false;
-            NotifyCanExecuteChanged();
             try
             {
                 TimesheetDetailVm detailVm;
                 if (parameter is Timesheet timesheet)
                     detailVm = new(Timesheets, timesheet);
-                else detailVm = new(Timesheets, new()
-                {
-                    PayrollCode = ViewModel.PayrollCode.PayrollCodeId,
-                    CutoffId = ViewModel.Cutoff.CutoffId
-                });
+                else detailVm = new(Timesheets, new() { CutoffId = ListingVm.Cutoff.CutoffId });
 
                 TimesheetDetailView detailView = new() { DataContext = detailVm };
 
@@ -53,11 +44,11 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
             }
             catch (Exception ex) { MessageBoxes.Error(ex.Message); }
 
-            executable = true;
-            NotifyCanExecuteChanged();
         }
 
+        public bool CanExecute(object? parameter) => ListingVm.Executable;
+        private void ListingVm_CanExecuteChanged(object? sender, bool e) => NotifyCanExecuteChanged();
         public void NotifyCanExecuteChanged() =>
-            CanExecuteChanged?.Invoke(this, new());
+            CanExecuteChanged?.Invoke(this, new EventArgs());
     }
 }

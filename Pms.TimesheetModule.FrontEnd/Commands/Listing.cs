@@ -50,7 +50,7 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
                     _viewModel.Timesheets = new ObservableCollection<Timesheet>(timesheets);
                     _viewModel.Confirmed = timesheets.Count(p => p.TotalHours > 0 && p.IsConfirmed);
                     _viewModel.CWithoutAttendance = timesheets.Count(p => p.TotalHours == 0 && p.IsConfirmed);
-                    _viewModel.NotConfirmed = timesheets.Count(p => p.TotalHours == 0 && !p.IsConfirmed);
+                    _viewModel.NotConfirmed = timesheets.Count(p => !p.IsConfirmed);
                     _viewModel.NCWithAttendance = timesheets.Count(p => p.TotalHours > 0 && !p.IsConfirmed);
                     _viewModel.TotalTimesheets = timesheets.Count();
                 }
@@ -72,11 +72,12 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
     {
         public static IEnumerable<Timesheet> FilterPayrollCode(this IEnumerable<Timesheet> timesheets, string payrollCode)
         {
-            if (payrollCode is not null)
+            if (!string.IsNullOrEmpty(payrollCode))
                 return timesheets
                     .Where(p => p.EE is not null)
                     .Where(p => p.EE.PayrollCode == payrollCode);
-            return timesheets;
+            else
+                return timesheets.Where(p => p.EE is null);
         }
 
         public static IEnumerable<Timesheet> FilterSearchInput(this IEnumerable<Timesheet> timesheets, string filter)

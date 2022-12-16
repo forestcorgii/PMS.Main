@@ -51,7 +51,7 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
 
         public ICommand LoadEmployees { get; }
 
-        public ICommand SyncMany { get; }
+        public ICommand SyncAll { get; }
         public ICommand SyncNewlyHired { get; }
         public ICommand SyncResigned { get; }
 
@@ -73,13 +73,13 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
             AllEEExport = new MasterlistExport(this, employees);
             NoTinEEExport = new UnknownTin(this, employees);
 
-            CheckDetail = new Detail(employees);
+            CheckDetail = new Detail(this,employees);
 
-            SyncMany = new SyncMany(this, employees);
+            SyncAll = new SyncAll(this, employees);
             SyncNewlyHired = new SyncNewlyHired(this, employees);
             SyncResigned = new SyncResigned(this, employees);
 
-            OpenPayrollCodeView = new Commands.Payroll_Codes.OpenView(payrollCodes, companies);
+            OpenPayrollCodeView = new Commands.Payroll_Codes.OpenView(this,payrollCodes, companies);
 
             LoadEmployees = new Listing(this, employees);
 

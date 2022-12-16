@@ -66,11 +66,9 @@ namespace Pms.TimesheetModule.FrontEnd.Models
             return Enumerable.Empty<string>();
         }
 
-        public void SaveEmployeeData(Timesheet timesheet) =>
-            _timesheetManager.SaveTimesheetEmployeeData(timesheet);
 
         public void SaveTimesheet(Timesheet timesheet) =>
-            _timesheetManager.SaveTimesheet(timesheet, timesheet.PayrollCode, timesheet.CutoffId, 0);
+            _timesheetManager.SaveTimesheet(timesheet, timesheet.CutoffId, 0);
 
 
 
@@ -95,13 +93,13 @@ namespace Pms.TimesheetModule.FrontEnd.Models
         public async Task<DownloadSummary<Timesheet>> DownloadContentSummary(Cutoff cutoff, string payrollCode, string site) =>
              await _downloadProvider.GetTimesheetSummary(cutoff.CutoffRange, payrollCode, site);
 
-        public async Task<IEnumerable<Timesheet>> DownloadContent(Cutoff cutoff, string payrollCodeName, string payrollCodeId, string site, int page)
+        public async Task<IEnumerable<Timesheet>> DownloadContent(Cutoff cutoff, string payrollCodeName, string site, int page)
         {
             DownloadContent<Timesheet> rawTimesheets = await _downloadProvider.DownloadTimesheets(cutoff.CutoffRange, payrollCodeName, page, site);
             if (rawTimesheets is not null && rawTimesheets.message is not null)
             {
                 foreach (Timesheet timesheet in rawTimesheets.message)
-                    _timesheetManager.SaveTimesheet(timesheet, payrollCodeId, cutoff.CutoffId, page);
+                    _timesheetManager.SaveTimesheet(timesheet, cutoff.CutoffId, page);
 
                 return rawTimesheets.message;
             }

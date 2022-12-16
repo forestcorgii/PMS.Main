@@ -16,58 +16,50 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
 {
     public class LoadSummary : IRelayCommand
     {
-        private TimesheetListingVm ViewModel;
         private Models.Timesheets Timesheets;
+        private TimesheetListingVm ListingVm;
 
         public LoadSummary(TimesheetListingVm viewModel, Models.Timesheets timesheets)
         {
-            ViewModel = viewModel;
             Timesheets = timesheets;
+            ListingVm = viewModel;
+            ListingVm.CanExecuteChanged += ListingVm_CanExecuteChanged;
         }
 
         public event EventHandler? CanExecuteChanged;
-
-        private bool executable = true;
-        public bool CanExecute(object? parameter) => executable;
-
+         
         public async void Execute(object? parameter)
-        {
-            executable = false;
-            NotifyCanExecuteChanged();
-
-            string site = ViewModel.Site.ToString();
-            string payrollCode = ViewModel.PayrollCode.Name;
-            Cutoff cutoff = ViewModel.Cutoff;
+        { 
+            string site = ListingVm.Site.ToString();
+            string payrollCode = ListingVm.PayrollCode.Name;
+            Cutoff cutoff = ListingVm.Cutoff;
             cutoff.SetSite(site);
 
             var summary = await Timesheets.DownloadContentSummary(cutoff, payrollCode, site);
             IEnumerable<Timesheet> timesheets = Timesheets.MapEmployeeView(summary.UnconfirmedTimesheet);
 
-            ViewModel.Timesheets = new ObservableCollection<Timesheet>(timesheets);
-            ViewModel.NotConfirmed = ViewModel.Timesheets.Count;
+            ListingVm.Timesheets = new ObservableCollection<Timesheet>(timesheets);
+            ListingVm.NotConfirmed = ListingVm.Timesheets.Count;
 
-            ViewModel.Confirmed = int.Parse(summary.TotalConfirmed);
-            ViewModel.TotalTimesheets = int.Parse(summary.TotalCount);
+            ListingVm.Confirmed = int.Parse(summary.TotalConfirmed);
+            ListingVm.TotalTimesheets = int.Parse(summary.TotalCount);
 
-            ViewModel.SetAsFinishProgress();
-
-            executable = true;
-            NotifyCanExecuteChanged();
+            ListingVm.SetAsFinishProgress();
         }
 
 
         public async Task StartDownload(int[] pages, Cutoff cutoff, string payrollCode, string site)
         {
-            ViewModel.SetProgress("Downloading Timesheets", pages.Length);
+            ListingVm.SetProgress("Downloading Timesheets", pages.Length);
 
             foreach (int page in pages)
             {
                 await DownloadPage(page, cutoff, payrollCode, site);
-                ViewModel.ProgressValue++;
+                ListingVm.ProgressValue++;
             }
 
 
-            ViewModel.SetAsFinishProgress();
+            ListingVm.SetAsFinishProgress();
         }
 
         public async Task DownloadPage(int page, Cutoff cutoff, string payrollCode, string site)
@@ -76,14 +68,13 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
             {
                 try
                 {
-                    IEnumerable<Timesheet> timesheets = await Timesheets.DownloadContent(cutoff, payrollCode, ViewModel.PayrollCode.PayrollCodeId, site, page);
+                    IEnumerable<Timesheet> timesheets = await Timesheets.DownloadContent(cutoff, payrollCode,  site, page);
                     foreach (Timesheet timesheet in timesheets)
                     {
                         EmployeeView ee = Timesheets.FindEmployeeView(timesheet.EEId);
                         timesheet.EE = ee;
-                        timesheet.PayrollCode = ViewModel.PayrollCode.PayrollCodeId;
                         timesheet.CutoffId = cutoff.CutoffId;
-                        ViewModel.Timesheets.Add(timesheet);
+                        ListingVm.Timesheets.Add(timesheet);
                     }
                     break;
                 }
@@ -96,7 +87,9 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
         }
 
 
+        public bool CanExecute(object? parameter) => ListingVm.Executable;
+        private void ListingVm_CanExecuteChanged(object? sender, bool e) => NotifyCanExecuteChanged();
         public void NotifyCanExecuteChanged() =>
-         CanExecuteChanged?.Invoke(this, new());
+            CanExecuteChanged?.Invoke(this, new EventArgs());
     }
 }

@@ -67,6 +67,7 @@
                     <MenuItem Header="Bank Report" Command="{Binding PayrollBankReportExport}"/>
                     <MenuItem Header="Alphalist" Command="{Binding PayrollAlphalistExport}"/>
                     <MenuItem Header="Macro" Command="{Binding PayrollMacroExport}"/>
+                    <MenuItem Header="13th Month" Command="{Binding Payroll13thMonthExport}"/>
                 </MenuItem>
             </Menu>
 
@@ -109,6 +110,7 @@
                     <DataGridTextColumn Header="Bank" Binding="{Binding EE.Bank}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Company" Binding="{Binding CompanyId}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Gross Pay" Binding="{Binding GrossPay, StringFormat={}{0:N2}}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Regular Pay" Binding="{Binding RegularPay, StringFormat={}{0:N2}}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Net Pay" Binding="{Binding NetPay, StringFormat={}{0:N2}}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="HDMF EE" Binding="{Binding EmployeePagibig, StringFormat={}{0:N2}}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="HDMF ER" Binding="{Binding EmployerPagibig, StringFormat={}{0:N2}}" IsReadOnly="True"/>
@@ -133,6 +135,7 @@
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="25"/>
                 <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="65"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -145,6 +148,7 @@
             <TextBlock Grid.Column="3" Text="{Binding ProgressMaximum, StringFormat={}{0:N0}}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,0"/>
 
             <ProgressBar Grid.ColumnSpan="5" Grid.Row="1" Maximum="{Binding ProgressMaximum}" Value="{Binding ProgressValue}"/>
+            <Button Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Cancel" Command="{Binding Cancel}"/>
         </Grid>
     </Grid>
 </UserControl>

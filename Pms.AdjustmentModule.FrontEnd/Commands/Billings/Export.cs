@@ -42,7 +42,7 @@ namespace Pms.AdjustmentModule.FrontEnd.Commands
                     AdjustmentTypes adjustmentType = _viewModel.AdjustmentName;
                     IEnumerable<Billing> billingItems = _viewModel.Billings;
 
-                    Billings.Export(billingItems, adjustmentType, $"{cutoffId}_{payrollCode}_{adjustmentType}.xls");
+                    Billings.Export(billingItems,cutoffId,payrollCode, adjustmentType );
                     _viewModel.SetAsFinishProgress();
                 });
             }

@@ -68,14 +68,13 @@
 
         <TextBlock Grid.Row="1" Grid.Column="0">EE Id:</TextBlock>
         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Timesheet.EEId}" IsReadOnly="{Binding IsForEditing}"/>
-        <TextBlock Grid.Row="1" Grid.Column="2">Payroll Code:</TextBlock>
-        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Timesheet.PayrollCode}" IsReadOnly="True"/>
-        <TextBlock Grid.Row="1" Grid.Column="4">Cutoff Id:</TextBlock>
-        <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Timesheet.CutoffId}" IsReadOnly="True"/>
-        
+        <TextBlock Grid.Row="1" Grid.Column="2">Cutoff Id:</TextBlock>
+        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Timesheet.CutoffId}" IsReadOnly="True"/>
+        <CheckBox Grid.Row="1" Grid.Column="5" Content="Is Confirmed" IsChecked="{Binding Timesheet.IsConfirmed}"/>
+
         <TextBlock Grid.Row="2" Grid.Column="0">Regular Hours:</TextBlock>
         <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Timesheet.TotalHours}"/>
-        
+
         <TextBlock Grid.Row="3" Grid.Column="0">Overtime:</TextBlock>
         <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Timesheet.TotalOT}"/>
         <TextBlock Grid.Row="4" Grid.Column="0">Restday Overtime:</TextBlock>

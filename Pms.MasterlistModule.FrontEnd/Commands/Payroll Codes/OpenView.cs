@@ -24,18 +24,19 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Payroll_Codes
         private readonly PayrollCodes PayrollCodes;
         private readonly Companies Companies;
 
+        private EmployeeListingVm ListingVm;
 
-        public OpenView(PayrollCodes model, Companies companies)
+        public OpenView(EmployeeListingVm listingVm, PayrollCodes model, Companies companies)
         {
             PayrollCodes = model;
             Companies = companies;
+            ListingVm = listingVm;
+            ListingVm.CanExecuteChanged += ListingVm_CanExecuteChanged;
         }
 
         public void Execute(object? parameter)
         {
-            Executable = false;
-            NotifyCanExecuteChanged();
-
+            ListingVm.SetProgress("", 1);
             try
             {
                 PayrollCodeDetailVm vm = new(PayrollCodes, Companies);
@@ -45,16 +46,13 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Payroll_Codes
             }
             catch (Exception ex) { MessageBoxes.Error(ex.Message, ""); }
 
-            Executable = true;
-            NotifyCanExecuteChanged();
+            ListingVm.SetAsFinishProgress();
         }
-
-        protected bool Executable = true;
 
         public event EventHandler? CanExecuteChanged;
 
-        public bool CanExecute(object? parameter) => Executable;
-
+        public bool CanExecute(object? parameter) => ListingVm.Executable;
+        private void ListingVm_CanExecuteChanged(object? sender, bool e) => NotifyCanExecuteChanged();
         public void NotifyCanExecuteChanged() =>
             CanExecuteChanged?.Invoke(this, new EventArgs());
 

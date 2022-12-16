@@ -52,7 +52,7 @@ namespace Pms.AdjustmentModule.FrontEnd.Models
 
         public void AddBilling(Billing billing) => _billingManager.AddBilling(billing);
 
-        public void Export(IEnumerable<Billing> billings, AdjustmentTypes adjustmentType, string filename) =>
-            _billingExporter.ExportBillings(billings, adjustmentType, filename);
+        public void Export(IEnumerable<Billing> billings, string cutoffId, string payrollCodeId, AdjustmentTypes adjustmentName) =>
+            _billingExporter.ExportBillings(billings, cutoffId, payrollCodeId, adjustmentName);
     }
 }

@@ -17,9 +17,9 @@ namespace Pms.AdjustmentModule.FrontEnd
 {
     public static class AdjustmentBuilder
     {
-        public static ServiceCollection AddAdjustment(this ServiceCollection services, IConfigurationRoot conf)
+        public static ServiceCollection AddAdjustment(this ServiceCollection services, IConfigurationRoot conf, string connectionName)
         {
-            string connectionString = conf.GetConnectionString("Default");
+            string connectionString = conf.GetConnectionString(connectionName);
             
             services.AddSingleton<IDbContextFactory<AdjustmentDbContext>>(new AdjustmentDbContextFactory(connectionString));
 

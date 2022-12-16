@@ -29,6 +29,7 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
         {
             Model = model;
             ListingVm = listingVm;
+            ListingVm.CanExecuteChanged += ListingVm_CanExecuteChanged; ;
         }
 
         public Task? ExecutionTask { get; }
@@ -42,9 +43,8 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
         public event EventHandler? CanExecuteChanged;
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private bool executable = true;
-        public bool CanExecute(object? parameter) =>
-        executable;
+        public bool CanExecute(object? parameter) => ListingVm.Executable;
+
 
 
         public async void Execute(object? parameter) =>
@@ -53,11 +53,6 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
 
         public async Task ExecuteAsync(object? parameter)
         {
-            executable = false;
-            NotifyCanExecuteChanged();
-
-
-
             DateTime selectedDate;
             SelectDateWidget dateSelector = new();
             if (dateSelector.ShowDialog() is bool isSuccess && isSuccess)
@@ -65,14 +60,13 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
                 selectedDate = dateSelector.SelectedDate;
 
                 List<Exception> exceptions = new();
-
                 Employee[] employees = (await Model.SyncResignedAsync(selectedDate, ListingVm.Site.ToString())).ToArray();
 
                 ListingVm.SetProgress($"Found {employees.Length} resigned employees", employees.Length);
                 await Task.Run(() =>
                 {
                     if (employees.Length == 0) return;//exit if empty
-                    
+
                     try
                     {
                         foreach (Employee employee in employees)
@@ -90,27 +84,27 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
                             catch (DuplicateBankInformationException ex) { exceptions.Add(ex); }
                             catch (Exception ex) { exceptions.Add(ex); }
 
-                            ListingVm.ProgressValue++;
+
+                            if (!ListingVm.IncrementProgress())
+                                break;
                         }
+
+                        Model.ReportExceptions(exceptions, new PayrollCode(), $"{ListingVm.Site}-RESIGNED");
                     }
                     catch (HttpRequestException) { MessageBoxes.Error("HTTP Request failed, please check Your HRMS Configuration."); }
+                    catch (Exception ex) { MessageBoxes.Error(ex.Message); }
 
-                    Model.ReportExceptions(exceptions, new PayrollCode(), "RESIGNED");
 
-                    ListingVm.SetProgress($"{exceptions.Count} error/s found.", 1);
-
-                    ListingVm.LoadEmployees.Execute(null);
                 });
+
+
+                ListingVm.SetAsFinishProgress($"{exceptions.Count} error/s found.");
+                ListingVm.LoadEmployees.Execute(null);
             }
-
-
-            executable = true;
-            NotifyCanExecuteChanged();
         }
 
 
-
-
+        private void ListingVm_CanExecuteChanged(object? sender, bool e) => NotifyCanExecuteChanged();
         public void NotifyCanExecuteChanged() => CanExecuteChanged?.Invoke(this, new EventArgs());
 
         public void Cancel() { }

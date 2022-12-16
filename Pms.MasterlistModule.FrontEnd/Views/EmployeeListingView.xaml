@@ -18,7 +18,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="45"/>
             <RowDefinition/>
-            <RowDefinition Height="24"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="450"/>
@@ -37,7 +37,7 @@
                 <MenuItem Header="No TIN" Command="{Binding NoTinEEExport}"/>
             </MenuItem>
             <MenuItem Header="Sync from HRMS">
-                <MenuItem Header="Sync All" Command="{Binding SyncMany}" />
+                <MenuItem Header="Sync All" Command="{Binding SyncAll}" />
                 <MenuItem Header="Sync Newly Hired" Command="{Binding SyncNewlyHired}" />
                 <MenuItem Header="Sync Resigned" Command="{Binding SyncResigned}" />
             </MenuItem>
@@ -108,6 +108,8 @@
                     <DataGridTextColumn Header="PhilHealth" Binding="{Binding PhilHealth}"/>
 
                     <DataGridTextColumn Header="Birth Date" Binding="{Binding BirthDate,StringFormat={}{0:yyyy-MM-dd}}"/>
+                    <DataGridTextColumn Header="Date Hired" Binding="{Binding DateHired,StringFormat={}{0:yyyy-MM-dd}}"/>
+                    <DataGridTextColumn Header="Date Resigned" Binding="{Binding DateResigned,StringFormat={}{0:yyyy-MM-dd}}"/>
                 </DataGrid.Columns>
             </DataGrid>
             <Grid Grid.Row="1">
@@ -138,12 +140,26 @@
         </Grid>
 
         <!--PROGRESS & STATUS MESSAGES-->
-        <TextBlock Grid.Row="2" Text="{Binding StatusMessage}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <ProgressBar 
-            Grid.Row="2" Grid.Column="1"
-            Maximum="{Binding ProgressMaximum}"
-            Value="{Binding ProgressValue}"
-        />
+        <Grid Grid.Row="2" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="25"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="65"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="5"/>
+            </Grid.RowDefinitions>
 
+            <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,0"/>
+            <TextBlock Text="{Binding ProgressValue, StringFormat={}{0:N0}}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,0"/>
+            <TextBlock Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">of</TextBlock>
+            <TextBlock Grid.Column="3" Text="{Binding ProgressMaximum, StringFormat={}{0:N0}}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,0"/>
+
+            <ProgressBar Grid.ColumnSpan="5" Grid.Row="1" Maximum="{Binding ProgressMaximum}" Value="{Binding ProgressValue}"/>
+            <Button Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Cancel" Command="{Binding Cancel}"/>
+        </Grid>
     </Grid>
 </UserControl>

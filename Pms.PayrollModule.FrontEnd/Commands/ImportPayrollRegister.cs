@@ -53,7 +53,8 @@ namespace Pms.PayrollModule.FrontEnd.Commands
                             foreach (Payroll payroll in extractedPayrolls)
                             {
                                 _model.Save(payroll, _viewModel.PayrollCode.PayrollCodeId, _viewModel.Company.CompanyId);
-                                _viewModel.ProgressValue++;
+                                if (!_viewModel.IncrementProgress())
+                                    break;
                             }
                         }
                         catch (PayrollRegisterHeaderNotFoundException ex)

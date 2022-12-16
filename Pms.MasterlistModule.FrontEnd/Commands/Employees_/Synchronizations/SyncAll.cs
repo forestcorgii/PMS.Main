@@ -18,16 +18,18 @@ using Pms.Masterlists.Domain.Entities.Employees;
 
 namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
 {
-    public class SyncMany : IAsyncRelayCommand
+    public class SyncAll : IAsyncRelayCommand
     {
         private readonly Employees Model;
         private readonly EmployeeListingVm ListingVm;
 
 
-        public SyncMany(EmployeeListingVm listingVm, Employees model)
+        public SyncAll(EmployeeListingVm listingVm, Employees model)
         {
             Model = model;
             ListingVm = listingVm;
+
+            ListingVm.CanExecuteChanged += ListingVm_CanExecuteChanged; ;
         }
 
         public Task? ExecutionTask { get; }
@@ -41,20 +43,14 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
         public event EventHandler? CanExecuteChanged;
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private bool executable = true;
-        public bool CanExecute(object? parameter) =>
-        executable;
+        public bool CanExecute(object? parameter) => ListingVm.Executable;
 
 
-        public async void Execute(object? parameter) =>
-            await ExecuteAsync(parameter);
+        public async void Execute(object? parameter) => await ExecuteAsync(parameter);
 
 
         public async Task ExecuteAsync(object? parameter)
         {
-            executable = false;
-            NotifyCanExecuteChanged();
-
             string[] eeIds;
             if (parameter is not null && parameter is string[])
                 eeIds = (string[])parameter;
@@ -64,6 +60,10 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
             ListingVm.SetProgress("Syncing Unknown Employees", eeIds.Length);
 
             List<Exception> exceptions = new();
+
+            //Employee[] newlyHiredEmployees = (await Model.SyncNewlyHiredAsync(DateTime.Now.AddDays(-20), ListingVm.Site.ToString())).ToArray();
+
+            //Employee[] resignedEmployees = (await Model.SyncResignedAsync(DateTime.Now.AddDays(-20), ListingVm.Site.ToString())).ToArray();
 
             try
             {
@@ -101,25 +101,25 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
                         //    break;
                     }
 
-                    ListingVm.ProgressValue++;
+                    if (!ListingVm.IncrementProgress())
+                        break;
                 }
+
+                Model.ReportExceptions(exceptions, ListingVm.PayrollCode, $"{ListingVm.Site}-REGULAR");
             }
             catch (HttpRequestException) { MessageBoxes.Error("HTTP Request failed, please check Your HRMS Configuration."); }
+            catch (Exception ex) { MessageBoxes.Error(ex.Message); }
 
-            Model.ReportExceptions(exceptions, ListingVm.PayrollCode, "REGULAR");
-            
-            ListingVm.SetProgress($"{exceptions.Count} error/s found.", 1);
+            ListingVm.SetAsFinishProgress($"{exceptions.Count} error/s found.");
 
             ListingVm.LoadEmployees.Execute(null);
-
-            executable = true;
-            NotifyCanExecuteChanged();
         }
 
 
+        public void Cancel() { }
 
         public void NotifyCanExecuteChanged() => CanExecuteChanged?.Invoke(this, new EventArgs());
+        private void ListingVm_CanExecuteChanged(object? sender, bool e) => NotifyCanExecuteChanged();
 
-        public void Cancel() { }
     }
 }

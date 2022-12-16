@@ -16,17 +16,17 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
     public class Detail : IRelayCommand
     {
         private readonly Employees Employees;
+        private EmployeeListingVm ListingVm;
 
-        public Detail(Employees employees)
+        public Detail(EmployeeListingVm listingVm, Employees employees)
         {
             Employees = employees;
+            ListingVm = listingVm;
+            ListingVm.CanExecuteChanged += ListingVm_CanExecuteChanged;
         }
 
         public void Execute(object? parameter)
         {
-            executable = false;
-            NotifyCanExecuteChanged();
-
             EmployeeDetailVm detailVm;
             if (parameter is Employee employee)
                 detailVm = new(employee, Employees);
@@ -36,18 +36,13 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
 
             detailVm.OnRequestClose += (s, e) => detailView.Close();
             detailView.ShowDialog();
-
-            executable = true;
-            NotifyCanExecuteChanged();
         }
-
-        protected bool executable = true;
 
 
         public event EventHandler? CanExecuteChanged;
 
-        public bool CanExecute(object? parameter) => executable;
-
+        public bool CanExecute(object? parameter) => ListingVm.Executable;
+        private void ListingVm_CanExecuteChanged(object? sender, bool e) => NotifyCanExecuteChanged();
         public void NotifyCanExecuteChanged() =>
             CanExecuteChanged?.Invoke(this, new EventArgs());
 

@@ -16,38 +16,34 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
     public class UnknownTin : IRelayCommand
     {
         private readonly Employees _model;
-        private readonly EmployeeListingVm _viewModel;
+        private readonly EmployeeListingVm ListingVm;
 
 
         public UnknownTin(EmployeeListingVm viewModel, Employees model)
         {
             _model = model;
-            _viewModel = viewModel;
+            ListingVm = viewModel;
+            ListingVm.CanExecuteChanged += ListingVm_CanExecuteChanged;
         }
 
         public async void Execute(object? parameter)
         {
-            executable = false;
-            NotifyCanExecuteChanged();
             await Task.Run(() =>
             {
+                ListingVm.SetProgress("Exporting Unknown TIN.", 1);
                 try
                 {
-                    _model.ExportMasterlist(_viewModel.Employees.Where(e => string.IsNullOrEmpty(e.TIN)), _viewModel.PayrollCode, "NO TIN");
+                    _model.ExportMasterlist(ListingVm.Employees.Where(e => string.IsNullOrEmpty(e.TIN)), ListingVm.PayrollCode, "NO TIN");
                 }
                 catch (Exception ex) { MessageBoxes.Error(ex.Message); }
-                _viewModel.SetAsFinishProgress();
+                ListingVm.SetAsFinishProgress();
             });
-            executable = true;
-            NotifyCanExecuteChanged();
-        }
-
-        protected bool executable = true;
+            }
 
         public event EventHandler? CanExecuteChanged;
 
-        public bool CanExecute(object? parameter) => executable;
-
+        public bool CanExecute(object? parameter) => ListingVm.Executable;
+        private void ListingVm_CanExecuteChanged(object? sender, bool e) => NotifyCanExecuteChanged();
         public void NotifyCanExecuteChanged() =>
             CanExecuteChanged?.Invoke(this, new EventArgs());
 

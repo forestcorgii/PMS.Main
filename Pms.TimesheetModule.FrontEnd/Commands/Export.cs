@@ -17,45 +17,42 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
 {
     public class Export : IRelayCommand
     {
-        private readonly TimesheetListingVm _viewModel;
+        private readonly TimesheetListingVm ListingVm;
         private Models.Timesheets _model;
 
         public event EventHandler? CanExecuteChanged;
 
         public Export(TimesheetListingVm viewModel, Models.Timesheets model)
         {
-            _viewModel = viewModel;
             _model = model;
+            ListingVm = viewModel;
+            ListingVm.CanExecuteChanged += ListingVm_CanExecuteChanged;
         }
-
-        private bool executable = true;
-        public bool CanExecute(object? parameter) => executable;
 
         public async void Execute(object? parameter)
         {
-            executable = false;
-            NotifyCanExecuteChanged();
+
+            Cutoff cutoff = ListingVm.Cutoff;
+            string cutoffId = cutoff.CutoffId;
+            string payrollCode = ListingVm.PayrollCode.PayrollCodeId;
+            cutoff.SetSite(ListingVm.PayrollCode.Site);
+
+            IEnumerable<Timesheet> timesheets = _model.GetTimesheets(cutoffId);
+            timesheets = timesheets.FilterByPayrollCode(payrollCode);
+            if (timesheets.Any(ts => !ts.IsValid))
+                if (!MessageBoxes.Inquire("There are Timesheets that are invalid, do you want to proceed?"))
+                    return;
+
+            IEnumerable<Timesheet> twoPeriodTimesheets = _model.GetTwoPeriodTimesheets(cutoffId).FilterByPayrollCode(payrollCode);
+
+            List<TimesheetBankChoices> bankCategories = timesheets.ExtractBanks();
+
+            ListingVm.SetProgress("Exporting Timesheets", bankCategories.Count);
 
             await Task.Run(() =>
             {
                 try
                 {
-                    Cutoff cutoff = _viewModel.Cutoff;
-                    string cutoffId = cutoff.CutoffId;
-                    string payrollCode = _viewModel.PayrollCode.PayrollCodeId;
-                    cutoff.SetSite(_viewModel.PayrollCode.Site);
-
-                    IEnumerable<Timesheet> timesheets = _model.GetTimesheets(cutoffId);
-                    timesheets = timesheets.FilterByPayrollCode(payrollCode);
-                    if (timesheets.Any(ts => !ts.IsValid))
-                        if (!MessageBoxes.Inquire("There are Timesheets that are invalid, do you want to proceed?"))
-                            return;
-
-                    IEnumerable<Timesheet> twoPeriodTimesheets = _model.GetTwoPeriodTimesheets(cutoffId).FilterByPayrollCode(payrollCode);
-
-                    List<TimesheetBankChoices> bankCategories = timesheets.ExtractBanks();
-
-                    _viewModel.SetProgress("Exporting Timesheets", bankCategories.Count);
                     foreach (TimesheetBankChoices bankCategory in bankCategories)
                     {
                         var timesheetsByBankCategory = timesheets.FilterByBank(bankCategory);
@@ -73,16 +70,13 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
                             IEnumerable<Timesheet> monthlyExportable = twoPeriodTimesheetsByBankCategory.ByExportable();
                             ExportEFile(cutoff, payrollCode, bankCategory, monthlyExportable.GroupTimesheetsByEEId().ToList());
                         }
-                        _viewModel.ProgressValue++;
+                        ListingVm.ProgressValue++;
                     }
                 }
                 catch (Exception ex) { MessageBoxes.Error(ex.Message); }
 
-                _viewModel.SetAsFinishProgress();
             });
-
-            executable = true;
-            NotifyCanExecuteChanged();
+            ListingVm.SetAsFinishProgress();
         }
 
         public void ExportFeedback(Cutoff cutoff, string payrollCode, TimesheetBankChoices bank, List<Timesheet> exportable, List<Timesheet> unconfirmedTimesheetsWithAttendance, List<Timesheet> unconfirmedTimesheetsWithoutAttendance)
@@ -133,7 +127,10 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
             }
         }
 
+
+        public bool CanExecute(object? parameter) => ListingVm.Executable;
+        private void ListingVm_CanExecuteChanged(object? sender, bool e) => NotifyCanExecuteChanged();
         public void NotifyCanExecuteChanged() =>
-            CanExecuteChanged?.Invoke(this, new());
+            CanExecuteChanged?.Invoke(this, new EventArgs());
     }
 }

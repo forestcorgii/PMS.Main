@@ -15,9 +15,9 @@ namespace Pms.MasterlistModule.FrontEnd
 {
     public static class MasterlistBuilder
     {
-        public static ServiceCollection AddMasterlist(this ServiceCollection services, IConfigurationRoot conf)
+        public static ServiceCollection AddMasterlist(this ServiceCollection services, IConfigurationRoot conf, string connectionName)
         {
-            string connectionString = conf.GetConnectionString("Default");
+            string connectionString = conf.GetConnectionString(connectionName);
             services.AddSingleton<IDbContextFactory<EmployeeDbContext>>(new EmployeeDbContextFactory(connectionString));
             services.AddSingleton(HRMSAdapterFactory.CreateAdapter(conf));
 

@@ -65,6 +65,7 @@ namespace Pms.PayrollModule.FrontEnd.ViewModels
         public ICommand PayrollBankReportExport { get; }
         public ICommand PayrollAlphalistExport { get; }
         public ICommand PayrollMacroExport { get; }
+        public ICommand Payroll13thMonthExport { get; }
         public IAsyncRelayCommand EmployeeDownloadCommand { get; }
         #endregion
 
@@ -77,6 +78,7 @@ namespace Pms.PayrollModule.FrontEnd.ViewModels
             PayrollBankReportExport = new ExportBankReport(this, model);
             PayrollAlphalistExport = new ExportAlphalist(this, model);
             PayrollMacroExport = new ExportMacro(this, model);
+            Payroll13thMonthExport = new Export13thMonth(this, model);
 
 
             company = WeakReferenceMessenger.Default.Send<CurrentCompanyRequestMessage>();

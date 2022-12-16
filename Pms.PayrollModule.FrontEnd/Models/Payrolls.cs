@@ -56,6 +56,27 @@ namespace Pms.PayrollModule.FrontEnd.Models
                 )
                 .ToList();
 
+        /// <summary>
+        /// Used specifically for 13th month
+        /// </summary>
+        /// <param name="yearCovered"></param>
+        /// <param name="payrollCodeId"></param>
+        /// <param name="companyId"></param>
+        /// <returns></returns>
+        public IEnumerable<IEnumerable<Payroll>> GetYearlyPayrollsByEmployee(int yearCovered, string payrollCodeId, string companyId)
+        {
+            var da = _provider.GetAllPayrolls()
+                .Where(p => p.YearCovered == yearCovered)
+                .Where(p => p.EE is not null).ToList();
+
+            IEnumerable<IGrouping<string, Payroll>>? da1 = da.GroupBy(py => py.EEId);
+            var da2 = da1.Where(p => p.Any(p => p.Cutoff.CutoffDate.Month == 11)).ToList();
+            var da3 = da2.Select(py => py.Where(p => p.PayrollCode == payrollCodeId).ToList()).ToList();
+            var da4 = da3.Where(p => p.Count() > 0).ToList();
+            return da4.ToList();
+        }
+
+
 
         public string[] ListCutoffIds() =>
             _provider.GetAllPayrolls().ExtractCutoffIds().ToArray();

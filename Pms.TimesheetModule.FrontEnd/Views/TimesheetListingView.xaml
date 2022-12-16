@@ -19,7 +19,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition />
-            <RowDefinition Height="35"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
 
@@ -79,7 +79,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" Content="Add" Command="{Binding DetailTimesheet}" Margin="4"/>
+                <!--<Button Grid.Column="0" Content="Add" Command="{Binding DetailTimesheet}" Margin="4"/>-->
 
                 <TextBlock Grid.Column="1" Text="Search:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
                 <TextBox Grid.Column="2" Margin="8,3" Text="{Binding Path=SearchInput, UpdateSourceTrigger=PropertyChanged, Delay=150}" CharacterCasing="Upper" VerticalAlignment="Center"/>
@@ -135,6 +135,7 @@
                     <DataGridTextColumn Header="ND" Binding="{Binding TotalND, StringFormat={}{0:N2}}"/>
                     <DataGridTextColumn Header="Tardy" Binding="{Binding TotalTardy, StringFormat={}{0:N2}}"/>
                     <DataGridTextColumn Header="Allowance" Binding="{Binding Allowance, StringFormat={}{0:N2}}"/>
+                    <DataGridTextColumn Header="PCV" Binding="{Binding RawPCV}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
@@ -145,6 +146,7 @@
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="25"/>
                 <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="65"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -157,6 +159,7 @@
             <TextBlock Grid.Column="3" Text="{Binding ProgressMaximum, StringFormat={}{0:N0}}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,0"/>
 
             <ProgressBar Grid.ColumnSpan="5" Grid.Row="1" Maximum="{Binding ProgressMaximum}" Value="{Binding ProgressValue}"/>
+            <Button Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Cancel" Command="{Binding Cancel}"/>
         </Grid>
     </Grid>
 </UserControl>

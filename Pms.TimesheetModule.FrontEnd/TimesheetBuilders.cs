@@ -15,9 +15,9 @@ namespace Pms.TimesheetModule.FrontEnd
 {
     public static class TimesheetBuilders
     {
-        public static ServiceCollection AddTimesheet(this ServiceCollection services, IConfigurationRoot conf)
+        public static ServiceCollection AddTimesheet(this ServiceCollection services, IConfigurationRoot conf, string connectionName)
         {
-            string connectionString = conf.GetConnectionString("Default");
+            string connectionString = conf.GetConnectionString(connectionName);
             services.AddSingleton<IDbContextFactory<TimesheetDbContext>>(new TimesheetDbContextFactory(connectionString));
             services.AddSingleton(TimeDownloaderFactory.CreateAdapter(conf));
 

@@ -13,10 +13,10 @@ namespace Pms.PayrollModule.FrontEnd
 {
     public static class PayrollBuilder
     {
-        public static ServiceCollection AddPayroll(this ServiceCollection services, IConfigurationRoot conf)
+        public static ServiceCollection AddPayroll(this ServiceCollection services, IConfigurationRoot conf,string connectionName)
         {
 
-            string connectionString = conf.GetConnectionString("Default");
+            string connectionString = conf.GetConnectionString(connectionName);
 
             services.AddSingleton<IDbContextFactory<PayrollDbContext>>(new PayrollDbContextFactory(connectionString));
 

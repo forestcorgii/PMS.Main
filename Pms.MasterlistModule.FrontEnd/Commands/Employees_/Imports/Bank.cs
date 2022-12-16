@@ -21,23 +21,21 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
     public class BankImport : IRelayCommand
     {
         private readonly Employees _model;
-        private readonly EmployeeListingVm _viewModel;
+        private readonly EmployeeListingVm ListingVm;
 
 
         public BankImport(EmployeeListingVm viewModel, Employees model)
         {
             _model = model;
-            _viewModel = viewModel;
-
+            ListingVm = viewModel;
+            ListingVm.CanExecuteChanged += ListingVm_CanExecuteChanged;
         }
 
         public async void Execute(object? parameter)
         {
-            executable = false;
-            NotifyCanExecuteChanged();
-            await Task.Run(() =>
+              await Task.Run(() =>
             {
-                _viewModel.SetProgress("Select EE Import file.", 0);
+                ListingVm.SetProgress("Select EE Import file.", 0);
 
                 OpenFileDialog openFile = new() { Multiselect = true };
                 bool? isValid = openFile.ShowDialog();
@@ -49,30 +47,27 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
                         {
                             IEnumerable<IBankInformation> extractedEmployee = _model.ImportBankInformation(filename);
                             
-                            _viewModel.SetProgress($"Saving Extracted employees bank information from {Path.GetFileName(filename)}.", extractedEmployee.Count());
+                            ListingVm.SetProgress($"Saving Extracted employees bank information from {Path.GetFileName(filename)}.", extractedEmployee.Count());
                             foreach (IBankInformation employee in extractedEmployee)
                             {
                                 try { _model.Save(employee); }
                                 catch (InvalidFieldValueException ex) { MessageBoxes. Error(ex.Message, Path.GetFileName(filename)); }
                                 catch (DuplicateBankInformationException ex) { MessageBoxes.Error(ex.Message, Path.GetFileName(filename)); }
-                                _viewModel.ProgressValue++;
+                                ListingVm.ProgressValue++;
                             }
                         }
                         catch (Exception ex) { MessageBoxes.Error(ex.Message, Path.GetFileName(filename)); }
                     }
-                    _viewModel.SetAsFinishProgress();
+                    ListingVm.SetAsFinishProgress();
                 }
             });
-            executable = true;
-            NotifyCanExecuteChanged();
-        }
-
-        protected bool executable=true;
-
+          }
+         
         public event EventHandler? CanExecuteChanged;
 
-        public bool CanExecute(object? parameter) => executable;
 
+        public bool CanExecute(object? parameter) => ListingVm.Executable;
+        private void ListingVm_CanExecuteChanged(object? sender, bool e) => NotifyCanExecuteChanged();
         public void NotifyCanExecuteChanged() =>
             CanExecuteChanged?.Invoke(this, new EventArgs());
 
