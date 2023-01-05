@@ -60,11 +60,6 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
             ListingVm.SetProgress("Syncing Unknown Employees", eeIds.Length);
 
             List<Exception> exceptions = new();
-
-            //Employee[] newlyHiredEmployees = (await Model.SyncNewlyHiredAsync(DateTime.Now.AddDays(-20), ListingVm.Site.ToString())).ToArray();
-
-            //Employee[] resignedEmployees = (await Model.SyncResignedAsync(DateTime.Now.AddDays(-20), ListingVm.Site.ToString())).ToArray();
-
             try
             {
                 foreach (string eeId in eeIds)
@@ -112,7 +107,7 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
 
             ListingVm.SetAsFinishProgress($"{exceptions.Count} error/s found.");
 
-            ListingVm.LoadEmployees.Execute(null);
+            ListingVm.SyncNewlyHired.Execute(DateTime.Now.AddDays(-20));
         }
 
 

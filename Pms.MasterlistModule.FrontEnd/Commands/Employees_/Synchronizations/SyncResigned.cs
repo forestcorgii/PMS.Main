@@ -53,14 +53,21 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
 
         public async Task ExecuteAsync(object? parameter)
         {
-            DateTime selectedDate;
-            SelectDateWidget dateSelector = new();
-            if (dateSelector.ShowDialog() is bool isSuccess && isSuccess)
+            DateTime? selectedDate = null;
+            if (parameter is DateTime dateParam)
+                selectedDate = dateParam;
+
+            if (selectedDate is null)
             {
-                selectedDate = dateSelector.SelectedDate;
+                SelectDateWidget dateSelector = new();
+                if (dateSelector.ShowDialog() is bool isSuccess && isSuccess)
+                    selectedDate = dateSelector.SelectedDate;
+            }
+            if (selectedDate is not null)
+            {
 
                 List<Exception> exceptions = new();
-                Employee[] employees = (await Model.SyncResignedAsync(selectedDate, ListingVm.Site.ToString())).ToArray();
+                Employee[] employees = (await Model.SyncResignedAsync(selectedDate.Value, ListingVm.Site.ToString())).ToArray();
 
                 ListingVm.SetProgress($"Found {employees.Length} resigned employees", employees.Length);
                 await Task.Run(() =>

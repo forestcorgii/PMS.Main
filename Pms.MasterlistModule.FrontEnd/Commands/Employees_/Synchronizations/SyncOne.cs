@@ -18,13 +18,13 @@ using Pms.Masterlists.Domain.Entities.Employees;
 
 namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
 {
-    public class Sync : IAsyncRelayCommand
+    public class SyncOne : IAsyncRelayCommand
     {
         private readonly Employees _model;
         private readonly EmployeeDetailVm _viewModel;
 
 
-        public Sync(EmployeeDetailVm viewModel, Employees model)
+        public SyncOne(EmployeeDetailVm viewModel, Employees model)
         {
             _model = model;
             _viewModel = viewModel;

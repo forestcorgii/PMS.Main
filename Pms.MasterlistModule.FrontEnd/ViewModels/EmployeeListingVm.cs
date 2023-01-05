@@ -15,6 +15,7 @@ using Pms.Main.FrontEnd.Common.Messages;
 using Pms.MasterlistModule.FrontEnd.Commands.Employees_;
 using CommunityToolkit.Mvvm.Messaging;
 using Pms.Masterlists.Domain.Entities.Employees;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Pms.MasterlistModule.FrontEnd.ViewModels
 {
@@ -73,13 +74,14 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
             AllEEExport = new MasterlistExport(this, employees);
             NoTinEEExport = new UnknownTin(this, employees);
 
-            CheckDetail = new Detail(this,employees);
+            CheckDetail = new Detail(this, employees);
 
-            SyncAll = new SyncAll(this, employees);
             SyncNewlyHired = new SyncNewlyHired(this, employees);
             SyncResigned = new SyncResigned(this, employees);
+            SyncAll  = new SyncAll(this, employees);
 
-            OpenPayrollCodeView = new Commands.Payroll_Codes.OpenView(this,payrollCodes, companies);
+
+            OpenPayrollCodeView = new Commands.Payroll_Codes.OpenView(this, payrollCodes, companies);
 
             LoadEmployees = new Listing(this, employees);
 

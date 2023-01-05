@@ -52,49 +52,51 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
 
         public async Task ExecuteAsync(object? parameter)
         {
-            DateTime selectedDate;
-            SelectDateWidget dateSelector = new();
-            if (dateSelector.ShowDialog() is bool isSuccess && isSuccess)
-            {
-                selectedDate = dateSelector.SelectedDate;
+            DateTime? selectedDate = null;
+            if (parameter is DateTime dateParam)
+                selectedDate = dateParam;
 
+            if (selectedDate is null)
+            {
+                SelectDateWidget dateSelector = new();
+                if (dateSelector.ShowDialog() is bool isSuccess && isSuccess)
+                    selectedDate = dateSelector.SelectedDate;
+            }
+            if (selectedDate is not null)
+            {
                 List<Exception> exceptions = new();
 
-                Employee[] employees = (await Model.SyncNewlyHiredAsync(selectedDate, ListingVm.Site.ToString())).ToArray();
+                Employee[] employees = (await Model.SyncNewlyHiredAsync(selectedDate.Value, ListingVm.Site.ToString())).ToArray();
                 ListingVm.SetProgress($"Found {employees.Length} newly hired employees", employees.Length);
 
-                await Task.Run(() =>
+                if (employees.Length == 0) return;//exit if empty
+
+                try
                 {
-                    if (employees.Length == 0) return;//exit if empty
-
-                    try
+                    foreach (Employee employee in employees)
                     {
-                        foreach (Employee employee in employees)
+                        try
                         {
-                            try
+                            Employee employeeFoundLocally = Model.FindEmployee(employee.EEId);
+                            if (employee is not null && employeeFoundLocally is null)
                             {
-                                Employee employeeFoundLocally = Model.FindEmployee(employee.EEId);
-                                if (employee is not null && employeeFoundLocally is null)
-                                {
-                                    employee.Active = true;
-                                    Model.Save(employee);
-                                }
+                                employee.Active = true;
+                                Model.Save(employee);
                             }
-                            catch (InvalidFieldValuesException ex) { exceptions.Add(ex); }
-                            catch (InvalidFieldValueException ex) { exceptions.Add(ex); }
-                            catch (DuplicateBankInformationException ex) { exceptions.Add(ex); }
-                            catch (Exception ex) { exceptions.Add(ex); }
-
-
-                            if (!ListingVm.IncrementProgress())
-                                break;
                         }
-                        Model.ReportExceptions(exceptions, new PayrollCode(), $"{ListingVm.Site}-NEWLYHIRED");
-                    }
-                    catch (HttpRequestException) { MessageBoxes.Error("HTTP Request failed, please check Your HRMS Configuration."); }
-                    catch (Exception ex) { MessageBoxes.Error(ex.Message); }
+                        catch (InvalidFieldValuesException ex) { exceptions.Add(ex); }
+                        catch (InvalidFieldValueException ex) { exceptions.Add(ex); }
+                        catch (DuplicateBankInformationException ex) { exceptions.Add(ex); }
+                        catch (Exception ex) { exceptions.Add(ex); }
 
-                });
+
+                        if (!ListingVm.IncrementProgress())
+                            break;
+                    }
+                    Model.ReportExceptions(exceptions, new PayrollCode(), $"{ListingVm.Site}-NEWLYHIRED");
+                }
+                catch (HttpRequestException) { MessageBoxes.Error("HTTP Request failed, please check Your HRMS Configuration."); }
+                catch (Exception ex) { MessageBoxes.Error(ex.Message); }
 
                 ListingVm.SetAsFinishProgress($"{exceptions.Count} error/s found.");
                 ListingVm.LoadEmployees.Execute(null);

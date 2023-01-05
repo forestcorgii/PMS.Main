@@ -49,7 +49,7 @@ namespace Pms.MasterlistModule.FrontEnd.ViewModels
         {
             Employee = employee;
             Save = new Save(this, employees);
-            Sync = new Sync(this, employees);
+            Sync = new SyncOne(this, employees);
 
             PayrollCodes = WeakReferenceMessenger.Default.Send<CurrentPayrollCodesRequestMessage>().Response;
         }
