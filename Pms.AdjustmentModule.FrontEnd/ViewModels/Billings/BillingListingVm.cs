@@ -26,6 +26,7 @@ namespace Pms.AdjustmentModule.FrontEnd.ViewModels
             set => SetProperty(ref _billings, value);
         }
 
+        public ICommand AddToAdjustment { get; }
         public ICommand GenerateBillings { get; }
         public ICommand ListBillings { get; }
         public ICommand ExportBillings { get; }
@@ -44,11 +45,12 @@ namespace Pms.AdjustmentModule.FrontEnd.ViewModels
               new ObservableCollection<AdjustmentTypes>(Enum.GetValues(typeof(AdjustmentTypes)).Cast<AdjustmentTypes>());
 
 
-        public BillingListingVm(Billings model)
+        public BillingListingVm(Billings model, Pms.TimesheetModule.FrontEnd.Models.Timesheets timesheetsModel)
         {
             _billings = new ObservableCollection<Billing>();
             Billings = new ObservableCollection<Billing>();
 
+            AddToAdjustment = new AddAdjustment(this, model, timesheetsModel);
             ExportBillings = new Export(this, model);
             GenerateBillings = new Generate(this, model);
             ListBillings = new Listing(this, model);

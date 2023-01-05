@@ -50,7 +50,11 @@ namespace Pms.AdjustmentModule.FrontEnd.Models
         public IEnumerable<Billing> GenerateBillingFromBillingRecord(string cutoffId, string eeId) =>
                     _billingGenerator.GenerateBillingFromRecords(eeId, cutoffId);
 
-        public void AddBilling(Billing billing) => _billingManager.AddBilling(billing);
+        public void AddBilling(Billing billing)
+        {
+            billing.EE = null;
+            _billingManager.AddBilling(billing);
+        }
 
         public void Export(IEnumerable<Billing> billings, string cutoffId, string payrollCodeId, AdjustmentTypes adjustmentName) =>
             _billingExporter.ExportBillings(billings, cutoffId, payrollCodeId, adjustmentName);

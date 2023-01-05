@@ -3,8 +3,8 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="clr-namespace:Pms.AdjustmentModule.FrontEnd"
-      mc:Ignorable="d" 
+      xmlns:local="clr-namespace:Pms.AdjustmentModule.FrontEnd" xmlns:viewmodels="clr-namespace:Pms.AdjustmentModule.FrontEnd.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:BillingListingVm}"
+             mc:Ignorable="d" 
       d:DesignHeight="450" 
       d:DesignWidth="800"
 >
@@ -22,7 +22,9 @@
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-            <Button x:Name="btnGenerateBilling" Command="{Binding GenerateBillings}">Generate Billings</Button>
+            <Button Margin="8 0 0 0" Command="{Binding AddToAdjustment}" CommandParameter="1">Add to Adjust1</Button>
+            <Button Margin="8 0 0 0" Command="{Binding AddToAdjustment}" CommandParameter="2">Add to Adjust2</Button>
+            <Button Margin="24 0 8 0" Command="{Binding GenerateBillings}">Generate Billings</Button>
         </StackPanel>
 
         <DataGrid x:Name="lstAdjustments" 
@@ -40,7 +42,7 @@
                 <DataGridTextColumn Header="Amount" Binding="{Binding Amount}"/>
                 <DataGridTextColumn Header="On" Binding="{Binding AdjustmentType}"/>
                 <DataGridTextColumn Header="Remarks" Binding="{Binding Remarks}"/>
-                <DataGridCheckBoxColumn Header="Deducted" Binding="{Binding Deducted}"/>
+                <DataGridCheckBoxColumn Header="Applied" Binding="{Binding Applied}"/>
             </DataGrid.Columns>
         </DataGrid>
 

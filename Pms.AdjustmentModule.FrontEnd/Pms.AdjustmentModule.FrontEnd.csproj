@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Pms.Main.FrontEnd.Common\Pms.Main.FrontEnd.Common.csproj" />
+    <ProjectReference Include="..\Pms.TimesheetModule.FrontEnd\Pms.TimesheetModule.FrontEnd.csproj" />
   </ItemGroup>
 
   <ItemGroup>

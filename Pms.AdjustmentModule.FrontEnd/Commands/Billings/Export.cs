@@ -36,7 +36,7 @@ namespace Pms.AdjustmentModule.FrontEnd.Commands
             {
                 await Task.Run(() =>
                 {
-                    _viewModel.SetProgress("Exporting Payrolls for Land Bank.", 1);
+                    _viewModel.SetProgress("Exporting Adjustments.", 1);
                     string cutoffId = _viewModel.CutoffId;
                     string payrollCode = _viewModel.PayrollCodeId;
                     AdjustmentTypes adjustmentType = _viewModel.AdjustmentName;
