@@ -136,6 +136,8 @@
                     <DataGridTextColumn Header="Tardy" Binding="{Binding TotalTardy, StringFormat={}{0:N2}}"/>
                     <DataGridTextColumn Header="Allowance" Binding="{Binding Allowance, StringFormat={}{0:N2}}"/>
                     <DataGridTextColumn Header="PCV" Binding="{Binding RawPCV}"/>
+                    <DataGridTextColumn Header="Adjust 1" Binding="{Binding Adjust1}"/>
+                    <DataGridTextColumn Header="Adjust 2" Binding="{Binding Adjust2}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

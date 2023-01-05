@@ -40,6 +40,9 @@ namespace Pms.TimesheetModule.FrontEnd.Models
         }
 
 
+        public Timesheet Find(string eeId, string cutoffId) =>
+            _timesheetProvider.GetTimesheets(cutoffId).Where(ts=> ts.CutoffId == cutoffId && ts.EEId == eeId).First();
+
         public IEnumerable<Timesheet> GetTimesheets(string cutoffId) =>
             _timesheetProvider.GetTimesheets(cutoffId);
 

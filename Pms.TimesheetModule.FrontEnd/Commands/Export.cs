@@ -31,7 +31,6 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
 
         public async void Execute(object? parameter)
         {
-
             Cutoff cutoff = ListingVm.Cutoff;
             string cutoffId = cutoff.CutoffId;
             string payrollCode = ListingVm.PayrollCode.PayrollCodeId;
@@ -43,7 +42,9 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
                 if (!MessageBoxes.Inquire("There are Timesheets that are invalid, do you want to proceed?"))
                     return;
 
-            IEnumerable<Timesheet> twoPeriodTimesheets = _model.GetTwoPeriodTimesheets(cutoffId).FilterByPayrollCode(payrollCode);
+            IEnumerable<Timesheet> twoPeriodTimesheets = _model
+                .GetTwoPeriodTimesheets(cutoffId)
+                .FilterByPayrollCode(payrollCode);
 
             List<TimesheetBankChoices> bankCategories = timesheets.ExtractBanks();
 
@@ -114,7 +115,7 @@ namespace Pms.TimesheetModule.FrontEnd.Commands
         {
             try
             {
-                ExportTimesheetsDbfService service = new();
+                TimesheetDbfExporter service = new();
                 string dbfdir = $@"{AppDomain.CurrentDomain.BaseDirectory}\EXPORT\{cutoff.CutoffId}\{payrollCode}";
                 string dbfpath = $@"{dbfdir}\{payrollCode}_{bank}_{cutoff.CutoffId}.DBF";
                 System.IO.Directory.CreateDirectory(dbfdir);
