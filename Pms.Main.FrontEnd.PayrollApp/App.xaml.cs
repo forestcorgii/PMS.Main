@@ -24,11 +24,13 @@ namespace Pms.Main.FrontEnd.PayrollApp
 
         private static IServiceProvider ConfigureServices()
         {
-            IConfigurationRoot conf = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).Build();
+            IConfigurationRoot conf = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
 
             ServiceCollection services = new();
 
-            bool isDevelopment = false;
+            bool isDevelopment = !true;
             string connectionName = isDevelopment ? "Development" : "Production";
 
             services

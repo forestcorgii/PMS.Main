@@ -17,7 +17,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
     <PackageReference Include="ModernWpfUI" Version="0.9.6" />
     <PackageReference Include="Pms.Masterlists" Version="1.0.0-preview001" />
-    <PackageReference Include="Pms.Timesheets" Version="1.0.0-preview003" />
+    <PackageReference Include="Pms.Timesheets" Version="1.0.0-preview004" />
     <PackageReference Include="System.Data.OleDb" Version="6.0.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
   </ItemGroup>
