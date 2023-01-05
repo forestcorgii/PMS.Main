@@ -28,17 +28,17 @@ namespace Pms.MasterlistModule.FrontEnd.Commands.Employees_
 
         public async void Execute(object? parameter)
         {
+            ListingVm.SetProgress("Exporting Unknown TIN.", 1);
             await Task.Run(() =>
             {
-                ListingVm.SetProgress("Exporting Unknown TIN.", 1);
                 try
                 {
                     _model.ExportMasterlist(ListingVm.Employees.Where(e => string.IsNullOrEmpty(e.TIN)), ListingVm.PayrollCode, "NO TIN");
                 }
                 catch (Exception ex) { MessageBoxes.Error(ex.Message); }
-                ListingVm.SetAsFinishProgress();
             });
-            }
+            ListingVm.SetAsFinishProgress();
+        }
 
         public event EventHandler? CanExecuteChanged;
 
